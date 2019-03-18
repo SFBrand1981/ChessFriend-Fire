@@ -1,11 +1,9 @@
 language: node_js
 node_js:
 - node
-cache:
-  directories:
-  - node_modules
 os: windows
 script:
+  - npm install
   - npm run prod
   - tar -zcf release.tar.gz ./dist
 before_deploy:	
