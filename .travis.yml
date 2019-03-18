@@ -3,6 +3,14 @@ node_js:
 - node
 os: windows
 script:
+  - rm -rf ./node_modules
+  - npm install -g nw-gyp
+  - export npm_config_target=0.18.5
+  - export npm_config_arch=x64
+  - export npm_config_target_arch=x64
+  - export npm_config_runtime=node-webkit
+  - export npm_config_build_from_source=true
+  - export npm_config_node_gyp=$(which nw-gyp)
   - npm install
   - npm run prod
   - tar -zcf release.tar.gz ./dist
