@@ -1,0 +1,38 @@
+{
+  "name": "chessfriendfire",
+  "version": "1.0.0",
+  "main": "views/main.html",
+  "devDependencies": {
+    "nw": "^0.37.0",
+    "nw-builder": "^3.5.7"
+  },
+  "scripts": {
+    "dev": "nw src/",
+    "prod": "nwbuild --flavor normal --platforms osx64 --buildDir dist/ src/"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "chess.js": "^0.10.2",
+    "font-awesome": "^4.7.0",
+    "level-js": "^4.0.0",
+    "linvodb3": "^3.26.0"
+  },
+  "directories": {
+    "doc": "docs",
+    "test": "tests"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SFBrand1981/ChessFriend-Fire.git"
+  },
+  "keywords": [
+    "chess",
+    "engine",
+    "database"
+  ],
+  "author": "",
+  "bugs": {
+    "url": "https://github.com/SFBrand1981/ChessFriend-Fire/issues"
+  },
+  "homepage": "https://github.com/SFBrand1981/ChessFriend-Fire#readme"
+}

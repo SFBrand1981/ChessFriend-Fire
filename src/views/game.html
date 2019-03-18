@@ -1,0 +1,164 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>chessfriend - Game</title>
+
+    <link rel="stylesheet" href="../css/common.css">
+    <script src="../app/chessfriend.js"></script>
+    
+  </head>
+
+  
+  <body>
+
+
+    <div class="game-container">
+
+
+      <div class="board-view">
+	
+	<div id="game-board"></div>
+	<br>
+
+	<!-- <div class="mode-line"> -->
+	<!--   <a class="mode-line-item" href="main.html"><i class="fa">&#xf137;</i></a> -->
+	<!--   <a class="mode-line-item" href="game.html"><i class="fa">&#xf138;</i></a> -->
+	<!-- </div> -->
+      </div>
+
+
+      <div class="notation-view">
+	<div class="game-window">
+	  
+	  <div id="pgnHeader"></div>
+	  <p id="startHook" class="startHook">&nbsp;</p>
+	  
+	  <div id="game-notation"></div>
+	</div>	
+      </div>
+
+      
+    </div>
+
+
+    
+    <div id="myModal" class="modal">
+      <!-- Modal content -->
+      <div class="modal-content">
+    	<p>This game has been edited. Save changes?</p>
+	<div>
+	  <span class="txtAsBtn" onclick="cancel();">Cancel</span>
+	  <span class="txtAsBtn" onclick="discard();">Discard</span>
+	  <span class="txtAsBtn" onclick="save();">Save</span>
+	</div>
+      </div>
+    </div>
+
+    
+    <div id="deletionModal" class="modal">
+      <!-- Modal content -->
+      <div class="modal-content">
+    	<p>Do you really want to delete this game?</p>
+	<div>
+	  <span class="txtAsBtn" onclick="cancel();">Cancel</span>
+	  <span class="txtAsBtn" onclick="deleteGame();">Delete</span>
+	</div>
+      </div>
+    </div>
+    
+
+  </body>
+</html>
+
+
+
+<script>
+
+  var path = require('path')
+  var modalContainer = document.getElementById("myModal")
+  var deletionContainer = document.getElementById("deletionModal")
+  var boardContainer = document.getElementById('game-board')
+  var moveContainer = document.getElementById('game-notation')
+  var Container = {}
+  Container.boardContainer = boardContainer
+  Container.moveContainer = moveContainer
+  Container.modalContainer = modalContainer
+
+  var BoardHandling = require(path.join(process.cwd(), '/app/boardHandling.js'))  
+  var db = require(path.join(process.cwd(), '/app/chessfriendDB.js'))
+  
+
+  var board = new BoardHandling(window, Container, db)
+  board.loadForAnalysis()
+  
+
+  function discard() {
+      window.open('/views/main.html', '_self')
+  }
+  
+  function cancel() {
+      modalContainer.style.display = "none"
+      deletionContainer.style.display = "none"
+  }
+
+  function save() {
+      board.save(function(err) {
+	  window.open('/views/main.html', '_self')
+      })
+  }
+  
+  function deleteGame() {
+      board.deleteGame(function(err) {
+	  db.forceInitialization = true
+	  window.open('/views/main.html', '_self')
+      })
+  }
+
+  
+  // Create an empty context menu for view
+  var menu = new nw.Menu();
+  
+  // Add menu items with label in this menu
+  menu.append(new nw.MenuItem({
+      label: 'Promote variation',
+      click: function(){
+   	  board.promoteVariation()
+      }
+  }))
+
+  menu.append(new nw.MenuItem({
+      label: 'Strip variation to end',
+      click: function(){
+   	  board.deleteVariation()
+      }
+  }))
+
+  menu.append(new nw.MenuItem({ type: 'separator' }))
+
+  menu.append(new nw.MenuItem({
+      label: 'Delete game',
+      click: function(){
+	  deletionContainer.style.display = "flex"
+      }
+  }))
+  
+  
+  // Hooks for the "contextmenu" event
+  document.body.addEventListener('contextmenu', function(ev) {
+      // Prevent to showing default context menu event
+      ev.preventDefault();
+      // display Popup the native context menu at place you clicked
+      menu.popup(ev.x, ev.y)
+      
+      return false
+  }, false)
+
+  
+  // make background clickable
+  var startHook = document.getElementById("startHook")
+  startHook.addEventListener("click", function (evt) {
+      board.selectRootNode()
+  })
+
+</script>

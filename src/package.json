@@ -1,0 +1,10 @@
+{
+    "name": "chessfriend",
+    "version": "1.0.0",
+    "main": "views/main.html",
+    "window": {
+	"width": 800,
+	"height": 647,
+	"icon": "assets/icon.png"
+    }
+}

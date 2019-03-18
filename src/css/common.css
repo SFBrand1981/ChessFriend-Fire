@@ -1,0 +1,852 @@
+@import url("../css/normalize.css");
+@import url("../css/font-awesome.css");
+
+
+@font-face {
+  font-family: "Lato";
+  src: url(../fonts/Lato/Lato-Regular.ttf) format("truetype");
+}
+
+@font-face {
+  font-family: "Alpha";
+  src: url(../fonts/Alpha/ChessAlpha2.ttf) format("truetype");
+}
+
+
+html {
+    font-size: 62.5%;
+    height: 100%;
+    margin: 0;
+}
+
+
+body {
+    font-size: 1.4em; /* currently ems cause chrome bug misinterpreting rems on body element */
+    line-height: 1.5;
+    font-weight: 400;
+    font-family: "Lato";
+    height: 100%;
+    margin: 0;
+}
+
+
+
+
+.main-container {
+    display: flex;
+    height: 100%;
+}
+
+
+.main-menu {
+    background-color: #2F4858;
+    width: 189px;
+    padding: 8px;
+    color: white;
+    overflow: auto;
+    user-select: none;
+}
+
+
+.main-menu p {
+    cursor: pointer;
+}
+
+.main-menu p:hover {
+    color: lightgray;
+}
+
+.main-menu ul {
+    cursor: pointer;
+}
+
+.main-menu ul:hover {
+    color: lightgray;
+}
+
+.main-window {
+    background-color: rgba(237,245,249);
+    width: 100%;
+    padding: 8px;
+    padding-top: 0px;
+    overflow-y: auto;
+    user-select: none;
+    padding-right: 1.5rem;
+    padding-left: 1.5rem;
+}
+
+
+.game-container {
+    display: flex;
+    height: 100%;
+}
+
+
+.board-view {
+    background-color: #2F4858;
+    width: 50%;
+    min-width: 160px;
+    color: white;
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
+    padding: 8px;
+    padding-left: 0px;
+}
+
+
+.notation-view {
+    background-color: rgba(237,245,249);
+    width: 50%;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+
+.settings-view {
+    background-color: rgba(237,245,249);
+    width: 100%;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+
+.search-view {
+    background-color: rgba(237,245,249);
+    width: 50%;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+
+.search-window {
+    padding: 8px;
+}
+
+
+.game-window {
+    padding: 8px;
+    padding-top: 4px;
+}
+
+.sticky-on-top {
+    background-color: rgba(237,245,249);
+    position: sticky;
+    top: 0px;
+}
+
+
+/* Modal Content/Box */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.4);
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 16px;
+    padding-top: 0px;
+    border: 1px solid #888;
+    text-align: center;
+}
+
+
+.comment-input {
+    width: 100%;
+}
+
+
+.mode-line {
+    background-color: #2F4858;
+    bottom: 8px;
+    left: 12px;
+    position: fixed;
+}
+
+.mode-line-item {
+    color: lightgray;
+    padding: 4px;
+    text-decoration: none;
+}
+
+.mode-line-item:first-child {
+    padding-left: 0px;
+}
+
+.fa {
+    font-family: "Lato", "FontAwesome";
+}
+
+.menu.fa {
+    width: 1.5em;
+    padding-left: 4px;
+}
+
+.searchbox {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 8px;
+    margin-top: 8px;
+    border-radius: 4px;
+    font-family: "Lato", "FontAwesome", sans-serif;
+}
+
+
+::placeholder {
+    color: grey;
+}
+
+
+.noBorder {
+    border: 0px;
+    padding:0; 
+    margin:0;
+    border-collapse: collapse;
+}
+
+.game-desc {
+    width: 100%;
+}
+
+.game-desc td:first-child {
+    cursor: pointer;
+}
+
+.game-desc td:last-child {
+    cursor: pointer;
+    padding-left: 8px;
+}
+
+
+hr {
+    border-width: 0;
+    border-top: 1px solid lightgray;
+}
+
+.info-item {
+    display: flex;
+    font-size: smaller;
+    color: grey;
+    width: 100%;
+    display: flex;
+    height: 50px;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.db-num-results {
+    padding-right: 0px;
+}
+
+
+.cursor {
+    cursor: pointer;
+    display: inline-block;
+    min-width: 1rem;
+    font-size: 115%;
+}
+
+.cursor:hover{
+    color: #2F4858;
+}
+
+.db-entries {
+    width: 100%;
+    table-layout: fixed;
+    white-space: nowrap;
+    border-collapse: collapse;
+    margin-bottom: 8px;
+    font-size: 90%;
+}
+
+
+.db-entries tbody {
+    width: 100%;
+    height: 100px;
+    overflow: auto;
+}
+
+
+.db-entries td {
+    border-top: 1pt solid lightgrey;
+    border-bottom: 1pt solid lightgrey;
+    display: table-cell;
+    padding: 8px 4px;
+}
+
+
+.db-entries tbody tr:hover {
+    box-shadow: 0 0 8px gray;
+}
+
+
+.db-entry {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+.db-entry-player {
+    width: 20%;
+}
+
+.db-entry-dwz {
+    width: 3.5rem;
+}
+
+.db-entry-res {
+    width: 4rem;
+    text-align: center;
+}
+
+.db-entry-year {
+    width: 2.5em;
+}
+
+.db-entry-star {
+    color: gray;
+    width: 1.5em;
+    text-align: center;
+}
+
+.db-entry-tag {
+    color: lightgray;
+    width: 1.5em;
+    text-align: center;
+}
+
+.db-entry-trash {
+    color: gray;
+    width: 1.5em;
+    text-align: center;
+}
+
+.db-entries th {
+    font-weight: bold;
+    color: #2F4858;
+    padding: 8px 4px;
+    text-align: left;
+}
+
+
+.db-entries .hoverable th:hover {
+    color: gray;
+    cursor: pointer;
+}
+
+
+.db-sticky-table {
+    position: sticky;
+    border-top: 1pt solid gray;
+    border-bottom: 1pt solid gray;
+    top: 50px;
+    margin-bottom: 0px;
+    background-color: rgba(237, 245, 249);
+}
+
+
+a {
+    color: #33658A;
+}
+
+
+
+.square {
+    width: 12.5%;
+    padding-bottom: 12.5%;
+    position: relative;
+    float: left;
+    display: inline-block;
+}
+
+.innerSquare {
+   position: absolute;
+   left: 3px;
+   right: 3px;
+   top: 3px;
+   bottom: 3px;
+}
+
+.black {
+    background-color: #99b2c4; 
+}
+
+.white {
+    background-color: white; ; 
+}
+
+.highlightedSquare {
+    background-color: #F26419;
+}
+
+.highlightedMove .san {
+    background-color: #F6AE2D;
+    color: black;
+}
+
+.valign {
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.piecesize {
+    width: 99%;
+}
+
+.pieces {
+    width: 4rem;
+    border: 3px solid rgba(237,245,249);
+}
+
+.selected {
+    border: 3px solid #F26419;
+}
+
+.boardcontainer {
+    width: 100%;
+    max-width: 400px;
+    overflow: hidden;
+    margin: 0 auto;
+}
+
+.board {
+    margin: auto;
+    float: left;
+    width: 100%;
+    margin-bottom: 4px;
+    border-collapse: collapse;
+    border: 0px;
+}
+
+.board tr, .board td {
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+
+.controlContainer {
+    margin-left: 12px;
+    text-align: center;
+}
+
+.control {
+    width: 50%;
+    max-width: 100px;
+    margin: auto;
+    table-layout: fixed;
+    text-decoration: none;
+    color: white;
+}
+
+
+.control-item {
+    text-decoration: none;
+    color: white;
+}
+
+
+.control-item:hover {
+    color: lightgray;
+    cursor: pointer;
+}
+
+
+.move-nav:hover {
+    color: lightgray;
+}
+
+.move-nav {
+    cursor: pointer;
+    font-size: 1.6rem;
+}
+
+.coord {
+    text-align: left;
+    font-size: smaller;
+    width: 12px;
+    color: white;
+}
+
+.comment {
+    font-weight: normal;
+    margin-left: 4px;
+    margin-right: 4px;
+}
+
+.intro-comment {
+    font-weight: normal;
+    display: block;
+    margin-bottom: 4px;
+    margin-left: 0px;
+    margin-right: 0px;
+}
+
+.move {
+    cursor: pointer;
+}
+
+.move, .subvar {
+    display: inline;
+}
+
+.san {
+    padding-left: 1px;
+    padding-right: 1px;
+}
+
+.level1 {
+    font-weight: bold;
+}
+
+.level2 {
+    color: #33658A;
+}
+
+.subvar.level1 {
+    display: block;
+    margin-top: 4px;
+    margin-bottom: 4px;
+    margin-left: 1rem;
+}
+
+.varIndicator {
+    display: inline-block;
+    width: 1rem;
+    margin-left: -1rem;
+    text-align: left;
+}
+
+.subvar.level2 {
+    display: block;
+    margin-left: 4rem;
+}
+
+.subvar.level3 {
+    display: block;
+    margin-left: 4rem;
+}
+
+.subvar.level4 {
+    display: block;
+    margin-left: 4.5rem;
+}
+
+.level4 > .varIndicator {
+    display: inline-block;
+    width: 1.5rem;
+    margin-left: -1.5rem;
+    text-align: left;
+}
+
+.subvar.level5 {
+    display: block;
+    margin-left: 4.5rem;
+}
+
+.level5 > .varIndicator {
+    display: inline-block;
+    width: 1.5rem;
+    margin-left: -1.5rem;
+    text-align: left;
+}
+
+.engineOut {
+    margin-left: 12px;
+}
+
+.engineSTM {
+    display: inline-block;
+    margin-right: 8px;
+    font-size: smaller;
+}
+
+.engineStatus {
+    display: inline-block;
+    margin-right: 8px;
+    font-size: smaller;
+    color: lightgray;
+}
+
+.engineDepth {
+    display: inline-block;
+    margin-right: 8px;
+    font-size: smaller;
+}
+
+.engineCurrmove {
+    display: inline-block;
+    font-size: smaller;
+}
+
+.engineEval {
+    color: lightgray;
+    margin-right: 8px;
+}
+
+.engineLines {
+    overflow-x: auto;
+    padding-bottom: 1.4rem;
+}
+
+.engineLine {
+    white-space: nowrap;
+}
+
+.figurine {
+    font-family: "Alpha";
+    font-weight: 100;
+}
+
+
+button {
+    box-sizing:border-box;
+    padding: 8px;
+    border-radius: 4px;
+    border: 1pt solid #2F4858;
+    background-color: #2F4858;
+    color: white;
+    margin-left: 8px;
+    margin-right: 8px;
+}
+
+button:hover {
+    box-shadow: 0 0 8px gray;
+    cursor: pointer;
+}
+
+
+.modal-content button {
+    min-width: 9rem;
+}
+
+
+select, input {
+    border: 1pt solid gray;
+}
+
+
+.empty-square {
+    display: inline-block;
+    width: 4rem;
+    height: 4rem;
+    background: repeating-linear-gradient(
+	45deg,
+	#99b2c4,
+	#99b2c4 8px,
+	white 8px,
+	white 16px
+    );
+}
+
+
+.searchForm {
+    user-select: none;
+}
+
+
+.customSelect {
+    position: relative;
+    float: left;
+    width: 100%;
+}
+
+
+.customSelect:after {
+    content: '\f0dc';
+    font-family: "Lato", "FontAwesome";
+    color: grey;
+    right: 8px;
+    top: 6px;
+    padding-left: 4px;
+    position: absolute;
+    pointer-events: none;
+}
+
+
+.customSelect select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  /* Add some styling */
+  display: block;
+  width: 100%;
+  padding: 8px;
+  background-color: white;
+}
+
+
+.customInput {
+    padding: 8px;
+    box-sizing: border-box;
+    border-radius: 4px;
+}
+
+
+input[type="file"] {
+    display: none;
+}
+
+
+/* input[type=number]::-webkit-inner-spin-button,  */
+/* input[type=number]::-webkit-outer-spin-button {  */
+/*     opacity: 1; */
+/* } */
+
+
+.smallSelect {
+    background-color: white;
+}
+
+
+.setup {
+    border: 4px solid  lightgray;
+    /* border: 4px solid #1B998B; */
+}
+
+
+.noLeftBorder {
+    border-left: 0;
+}
+
+.noRightBorder {
+    border-right: 0;
+}
+
+.txtAsBtn {
+    display: inline-block;
+    padding: 8px;
+    font-weight: bold;
+    color: #2F4858;
+}
+
+.txtAsBtn:hover {
+    color: grey;
+    cursor: pointer;
+}
+
+
+.pgnHeaderDesc {
+    font-size: small;
+    color: gray;
+    max-width: 3.5rem;
+}
+
+.pgnHeader {
+    background-color: rgba(237,245,249);
+    border: 0;
+    padding-left: 8px;
+    box-sizing: border-box;
+    line-height: 1.5;
+    font-size: small;
+    width: 100%;
+}
+
+.pgnHeaderSelect {
+    width: 100%;
+    padding: 0px;
+    margin: 0px;
+    text-indent: 8px;
+    outline: none;
+    -webkit-appearance: none;
+}
+
+.pgnHeaderDate {
+}
+
+
+.loader {
+    border: 4px solid lightgray; /* Light grey */
+    border-top: 4px solid #F26419;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    animation: spin 2s linear infinite;
+    margin-left: auto;
+    margin-right: auto;
+    text-align:center;
+}
+
+.initLoaderDiv {
+    display: flex;
+    height: 62%;
+    align-items: center;
+}
+
+.initLoader {
+    border: 8px solid lightgray; /* Light grey */
+    border-top: 8px solid #F26419;
+    border-radius: 50%;
+    width: 64px;
+    height: 64px;
+    animation: spin 2s linear infinite;
+    margin-left: auto;
+    margin-right: auto;
+    text-align:center;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+
+.starred {
+    color: #F6AE2D;
+}
+
+.tagged {
+    color: gray;
+}
+
+.startHook {
+    padding: 0;
+    margin: 0;
+    width: 100%;
+}
+
+.taglist {
+    padding-left: 0.5rem;
+}
+
+.hiddenTaglist {
+    display: none;
+}
+
+.settingsTable {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.settingsTable td {
+    border: 1pt solid lightgray;
+    padding: 4px;
+}
+
+.settingsTable tr td:first-child {
+    border-left: 0;
+}
+
+.settingsTable tr td:last-child {
+    border-right: 0;
+}
+
+.settingsInput {
+    width: 100%;
+    box-sizing:border-box;
+}
+
+.hoverable:hover {
+    color: gray;
+    cursor: pointer;
+}

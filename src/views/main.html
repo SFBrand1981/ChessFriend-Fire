@@ -1,0 +1,229 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>chessfriend - Database</title>
+
+    <link rel="stylesheet" href="../css/common.css">
+    
+    <script src="../app/chessfriend.js"></script>
+    
+  </head>
+
+  
+  <body>
+
+    <div class="main-container">
+      
+      <div class="main-menu">
+	<p id="database"><i class="menu fa">&#xf03a;</i>Database</p>
+	<p id="addNew"><i class="menu fa">&#xf055;</i>Add new</p>
+	<!-- <p id="settings"><i class="menu fa">&#xf013;</i>Settings</p> -->
+	<p id="importFromFile"><i class="menu fa">&#xf019;</i>Import</p>
+	<p id="search"><i class="menu fa">&#xF002;</i>Search</p>
+	<!-- <p><i class="menu fa">&#xf093;</i>Export</p> -->
+	<p id="starred"><i class="menu fa">&#xf005;</i>Starred</p>
+	
+	<p id="tags"><i class="menu fa">&#xf02c;</i>Tags</p>
+	<div id="taglist" class="taglist"></div>
+	<p id="trash"><i class="menu fa">&#xf1f8;</i>Trash</p>
+      </div>
+
+      <div class="main-window">
+
+	<div class="sticky-on-top info-item">
+	
+	  <!-- <form id="searchbox" action="javascript:void(0);"> -->
+	  <!--   <input class="searchbox" type="text" name="search" id="searchinput" -->
+	  <!-- 	   placeholder=" &#xF002; Search in database"> -->
+	  <!-- </form> -->
+
+	  <!-- <label>Sort by: -->
+	  <!--   <select class="smallSelect" id="selectSorting" onchange="setSorting(this.value);"> -->
+	  <!--     <option value="created">Created</option> -->
+	  <!--     <option value="white">White</option> -->
+	  <!--     <option value="black">Black</option> -->
+	  <!--     <option value="elo_white">ELO White</option> -->
+	  <!--     <option value="elo_black">ELO Black</option> -->
+	  <!--     <option value="year">Year</option> -->
+	  <!--   </select> -->
+	  <!-- </label> -->
+	  
+
+	  
+	  <label class="db-num-results">
+	    <span class="cursor" id="prevCursor"><i class="fa">&#xf0d9;</i></span>
+	    <output id="numCursor">?</output> of
+	    <output id="numResults"></output>
+	    <span class="cursor" id="nextCursor" style="text-align: right;"><i class="fa">&#xf0da;</i></span>
+	  </label>
+
+	    
+	</div>
+
+
+	<div id="initLoader" class="initLoaderDiv">
+	  <div class="initLoader"></div>
+	</div>
+	
+	<div id="db-entries"></div>
+
+      </div>
+    </div>
+
+    <input style="display:none;" id="fileDialog" type="file" accept=".pgn"/>
+
+    <div id="myModal" class="modal">
+      <!-- Modal content -->
+      <div class="modal-content">
+    	<p>Imported
+	  <output id="numImported">0</output>/
+	  <output id="numGames">0</output>
+	  games into database
+	</p>
+	<div class="loader" id="importLoader"></div> 
+	<div>
+	  <span class="txtAsBtn" id="confirmImport" style="display:none;">Ok</span>
+	</div>
+      </div>
+    </div>
+
+    <div id="tagModal" class="modal">
+      <!-- Modal content -->
+      <div class="modal-content">
+    	<p>Comma-separated list of tags:</p>
+	<textarea id="tagInput"></textarea> 
+	<input id="tagEntry" type="hidden"> 
+	<div>
+	  <span class="txtAsBtn" id="confirmTag">Ok</span>
+	</div>
+      </div>
+    </div>
+      
+  </body>
+</html>
+
+
+<script>
+  
+  var path = require('path')
+  var db = require(path.join(process.cwd(), '/app/chessfriendDB.js'))  
+  var DBHandling = require(path.join(process.cwd(), '/app/dbHandling.js'))
+
+  
+  var BoardHandling = require(path.join(process.cwd(), '/app/boardHandling.js'))
+  var Container = {}
+  var board = new BoardHandling(window, Container, db)
+  board.initImportWorker()
+  
+  var dbHandler = new DBHandling(window, db)
+  var dbContainer = document.getElementById('db-entries')
+  var dbNumResults = document.getElementById("numResults")
+  var dbNumCursor = document.getElementById("numCursor")
+  dbHandler.initDBListener(dbContainer, dbNumResults, dbNumCursor)
+
+
+  var addNew = document.getElementById("addNew")
+  addNew.addEventListener("click", function(evt) {
+      db.forceInitialization = true
+      window.open('/views/addNew.html', '_self')
+  })
+  
+  var importFromFile = document.getElementById("importFromFile")
+  importFromFile.addEventListener("click", function (evt) {
+      var fd = document.getElementById("fileDialog")
+      fd.click()
+  })
+
+  
+  var fileDialog = document.getElementById("fileDialog")
+  fileDialog.addEventListener("change", function (evt) {
+
+      var modalContainer = document.getElementById("myModal")
+      modalContainer.style.display = "flex"
+
+      db.userSelected['startmode'] = "fromFile"
+      db.userSelected['filename'] = this.value
+
+      dbHandler.getMinId(function(minId) {
+	  db.MinId = minId
+	  board.importGames()
+      })
+            
+  })
+
+
+  var starred = document.getElementById("starred")
+  starred.addEventListener("click", function(evt) {
+      dbHandler.sortByStarred(dbContainer, dbNumResults, dbNumCursor)
+  })
+
+  var database = document.getElementById("database")
+  database.addEventListener("click", function(evt) {
+      dbHandler.sortByCreated(dbContainer, dbNumResults, dbNumCursor)
+  })
+
+  var nextCursor = document.getElementById("nextCursor")
+  nextCursor.addEventListener("click", function(evt) {
+      dbHandler.nextCursor(dbContainer, dbNumResults, dbNumCursor)
+  })
+
+  var prevCursor = document.getElementById("prevCursor")
+  prevCursor.addEventListener("click", function(evt) {
+      dbHandler.prevCursor(dbContainer, dbNumResults, dbNumCursor)
+  })
+
+
+  var tagInput = document.getElementById("tagInput")
+  function setTags() {
+      var tagModal = document.getElementById("tagModal")
+      var tagEntry = document.getElementById("tagEntry")
+      tagModal.style.display = "none"
+      dbHandler.setTags(tagEntry.value, tagInput.value)
+  }
+  
+  tagInput.addEventListener("keydown", function(evt) {
+      if (evt.which == 13) {
+	  setTags()
+      }
+  })
+
+  var confirmTag = document.getElementById("confirmTag")
+  confirmTag.addEventListener("click", function(evt) {
+      setTags()
+  })
+
+  var trash = document.getElementById("trash")
+  trash.addEventListener("click", function(evt) {
+      dbHandler.trashDB()
+  })
+
+  var search = document.getElementById("search")
+  search.addEventListener("click", function(evt) {
+      db.sorting = "created"
+      window.open('/views/search.html', '_self')
+  })
+
+  var tags = document.getElementById("tags")
+  tags.addEventListener("click", function(evt) {
+      // toggle taglist
+      var taglist = document.getElementById("taglist")
+      taglist.classList.toggle("hiddenTaglist")
+
+      if (taglist.classList.contains("hiddenTaglist")) {
+	  localStorage.taglistHidden = true
+      } else {
+	  localStorage.taglistHidden = false
+      }
+  })
+
+
+  // var settings = document.getElementById("settings")
+  // settings.addEventListener("click", function(evt) {
+  //     window.open('/views/settings.html', '_self')
+  // })
+
+
+  
+</script>
+	  

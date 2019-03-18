@@ -1,0 +1,134 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>chessfriend - Settings</title>
+    
+    <link rel="stylesheet" href="../css/common.css">
+    <script src="../app/chessfriend.js"></script>
+    
+  </head>
+
+  
+  <body>
+
+    <div class="game-container">
+      <div class="settings-view">
+	<div class="search-window">
+	  
+	  
+	  <table class="settingsTable">
+	    <tr>
+	      <td>
+		Engine path
+		<div style="float: right; text-align: right; display: inline-block;">
+		  <label for="chooseEngine" class="hoverable">Select</label>
+		  <input id="chooseEngine" type="file" onchange="changeEnginePath();">
+		</div>
+	      </td>
+	      <td>
+		<input id="enginePath" type="text" class="settingsInput">
+	      </td>
+	    </tr>
+	    
+	    <tr>
+	      <td>Number of threads</td>
+	      <td><input id="numThreads" type="number" class="settingsInput"></td>
+	    </tr>
+	    
+	    <tr>
+	      <td>MultiPV</td>
+	      <td><input id="multiPV" type="number" class="settingsInput"></td>
+	    </tr>
+	    
+	    <tr>
+	      <td>Notation style</td>
+	      <td>
+		<select id="notationStyle" class="settingsInput">
+		  <option value="figurine">Figurine</option>
+		  <option value="algebraic">Algebraic</option>
+		</select>
+	      </td>
+	    </tr>
+	  </table>
+	  
+	  
+	  <div style="text-align: center; margin-top: 16px;">
+	    <button onclick="save()">Save settings</button>
+	  </div>
+
+	</div>
+      </div>
+    </div>
+  </body>
+</html>
+
+
+
+<script>
+
+  var fs = require('fs')
+  var path = require('path')
+  
+  var enginePath = document.getElementById("enginePath")
+  var numThreads = document.getElementById("numThreads")
+  var multiPV = document.getElementById("multiPV")
+  var notationStyle = document.getElementById("notationStyle")
+
+
+  enginePath.value = cfdt.getConfigParam('enginePath', path.join(process.cwd(), '/bin/stockfish-10-64'))
+  numThreads.value = cfdt.getConfigParam('numThreads', 4)
+  multiPV.value = cfdt.getConfigParam('multiPV', 5)
+  notationStyle.value = cfdt.getConfigParam('notationStyle', 'figurine')
+
+  
+  function save() {
+
+
+      if (multiPV.value > 128) {
+	  alert("MultiPV variations must not be larger than 128")
+	  return
+      }
+
+      if (multiPV.value < 1) {
+	  alert("MultiPV must not be smaller than 1")
+	  return
+      }
+
+      if (numThreads.value < 1) {
+	  alert("Number of threads must not be smaller than 1")
+	  return
+      }
+
+      if (numThreads.value > 128) {
+	  alert("Number of threads must not be larger than 1")
+	  return
+      }
+
+      
+      localStorage['enginePath'] = enginePath.value
+      localStorage['numThreads'] = numThreads.value
+      localStorage['multiPV'] = multiPV.value
+      localStorage['notationStyle'] = notationStyle.value
+
+      var filePath = path.join(process.cwd(), "engineParams");
+      var engineParams = {}
+      engineParams['enginePath'] = enginePath.value
+      engineParams['numThreads'] = numThreads.value
+      engineParams['multiPV'] = multiPV.value
+
+      
+      fs.writeFile(filePath, JSON.stringify(engineParams), function (err) {
+      })
+      
+      window.open('/views/main.html', '_self')
+  }
+
+  function changeEnginePath() {
+      var chooseEngine = document.getElementById("chooseEngine")
+      cfdt.log("path change: " + chooseEngine.value)
+      enginePath.value = chooseEngine.value
+  }
+  
+
+</script>
