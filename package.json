@@ -8,7 +8,7 @@
   },
   "scripts": {
     "dev": "nw src/",
-    "prod": "nwbuild --flavor normal --platforms osx64 --buildDir dist/ src/"
+    "prod": "nwbuild --flavor normal --platforms win64 --buildDir dist/ src/"
   },
   "license": "MIT",
   "dependencies": {
