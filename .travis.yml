@@ -3,7 +3,7 @@ node_js:
 - node
 os: windows
 script:
-  - rm -rf ./node_modules ./dist
+  - rm -rf ./node_modules
   - npm install -g nw-gyp
   - export npm_config_target=0.18.5
   - export npm_config_arch=x64
@@ -12,7 +12,7 @@ script:
   - export npm_config_build_from_source=true
   - export npm_config_node_gyp=$(which nw-gyp)
   - npm install
-  - npm run prod
+  #- npm run prod
 before_deploy:
   - tar -zcf release.tar.gz --exclude=release.tar.gz .
   # tag this commit

@@ -3,8 +3,18 @@
   "version": "1.0.0",
   "main": "views/main.html",
   "devDependencies": {
-    "nw": "^0.37.0",
     "nw-builder": "^3.5.7"
+  },
+  "bin": "src/views/main.html",
+  "pkg": {
+    "scripts": "src/app/*",
+    "assets": [
+      "src/assets/*",
+      "src/bin/*",
+      "src/css/*",
+      "src/views/*",
+      "src/fonts/*"
+    ]
   },
   "scripts": {
     "dev": "nw src/",
@@ -15,21 +25,14 @@
     "chess.js": "^0.10.2",
     "font-awesome": "^4.7.0",
     "level-js": "^4.0.0",
-    "linvodb3": "^3.26.0"
-  },
-  "directories": {
-    "doc": "docs",
-    "test": "tests"
+    "linvodb3": "^3.26.0",
+    "nw": "^0.37.0",
+    "pkg": "^4.3.7"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/SFBrand1981/ChessFriend-Fire.git"
   },
-  "keywords": [
-    "chess",
-    "engine",
-    "database"
-  ],
   "author": "",
   "bugs": {
     "url": "https://github.com/SFBrand1981/ChessFriend-Fire/issues"
