@@ -15,19 +15,19 @@ matrix:
       - export npm_config_node_gyp=$(which nw-gyp)
       - npm install
       - npm install nwjs
-      - tar -zcf release_win.tar.gz --exclude=release_*.tar.gz
+      - tar -zcf release_win.tar.gz --exclude=release_*.tar.gz .
 
    - os: linux
      script:
       - npm install
       - npm install nwjs
-      - tar -zcf release_linux.tar.gz --exclude=release_*.tar.gz
+      - tar -zcf release_linux.tar.gz --exclude=release_*.tar.gz .
 
    - os: osx
      script:
       - npm install
       - npm install nwjs
-      - tar -zcf release_osx.tar.gz --exclude=release_*.tar.gz
+      - tar -zcf release_osx.tar.gz --exclude=release_*.tar.gz .
 
 
 before_deploy:
