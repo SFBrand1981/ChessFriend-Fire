@@ -12,6 +12,7 @@ script:
   - export npm_config_build_from_source=true
   - export npm_config_node_gyp=$(which nw-gyp)
   - npm install
+  - npm install nwjs
   #- npm run prod
 before_deploy:
   - tar -zcf release.tar.gz --exclude=release.tar.gz .

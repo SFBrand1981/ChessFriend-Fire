@@ -5,17 +5,6 @@
   "devDependencies": {
     "nw-builder": "^3.5.7"
   },
-  "bin": "src/views/main.html",
-  "pkg": {
-    "scripts": "src/app/*",
-    "assets": [
-      "src/assets/*",
-      "src/bin/*",
-      "src/css/*",
-      "src/views/*",
-      "src/fonts/*"
-    ]
-  },
   "scripts": {
     "dev": "nw src/",
     "prod": "nwbuild --flavor sdk --platforms win64 --buildDir dist/ src/"
@@ -26,8 +15,7 @@
     "font-awesome": "^4.7.0",
     "level-js": "^4.0.0",
     "linvodb3": "^3.26.0",
-    "nw": "^0.37.0",
-    "pkg": "^4.3.7"
+    "nw": "^0.37.0"
   },
   "repository": {
     "type": "git",
