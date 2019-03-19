@@ -45,4 +45,3 @@ deploy:
   skip_cleanup: true
   on:
     repo: SFBrand1981/ChessFriend-Fire
-    condition: $TRAVIS_OS_NAME = "windows"
