@@ -2,12 +2,9 @@
   "name": "chessfriendfire",
   "version": "1.0.0",
   "main": "views/main.html",
-  "devDependencies": {
-    "nw-builder": "^3.5.7"
-  },
   "scripts": {
     "dev": "nw src/",
-    "prod": "nwbuild --flavor sdk --platforms win64 --buildDir dist/ src/"
+    "prod": "nwbuild --flavor sdk --platforms osx64,linux64 --buildDir dist/ src/"
   },
   "license": "MIT",
   "dependencies": {
@@ -15,7 +12,8 @@
     "font-awesome": "^4.7.0",
     "level-js": "^4.0.0",
     "linvodb3": "^3.26.0",
-    "nw": "^0.37.0"
+    "nw": "^0.37.0",
+    "nw-builder": "^3.5.7"
   },
   "repository": {
     "type": "git",

@@ -1,10 +1,9 @@
-# NW.js-examples
-
+# Chessfriend-Fire
 [![Build Status](https://travis-ci.org/SFBrand1981/ChessFriend-Fire.svg?branch=master)](https://travis-ci.org/SFBrand1981/ChessFriend-Fire)
 
 [NW.js][nwjs] features demonstrated in a simple project.
 
-![application screenshot][screen]
+![image][screen]
 
 This project is part of the article [Building a Cross-Platform Desktop App with NW.js][article] on Sitepoint.
 
