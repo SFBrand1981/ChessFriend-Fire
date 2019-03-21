@@ -26,9 +26,8 @@ matrix:
    - os: osx
      script:
       - npm install
-      - npm install nwjs -g
-      - npm run prod
-      - tar -zcf release_osx.tar.gz --exclude=release_osx.tar.gz ./dist/chessfriendfire/osx64/
+      - npm install nwjs
+      - tar -zcf release_osx.tar.gz --exclude=release_osx.tar.gz .
 
 
 before_deploy:

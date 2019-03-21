@@ -4,7 +4,7 @@
   "main": "views/main.html",
   "scripts": {
     "dev": "nw src/",
-    "prod": "nwbuild --flavor sdk --platforms osx64,linux64 --buildDir dist/ src/"
+    "prod": "nwbuild --flavor sdk --platforms osx64 --buildDir dist/ src/"
   },
   "license": "MIT",
   "dependencies": {
