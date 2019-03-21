@@ -28,8 +28,7 @@ matrix:
      script:
       - npm install
       - npm install nwjs
-      - mkdir artefacts
-      - tar -zcf ./artefacts/release_osx.tar.gz --exclude=./artefacts/release_osx.tar.gz .
+      - tar -zcf release_osx.tar.gz --exclude=release_osx.tar.gz .
 
 
 before_deploy:
