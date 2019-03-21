@@ -1,6 +1,6 @@
 # Chessfriend-Fire
 [![Build Status](https://travis-ci.org/SFBrand1981/ChessFriend-Fire.svg?branch=master)](https://travis-ci.org/SFBrand1981/ChessFriend-Fire)
-![Twitter Follow](https://img.shields.io/twitter/follow/SFBrand81.svg?style=social)
+[![Twitter Follow](https://img.shields.io/twitter/follow/SFBrand81.svg?style=social)](https://twitter.com/SFBrand81)
 
 [NW.js][nwjs] features demonstrated in a simple project.
 
