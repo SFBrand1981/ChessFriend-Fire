@@ -1175,7 +1175,7 @@ module.exports = function (window,
 		    }
 	
 		} else {
-
+		    
 		    if (nextColor === 'w') {
 			mainMoveNr = mvNr + 1
 			mainMoveDesc = ' ' + mainMoveNr.toString() + '.'
@@ -1186,7 +1186,7 @@ module.exports = function (window,
 			    // Main variation should always start with a move description
 			    mainMoveDesc = mainMoveNr.toString() + '. ...'
 			} else {
-			    mainMoveDesc = (hasSibling) ? mainMoveNr.toString() + '. ...' : ''
+			    mainMoveDesc = (hasSibling && sibling === 1) ? mainMoveNr.toString() + '. ...' : ''
 			}
 		    }
 		}
