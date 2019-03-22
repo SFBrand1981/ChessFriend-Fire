@@ -695,8 +695,10 @@ module.exports = function (window,
 	function appendComment(pos, nodeIndx, callback) {
 	    nodes[nodeIndx]['Comment'] = ''
 
+
 	    var i = pos
 	    while (moves[i] !== '}') {
+		
 		nodes[nodeIndx]['Comment'] += ((i === pos) ? '' : ' ') + moves[i]
 		i += 1
 	    }
@@ -759,7 +761,7 @@ module.exports = function (window,
 	    while (moves[i+1] !== undefined) {
 	
 		i += 1
-
+		
 		// End of game
 		if (moves[i] === '1-0' || moves[i] === '0-1' || moves[i] === "1/2-1/2") {
 		    appendEndOfGame(nodeIndx, i, 0)
@@ -802,12 +804,30 @@ module.exports = function (window,
 		    while (moves[i] === '(') {
 			
 			i += 1
+			var preComment = ''
+			
+			if (moves[i] === '{') {
+
+			    i += 1
+			    while(moves[i] !== '}') {
+				preComment === '' ? preComment += moves[i] : preComment += ' ' + moves[i]
+				i += 1
+			    }
+
+			    i += 1
+			}
+
 			while (isMoveDesc(i)) {
 			    i += 1
 			}
 
 			varIndx += 1
 			appendNode(root, i, varIndx)
+
+			if (preComment !== '') {
+			    var preCommentIndx = root + '(' + varIndx.toString() + ')'
+			    nodes[preCommentIndx]['preComment'] = preComment
+			}
 
 			consumeVariation(i, function(varEndPos) {
 			    i = varEndPos + 1
@@ -1009,6 +1029,10 @@ module.exports = function (window,
 		return " +-"
 	    case "$19":
 		return " -+"
+	    case "$40":
+		return " ↑"
+	    case "$41":
+		return " ↑"
 	    case "$44":
 		return " =/∞"
 	    case "$146":
@@ -1026,9 +1050,8 @@ module.exports = function (window,
 		move.classList.add("move")
 		move.classList.add("level" + branchLevel.toString())
 		move.id = "move" + nodeIndx
-
+		
 		var NAG = (nodes[nodeIndx]['NAG'] !== undefined) ? convertNAG2Symbol(nodes[nodeIndx]['NAG']) : ""
-
 		move.innerHTML = mvDesc + ' ' + '<span class="san">' + figurine(nodes[nodeIndx]['SAN']) + NAG + '</span>'
 
 		if (nodes[nodeIndx]['Comment'] !== undefined) {
@@ -1081,6 +1104,7 @@ module.exports = function (window,
 			mainMoveDesc = ' ' + mainMoveNr.toString() + '.'
 		    }		    
 		}
+
 
 		var NAG = (nodes[mainNodeIndx]['NAG'] !== undefined) ? convertNAG2Symbol(nodes[mainNodeIndx]['NAG']) : ""
 		mainMove.innerHTML = mainMoveDesc + ' ' + '<span class="san">' + figurine(nodes[mainNodeIndx]['SAN']) + NAG + '</san>'
