@@ -12,7 +12,6 @@ const { spawn } = require('child_process')
 var filePath = path.join(process.cwd(), "engineParams")
 var engineParams = JSON.parse(fs.readFileSync(filePath, 'utf8'))
 
-cfdt.log(engineParams)
 
 var engineInfo = {
     status : undefined,
@@ -25,7 +24,7 @@ var engineInfo = {
 
 
 const engine = spawn(path.resolve(engineParams['enginePath']))
-cfdt.log(`Spawned engine pid: ${engine.pid}`)
+//cfdt.log(`Spawned engine pid: ${engine.pid}`)
 
 
 var rl = readline.createInterface({
@@ -36,7 +35,7 @@ var rl = readline.createInterface({
 
 
 engine.on('close', function(code, signal) {
-    cfdt.log(`Engine ${engine.pid} exited with code ${code} and signal ${signal}`)
+    //cfdt.log(`Engine ${engine.pid} exited with code ${code} and signal ${signal}`)
 })
 
 rl.on('line', function(line) {

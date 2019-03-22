@@ -1870,7 +1870,6 @@ module.exports = function (window,
     }
 
     function quitEngine() {
-	cfdt.log('Quit engine')
 	engine.send({ uci : 'quit' })
     }
 

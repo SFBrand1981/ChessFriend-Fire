@@ -35,16 +35,16 @@ engineParams['multiPV'] = cfdt.getConfigParam('multiPV', 5)
 fs.writeFile(filePath, JSON.stringify(engineParams), function (err) {
 })
 
-// Read settings on load
-window.onload = () => {
+// // Read settings on load
+// window.onload = () => {
 
-    cfdt.readSettings(function (settings) {
+//     cfdt.readSettings(function (settings) {
 
-	if (settings.screenX != undefined && settings.screenY != undefined) {
-	    window.moveTo(settings.screenX, settings.screenY)
-	}
-    })
-}
+// 	if (settings.screenX != undefined && settings.screenY != undefined) {
+// 	    window.moveTo(settings.screenX, settings.screenY)
+// 	}
+//     })
+// }
 
 
 
@@ -100,20 +100,19 @@ nw.Window.get().menu = mainMenu
 // Remove menu on page leave
 window.onunload = () => {
     nw.Window.get().menu = null
-    cfdt.log("WINDOW CLOSED")
 }
 
 
-// Save settings before window unloads 
-window.addEventListener("beforeunload", function() {
+// // Save settings before window unloads 
+// window.addEventListener("beforeunload", function() {
 
-    cfSettings.screenX = window.screenX 
-    cfSettings.screenY = window.screenY
+//     cfSettings.screenX = window.screenX 
+//     cfSettings.screenY = window.screenY
     
-    cfdt.saveSettings(cfSettings, function() {
-	cfdt.log("Settings saved")
-    })
-})
+//     cfdt.saveSettings(cfSettings, function() {
+// 	cfdt.log("Settings saved")
+//     })
+// })
 
 
 

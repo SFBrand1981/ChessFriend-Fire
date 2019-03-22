@@ -54,7 +54,8 @@
 	  
 	  
 	  <div style="text-align: center; margin-top: 16px;">
-	    <button onclick="save()">Save settings</button>
+	    <span class="txtAsBtn" onclick="cancel()">Cancel</span>
+	    <span class="txtAsBtn" onclick="save()">Save</span>
 	  </div>
 
 	</div>
@@ -124,9 +125,12 @@
       window.open('/views/main.html', '_self')
   }
 
+  function cancel() {
+      window.open('/views/main.html', '_self')
+  }
+
   function changeEnginePath() {
       var chooseEngine = document.getElementById("chooseEngine")
-      cfdt.log("path change: " + chooseEngine.value)
       enginePath.value = chooseEngine.value
   }
   
