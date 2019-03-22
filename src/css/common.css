@@ -513,52 +513,63 @@ a {
     color: #33658A;
 }
 
+
+.varIndicator {
+    display: inline-block;
+    width: 2rem;
+    margin-left: -2rem;
+    text-align: left;
+}
+
+
 .subvar.level1 {
     display: block;
     margin-top: 4px;
     margin-bottom: 4px;
-    margin-left: 1rem;
-}
-
-.varIndicator {
-    display: inline-block;
-    width: 1rem;
-    margin-left: -1rem;
-    text-align: left;
+    margin-left: 2rem;
 }
 
 .subvar.level2 {
     display: block;
-    margin-left: 4rem;
+    margin-left: 2rem;
 }
 
 .subvar.level3 {
     display: block;
-    margin-left: 4rem;
+    margin-left: 1.7rem;
 }
 
 .subvar.level4 {
     display: block;
-    margin-left: 4.5rem;
-}
-
-.level4 > .varIndicator {
-    display: inline-block;
-    width: 1.5rem;
-    margin-left: -1.5rem;
-    text-align: left;
+    margin-left: 1.8rem;
 }
 
 .subvar.level5 {
     display: block;
-    margin-left: 4.5rem;
+    margin-left: 2.2rem;
 }
 
-.level5 > .varIndicator {
-    display: inline-block;
-    width: 1.5rem;
-    margin-left: -1.5rem;
-    text-align: left;
+.level2 {
+    padding-bottom: 1rem;
+}
+
+.level3 {
+    padding-bottom: 1rem;
+    color: teal;
+}
+
+.level4 {
+    padding-bottom: 1rem;
+    color: purple;
+}
+
+.level5 {
+    padding-bottom: 1rem;
+    color: olive;
+}
+
+.level6 {
+    color: black;
 }
 
 .engineOut {
