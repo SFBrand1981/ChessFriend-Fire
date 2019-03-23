@@ -2652,6 +2652,11 @@ module.exports = function (window,
 	var fen = board.nodes[nodeIndx]['FEN']
 	updateBoard(fen, nodeIndx)
     }
+
+    function getBoardFEN() {
+	return board.FEN
+    }
+    
     
     // Module exports
     module.loadForAnalysis = loadForAnalysis
@@ -2667,6 +2672,7 @@ module.exports = function (window,
     module.deleteVariation = deleteVariation
     module.selectRootNode = selectRootNode
     module.deleteGame = deleteGame
+    module.getBoardFEN = getBoardFEN
     
     return module
 

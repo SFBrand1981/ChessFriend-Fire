@@ -181,8 +181,10 @@ module.exports = function (window, DB) {
 
 	var taglist = document.getElementById("taglist")
 
+
 	if (DB.forceInitialization) {
 	    initLastView()
+	    DB.forceInitialization = false
 	    return
 	}
 

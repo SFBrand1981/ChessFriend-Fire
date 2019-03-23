@@ -87,7 +87,9 @@
 
   var BoardHandling = require(path.join(process.cwd(), '/app/boardHandling.js'))  
   var db = require(path.join(process.cwd(), '/app/chessfriendDB.js'))
-  
+
+  var DBHandling = require(path.join(process.cwd(), '/app/dbHandling.js'))
+  var dbHandler = new DBHandling(window, db)
 
   var board = new BoardHandling(window, Container, db)
   board.loadForAnalysis()
@@ -115,7 +117,7 @@
       })
   }
 
-  
+
   // Create an empty context menu for view
   var menu = new nw.Menu();
   
@@ -135,6 +137,19 @@
   }))
 
   menu.append(new nw.MenuItem({ type: 'separator' }))
+
+  menu.append(new nw.MenuItem({
+      label: 'Search board position',
+      click: function(){
+	  
+	  var searchObj = {}
+	  searchObj.positions = board.getBoardFEN().split(' ')[0]
+
+	  // TODO warning: Unsaved changes will be lost!
+	  db.forceInitialization = false
+	  dbHandler.searchDB(searchObj)
+      }
+  }))
 
   menu.append(new nw.MenuItem({
       label: 'Delete game',
@@ -160,5 +175,10 @@
   startHook.addEventListener("click", function (evt) {
       board.selectRootNode()
   })
+
+
+  
+
+  
 
 </script>
