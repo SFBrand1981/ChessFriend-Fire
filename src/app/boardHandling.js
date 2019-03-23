@@ -543,7 +543,11 @@ module.exports = function (window,
 		moves = moves.replace(/\)/g, ' ) ')
 
 		// Separate move numbers by whitespace
-		moves = moves.replace(/(\d+)(\.)+/g, '$1. ')
+		// outside comments
+		moves = moves.replace(/(\d+)(\.)+(?=(((?!}).)*{)|[^{}]*$)/g, '$1. ')
+		// inside comments
+		moves = moves.replace(/(\d+\.)(\.+)(?=((?!{).)*?})/g, '$1 $2')
+
 		
 		// Remove repeated whitespace
 		moves = moves.replace(/\s\s+/g, ' ')
