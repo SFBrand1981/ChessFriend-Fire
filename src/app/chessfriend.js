@@ -29,7 +29,7 @@ if (os.platform() === "darwin") {
     engineParams['enginePath'] = cfdt.getConfigParam('enginePath', path.join(process.cwd(), '/bin/stockfish-10-64'))
 }
     
-engineParams['numThreads'] = cfdt.getConfigParam('numThreads', 4)
+engineParams['numThreads'] = cfdt.getConfigParam('numThreads', 1)
 engineParams['multiPV'] = cfdt.getConfigParam('multiPV', 5)
 
 fs.writeFile(filePath, JSON.stringify(engineParams), function (err) {

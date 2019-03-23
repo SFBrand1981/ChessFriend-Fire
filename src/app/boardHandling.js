@@ -1050,9 +1050,13 @@ module.exports = function (window,
 		move.classList.add("move")
 		move.classList.add("level" + branchLevel.toString())
 		move.id = "move" + nodeIndx
-		
+
+		move.innerHTML = ""
+
+		var pc = (nodes[nodeIndx]['preComment'] !== undefined) ? nodes[nodeIndx]['preComment'] : ''
+
 		var NAG = (nodes[nodeIndx]['NAG'] !== undefined) ? convertNAG2Symbol(nodes[nodeIndx]['NAG']) : ""
-		move.innerHTML = mvDesc + ' ' + '<span class="san">' + figurine(nodes[nodeIndx]['SAN']) + NAG + '</span>'
+		move.innerHTML = pc + mvDesc + ' ' + '<span class="san">' + figurine(nodes[nodeIndx]['SAN']) + NAG + '</span>'
 
 		if (nodes[nodeIndx]['Comment'] !== undefined) {
 		    move.innerHTML += ' <span class="comment">' + nodes[nodeIndx]['Comment'] + "</span>"
@@ -1105,9 +1109,9 @@ module.exports = function (window,
 		    }		    
 		}
 
-
+		var pc = (nodes[mainNodeIndx]['preComment'] !== undefined) ? nodes[mainNodeIndx]['preComment'] : ''
 		var NAG = (nodes[mainNodeIndx]['NAG'] !== undefined) ? convertNAG2Symbol(nodes[mainNodeIndx]['NAG']) : ""
-		mainMove.innerHTML = mainMoveDesc + ' ' + '<span class="san">' + figurine(nodes[mainNodeIndx]['SAN']) + NAG + '</san>'
+		mainMove.innerHTML = pc + mainMoveDesc + ' ' + '<span class="san">' + figurine(nodes[mainNodeIndx]['SAN']) + NAG + '</san>'
 
 		if (nodes[mainNodeIndx]['Comment'] !== undefined) {
 		    mainMove.innerHTML += ' <span class="comment">' + nodes[mainNodeIndx]['Comment'] + "</span>"
