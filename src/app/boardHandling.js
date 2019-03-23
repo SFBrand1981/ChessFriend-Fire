@@ -731,6 +731,7 @@ module.exports = function (window,
 	    
 	}
 
+
 	function appendEndOfGame(root, pos, indx) {
 	    var nodeIndx = root
 
@@ -752,7 +753,9 @@ module.exports = function (window,
 	    chess.move(moves[pos])
 
 	    var nodeIndx = root + '(' + indx.toString() + ')'
-	    nodes[nodeIndx] = {}
+	    if (nodes[nodeIndx] === undefined) {
+		nodes[nodeIndx] = {}
+	    }
 	    nodes[nodeIndx]['FEN'] = chess.fen()
 	    nodes[nodeIndx]['SAN'] = figurine(moves[pos])
 
@@ -761,6 +764,7 @@ module.exports = function (window,
 	    while (moves[i+1] !== undefined) {
 	
 		i += 1
+
 		
 		// End of game
 		if (moves[i] === '1-0' || moves[i] === '0-1' || moves[i] === "1/2-1/2") {
@@ -783,6 +787,7 @@ module.exports = function (window,
 	
 	    	// Comments
 	    	if (moves[i] === '{') {
+
 		    i += 1
 		    appendComment(i, nodeIndx, function(commentEndPos) {
 			i = commentEndPos 
@@ -792,7 +797,7 @@ module.exports = function (window,
 
 	    	
 	    	// Continue mainline
-	    	if ('abcdefghRBNQKO0'.indexOf(moves[i][0]) !== -1) {
+	    	if ('abcdefghRBNQKO0'.indexOf(moves[i][0]) !== -1 && moves[i-1] !== '{') {
 		    appendNode(nodeIndx, i, 0)
 		    return
 		}
@@ -800,52 +805,74 @@ module.exports = function (window,
 		
 	    	// Consume variations
 		if (moves[i] === '(') {
+
 		    var varIndx = indx
+		    
 		    while (moves[i] === '(') {
 			
 			i += 1
 			var preComment = ''
 			
 			if (moves[i] === '{') {
-
-			    i += 1
-			    while(moves[i] !== '}') {
+			    
+                            i += 1
+                            while(moves[i] !== '}') {
 				preComment === '' ? preComment += moves[i] : preComment += ' ' + moves[i]
 				i += 1
-			    }
-
-			    i += 1
+                            }
+			    
+                            i += 1
 			}
-
+			
 			while (isMoveDesc(i)) {
-			    i += 1
+                            i += 1
 			}
-
-			varIndx += 1
+			
+                        varIndx += 1
 			appendNode(root, i, varIndx)
-
+			
 			if (preComment !== '') {
-			    var preCommentIndx = root + '(' + varIndx.toString() + ')'
-			    nodes[preCommentIndx]['preComment'] = preComment
+                            var preCommentIndx = root + '(' + varIndx.toString() + ')'
+                            nodes[preCommentIndx]['preComment'] = preComment
 			}
-
+			
 			consumeVariation(i, function(varEndPos) {
-			    i = varEndPos + 1
-			})
+                            i = varEndPos + 1
+			})  
 		    }
-
+					 
 		    if (moves[i] == ')') {
 			return
 		    } else {
 			continue
 		    }
-
 		}
 		
 		
 		// End variation
 		if (moves[i] === ')' || moves[i] === '*') {
 		    return
+		}
+
+		// Precomment
+		if (moves[i-1] === '{') {
+
+		    var preComment = ''
+
+                    while(moves[i] !== '}') {
+			preComment === '' ? preComment += moves[i] : preComment += ' ' + moves[i]
+			i += 1
+                    }
+		    
+                    i += 1
+	    
+                    var preCommentIndx = nodeIndx + '(0)'
+
+		    if (nodes[preCommentIndx] === undefined) {
+			nodes[preCommentIndx] = {}
+		    }
+		    nodes[preCommentIndx]['preComment'] = preComment		    
+		    continue
 		}
 		
 	    	// Something unforeseen
@@ -1053,10 +1080,8 @@ module.exports = function (window,
 
 		move.innerHTML = ""
 
-		var pc = (nodes[nodeIndx]['preComment'] !== undefined) ? nodes[nodeIndx]['preComment'] : ''
-
 		var NAG = (nodes[nodeIndx]['NAG'] !== undefined) ? convertNAG2Symbol(nodes[nodeIndx]['NAG']) : ""
-		move.innerHTML = pc + mvDesc + ' ' + '<span class="san">' + figurine(nodes[nodeIndx]['SAN']) + NAG + '</span>'
+		move.innerHTML = mvDesc + ' ' + '<span class="san">' + figurine(nodes[nodeIndx]['SAN']) + NAG + '</span>'
 
 		if (nodes[nodeIndx]['Comment'] !== undefined) {
 		    move.innerHTML += ' <span class="comment">' + nodes[nodeIndx]['Comment'] + "</span>"
@@ -1109,9 +1134,8 @@ module.exports = function (window,
 		    }		    
 		}
 
-		var pc = (nodes[mainNodeIndx]['preComment'] !== undefined) ? nodes[mainNodeIndx]['preComment'] : ''
 		var NAG = (nodes[mainNodeIndx]['NAG'] !== undefined) ? convertNAG2Symbol(nodes[mainNodeIndx]['NAG']) : ""
-		mainMove.innerHTML = pc + mainMoveDesc + ' ' + '<span class="san">' + figurine(nodes[mainNodeIndx]['SAN']) + NAG + '</san>'
+		mainMove.innerHTML = mainMoveDesc + ' ' + '<span class="san">' + figurine(nodes[mainNodeIndx]['SAN']) + NAG + '</san>'
 
 		if (nodes[mainNodeIndx]['Comment'] !== undefined) {
 		    mainMove.innerHTML += ' <span class="comment">' + nodes[mainNodeIndx]['Comment'] + "</span>"
@@ -1135,12 +1159,18 @@ module.exports = function (window,
 		    var nextMvNr
 		    var nextMvDesc = (i === 1) ? ' ' : ''
 
+		    var pc = ''
+		    if (nodes[nextNodeIndx]['preComment'] !== undefined) {
+			pc = '<span class="precomment">' + nodes[nextNodeIndx]['preComment'] + ' ' + '</span>'
+		    }
+		    
+
 		    if (nextColor === 'w') {
 			nextMvNr = mvNr + 1
-			nextMvDesc += varIndicator(branchLevel, "left") + nextMvNr.toString() + '.'
+			nextMvDesc += varIndicator(branchLevel, "left") + pc + nextMvNr.toString() + '.'
 		    } else {
 			nextMvNr = mvNr
-			nextMvDesc += varIndicator(branchLevel, "left") + nextMvNr.toString() + '. ...'
+			nextMvDesc += varIndicator(branchLevel, "left") + pc + nextMvNr.toString() + '. ...'
 		    }
 		    
 
@@ -1151,8 +1181,7 @@ module.exports = function (window,
 		    
 		    addNextMove(subVar, nextMvNr, nextMvDesc, nextColor, branchLevel + 1, nextNodeIndx, nodes)
 
-
-		    if (nodes[nodeIndx + '(0)(0)'] === undefined && i === numNextNodes - 1) {
+		    if (nodes[nodeIndx + '(0)(0)'] === undefined && i === numNextNodes - 1) {			
 			subVar.lastChild.innerHTML += varIndicator(branchLevel, "right")
 		    }
 		    

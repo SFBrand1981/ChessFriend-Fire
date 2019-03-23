@@ -8,6 +8,12 @@
 }
 
 @font-face {
+  font-family: "Lato";
+  src: url(../fonts/Lato/Lato-Bold.ttf) format("truetype");
+  font-weight: bold;
+}
+
+@font-face {
   font-family: "Alpha";
   src: url(../fonts/Alpha/ChessAlpha2.ttf) format("truetype");
 }
@@ -482,6 +488,7 @@ a {
     font-weight: normal;
     margin-left: 4px;
     margin-right: 4px;
+    color: gray;
 }
 
 .intro-comment {
@@ -506,13 +513,12 @@ a {
 }
 
 .level1 {
-    font-weight: bold;
+    font-weight: normal;
 }
 
 .level2 {
     color: #33658A;
 }
-
 
 .varIndicator {
     display: inline-block;
@@ -520,7 +526,6 @@ a {
     margin-left: -2rem;
     text-align: left;
 }
-
 
 .subvar.level1 {
     display: block;
@@ -571,6 +576,15 @@ a {
 .level6 {
     color: black;
 }
+
+.precomment {
+    color: gray;
+}
+
+.level1 > .comment {
+    display: block;
+}
+
 
 .engineOut {
     margin-left: 12px;
