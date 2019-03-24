@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>chessfriend - Game</title>
+    <title>ChessFriend-Fire - Game</title>
 
     <link rel="stylesheet" href="../css/common.css">
     <script src="../app/chessfriend.js"></script>
@@ -66,6 +66,19 @@
 	</div>
       </div>
     </div>
+
+
+    <div id="exportModal" class="modal">
+      <!-- Modal content -->
+      <div class="modal-content">
+    	<p>Choose export format:</p>
+	<div>
+	  <span class="txtAsBtn" onclick="cancel();">Cancel</span>
+	  <span class="txtAsBtn" onclick="exportGame('tex');">LaTex</span>
+	  <span class="txtAsBtn" onclick="exportGame('pgn');">PGN</span>
+	</div>
+      </div>
+    </div>
     
 
   </body>
@@ -78,6 +91,7 @@
   var path = require('path')
   var modalContainer = document.getElementById("myModal")
   var deletionContainer = document.getElementById("deletionModal")
+  var exportContainer = document.getElementById("exportModal")
   var boardContainer = document.getElementById('game-board')
   var moveContainer = document.getElementById('game-notation')
   var Container = {}
@@ -93,7 +107,7 @@
 
   var board = new BoardHandling(window, Container, db)
   board.loadForAnalysis()
-  
+  board.setNotationStyle(cfdt.getConfigParam('notationStyle', 'figurine'))
 
   function discard() {
       window.open('/views/main.html', '_self')
@@ -102,6 +116,7 @@
   function cancel() {
       modalContainer.style.display = "none"
       deletionContainer.style.display = "none"
+      exportContainer.style.display = "none"
   }
 
   function save() {
@@ -109,7 +124,7 @@
 	  window.open('/views/main.html', '_self')
       })
   }
-  
+
   function deleteGame() {
       board.deleteGame(function(err) {
 	  db.forceInitialization = true
@@ -136,7 +151,6 @@
       }
   }))
 
-  menu.append(new nw.MenuItem({ type: 'separator' }))
 
   menu.append(new nw.MenuItem({
       label: 'Search board position',
@@ -151,13 +165,24 @@
       }
   }))
 
+
+  menu.append(new nw.MenuItem({ type: 'separator' }))
+
+  menu.append(new nw.MenuItem({
+      label: 'Export game',
+      click: function(){
+	  exportContainer.style.display = "flex"
+      }
+  }))
+
+  menu.append(new nw.MenuItem({ type: 'separator' }))
+
   menu.append(new nw.MenuItem({
       label: 'Delete game',
       click: function(){
 	  deletionContainer.style.display = "flex"
       }
   }))
-  
   
   // Hooks for the "contextmenu" event
   document.body.addEventListener('contextmenu', function(ev) {
@@ -177,7 +202,29 @@
   })
 
 
+  function exportGame(fmt) {
+
+      board.setExportFormat(fmt)
+      download("hello.pgn","This is the content of my file :)")
+      exportContainer.style.display = "none"
+  }
+
+
+  function download(filename, text) {
+      var element = document.createElement('a')
+      element.setAttribute('href',
+			   'data:text/plain;charset=utf-8,' + encodeURIComponent(text))
+      element.setAttribute('download', filename)
+      
+      element.style.display = 'none';
+      document.body.appendChild(element)
+      
+      element.click()
+      
+      document.body.removeChild(element)
+  }
   
+
 
   
 

@@ -13,6 +13,8 @@ var import_data
 var num_games
 var num_imported
 
+board.setNotationStyle('algebraic') // faster!
+
 function importBatch() {
 
     var games = import_data.split(/(\[Event\s.*\])/)

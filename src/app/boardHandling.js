@@ -34,7 +34,9 @@ module.exports = function (window,
 	selectedPiece : undefined,
 	edited : false,
 	_DB_Id : undefined,
-	_DB_created : undefined
+	_DB_created : undefined,
+	notationStyle : undefined,
+	exportFormat : undefined
     }
 
 
@@ -205,12 +207,21 @@ module.exports = function (window,
 	// r = r.replace(/B/g, "&#9815;");
 	// r = r.replace(/N/g, "&#9816;");
 
-	r = r.replace(/K/g, '<span class="figurine">n</span>');
-	r = r.replace(/Q/g, '<span class="figurine">m</span>');
-	r = r.replace(/R/g, '<span class="figurine">l</span>');
-	r = r.replace(/B/g, '<span class="figurine">j</span>');
-	r = r.replace(/N/g, '<span class="figurine">k</span>');
 
+	if (board.notationStyle === 'figurine') {
+	    r = r.replace(/K/g, '<span class="figurine">n</span>');
+	    r = r.replace(/Q/g, '<span class="figurine">m</span>');
+	    r = r.replace(/R/g, '<span class="figurine">l</span>');
+	    r = r.replace(/B/g, '<span class="figurine">j</span>');
+	    r = r.replace(/N/g, '<span class="figurine">k</span>');
+	} else {
+	    r = r.replace(/<span class="figurine">n<\/span>/g, 'K');
+	    r = r.replace(/<span class="figurine">m<\/span>/g, 'Q');
+	    r = r.replace(/<span class="figurine">l<\/span>/g, 'R');
+	    r = r.replace(/<span class="figurine">j<\/span>/g, 'B');
+	    r = r.replace(/<span class="figurine">k<\/span>/g, 'N');
+	}
+	    
 	return r;
     }
     
@@ -745,9 +756,9 @@ module.exports = function (window,
 	    
 	    // normalize result
 	    if (moves[pos] === "1/2-1/2") {
-		nodes[nodeIndx]['Comment'] += "½-½"
+		nodes[nodeIndx]['Comment'] += " " + "½-½"
 	    } else {
-		nodes[nodeIndx]['Comment'] += moves[pos]
+		nodes[nodeIndx]['Comment'] += " " + moves[pos]
 	    }
 	}
 	
@@ -836,6 +847,7 @@ module.exports = function (window,
 			appendNode(root, i, varIndx)
 			
 			if (preComment !== '') {
+			    
                             var preCommentIndx = root + '(' + varIndx.toString() + ')'
                             nodes[preCommentIndx]['preComment'] = preComment
 			}
@@ -875,7 +887,8 @@ module.exports = function (window,
 		    if (nodes[preCommentIndx] === undefined) {
 			nodes[preCommentIndx] = {}
 		    }
-		    nodes[preCommentIndx]['preComment'] = preComment		    
+
+		    nodes[preCommentIndx]['preComment'] = preComment
 		    continue
 		}
 		
@@ -986,7 +999,6 @@ module.exports = function (window,
 
     function displayNotation(nodes, callback) {
 
-
 	function childIndx(nodeIndx, i) {
 	    return nodeIndx + '(' + i.toString() + ')'
 	}
@@ -1082,8 +1094,6 @@ module.exports = function (window,
 		move.classList.add("level" + branchLevel.toString())
 		move.id = "move" + nodeIndx
 
-		move.innerHTML = ""
-
 		var NAG = (nodes[nodeIndx]['NAG'] !== undefined) ? convertNAG2Symbol(nodes[nodeIndx]['NAG']) : ""
 		move.innerHTML = mvDesc + ' ' + '<span class="san">' + figurine(nodes[nodeIndx]['SAN']) + NAG + '</span>'
 
@@ -1120,21 +1130,26 @@ module.exports = function (window,
 		var mainMoveDesc
 		var mainMoveNr
 
+		var pc = ''
+		if (nodes[nodeIndx]['preComment'] !== undefined) {
+		    pc = '<span class="precomment">' + nodes[nodeIndx]['preComment'] + ' ' + '</span>'
+		}
+
 		if (nodes[nodeIndx]['Comment'] !== undefined) {
 		    if (color === 'w') {
 			mainMoveNr = mvNr
-			mainMoveDesc = ' ' + mainMoveNr.toString() + '. ...'
+			mainMoveDesc = ' ' + pc + mainMoveNr.toString() + '. ...'
 		    } else {
 			mainMoveNr = mvNr + 1
-			mainMoveDesc = ' ' + mainMoveNr.toString() + '.'
+			mainMoveDesc = ' ' + pc + mainMoveNr.toString() + '.'
 		    }
 		} else {
 		    if (color === 'w') {
 			mainMoveNr = mvNr
-			mainMoveDesc = skipAppend ? mvNr +'. ...' : ''
+			mainMoveDesc = skipAppend ? pc + mvNr +'. ...' : pc
 		    } else {
 			mainMoveNr = mvNr + 1
-			mainMoveDesc = ' ' + mainMoveNr.toString() + '.'
+			mainMoveDesc = ' ' + pc + mainMoveNr.toString() + '.'
 		    }		    
 		}
 
@@ -1224,30 +1239,34 @@ module.exports = function (window,
 		var siblingIndx = nodeIndx.replace(/\(\d*\)$/, '') + '(' + sibling.toString() + ')'
 		var hasSibling = (nodes[siblingIndx] === undefined) ? false : true
 
+		var pc = ''
+		if (nodes[mainNodeIndx]['preComment'] !== undefined) {
+		    pc = '<span class="precomment">' + nodes[mainNodeIndx]['preComment'] + ' ' + '</span>' 
+		}
 		
 		if (nodes[nodeIndx]['Comment'] !== undefined) {
 
 		    if (nextColor === 'w') {
 			mainMoveNr = mvNr + 1
-			mainMoveDesc = ' ' + mainMoveNr.toString() + '.'
+			mainMoveDesc = ' ' + pc + mainMoveNr.toString() + '.'
 		    } else {
 			mainMoveNr = mvNr
-			mainMoveDesc = ' ' + mainMoveNr.toString() + '. ...'
+			mainMoveDesc = ' ' + pc + mainMoveNr.toString() + '. ...'
 		    }
 	
 		} else {
 		    
 		    if (nextColor === 'w') {
 			mainMoveNr = mvNr + 1
-			mainMoveDesc = ' ' + mainMoveNr.toString() + '.'
+			mainMoveDesc = ' ' + pc + mainMoveNr.toString() + '.'
 		    } else {
 			mainMoveNr = mvNr
 
 			if (mainNodeIndx === '(0)(0)') {
 			    // Main variation should always start with a move description
-			    mainMoveDesc = mainMoveNr.toString() + '. ...'
+			    mainMoveDesc = pc + mainMoveNr.toString() + '. ...'
 			} else {
-			    mainMoveDesc = (hasSibling && sibling === 1) ? mainMoveNr.toString() + '. ...' : ''
+			    mainMoveDesc = (hasSibling && sibling === 1) ? pc + mainMoveNr.toString() + '. ...' : pc
 			}
 		    }
 		}
@@ -2656,7 +2675,17 @@ module.exports = function (window,
     function getBoardFEN() {
 	return board.FEN
     }
-    
+
+    function setNotationStyle(s) {
+	board.notationStyle = s
+    }
+
+
+    function setExportFormat(fmt) {
+	board.exportFormat = fmt
+
+	cfdt.log(Container.moveContainer.innerHTML)
+    }
     
     // Module exports
     module.loadForAnalysis = loadForAnalysis
@@ -2673,6 +2702,8 @@ module.exports = function (window,
     module.selectRootNode = selectRootNode
     module.deleteGame = deleteGame
     module.getBoardFEN = getBoardFEN
+    module.setNotationStyle = setNotationStyle
+    module.setExportFormat = setExportFormat
     
     return module
 
