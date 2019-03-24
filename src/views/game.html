@@ -153,6 +153,16 @@
 
 
   menu.append(new nw.MenuItem({
+      label: 'Delete annotation glyph',
+      click: function(){
+   	  board.deleteNAG()
+      }
+  }))
+
+
+  menu.append(new nw.MenuItem({ type: 'separator' }))
+
+  menu.append(new nw.MenuItem({
       label: 'Search board position',
       click: function(){
 	  
@@ -165,8 +175,6 @@
       }
   }))
 
-
-  menu.append(new nw.MenuItem({ type: 'separator' }))
 
   menu.append(new nw.MenuItem({
       label: 'Export game',

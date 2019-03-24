@@ -2620,7 +2620,10 @@ module.exports = function (window,
 	updateNodes(newNodes, branchNode)
     }
 
-
+    function deleteNAG() {
+	board.nodes[board.nodeIndx]['NAG'] = undefined
+	updateNodes(board.nodes, board.nodeIndx)
+    }
 
     function deleteVariation() {
 	
@@ -3021,6 +3024,7 @@ module.exports = function (window,
     module.getBoardFEN = getBoardFEN
     module.setNotationStyle = setNotationStyle
     module.setExportFormat = setExportFormat
+    module.deleteNAG = deleteNAG
     
     return module
 
