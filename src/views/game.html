@@ -74,7 +74,7 @@
     	<p>Choose export format:</p>
 	<div>
 	  <span class="txtAsBtn" onclick="cancel();">Cancel</span>
-	  <span class="txtAsBtn" onclick="exportGame('tex');">LaTex</span>
+	  <span class="txtAsBtn" onclick="exportGame('tex');">LaTeX</span>
 	  <span class="txtAsBtn" onclick="exportGame('pgn');">PGN</span>
 	</div>
       </div>
@@ -171,7 +171,10 @@
   menu.append(new nw.MenuItem({
       label: 'Export game',
       click: function(){
-	  exportContainer.style.display = "flex"
+	  //exportContainer.style.display = "flex"
+
+	  exportGame('pgn')
+	  
       }
   }))
 
@@ -204,8 +207,10 @@
 
   function exportGame(fmt) {
 
-      board.setExportFormat(fmt)
-      download("hello.pgn","This is the content of my file :)")
+      board.setExportFormat(fmt, function(pgn) {
+	  download("game_export.pgn", pgn)
+      })
+      
       exportContainer.style.display = "none"
   }
 

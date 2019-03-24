@@ -999,10 +999,6 @@ module.exports = function (window,
 
     function displayNotation(nodes, callback) {
 
-	function childIndx(nodeIndx, i) {
-	    return nodeIndx + '(' + i.toString() + ')'
-	}
-
 
 	function varIndicator(branchLevel, dir) {
 	    if (dir === "left") {
@@ -2681,11 +2677,319 @@ module.exports = function (window,
     }
 
 
-    function setExportFormat(fmt) {
+    function setExportFormat(fmt, callback) {
 	board.exportFormat = fmt
+	var customNotationStyle = board.notationStyle
+	board.notationStyle = 'algebraic'
 
-	cfdt.log(Container.moveContainer.innerHTML)
+	exportPGN(board.nodes, function(pgn) {
+	    pgn = pgn.replace(/<div>/g, '')
+	    pgn = pgn.replace(/<\/div>/g, '')
+	    board.notationStyle = customNotationStyle
+	    callback(pgn)
+	})
+
     }
+
+
+    function childIndx(nodeIndx, i) {
+	return nodeIndx + '(' + i.toString() + ')'
+    }
+    
+
+    function exportPGN(nodes, callback) {
+	
+	function varIndicator(branchLevel, dir) {
+	    if (dir === "left") {
+
+		switch(branchLevel) {
+		default:
+		    return '('
+		}
+		
+	    } else if (dir === "right") {
+		switch(branchLevel) {
+		default:
+		    return ') '
+		}
+
+	    } else {
+		return ''
+	    }
+	    
+	}
+
+
+	function convertNAG2Symbol(nag) {
+	    switch(nag) {
+	    case "$1":
+		return "!"
+	    case "$2":
+		return "?"
+	    case "$3":
+		return "!!"
+	    case "$4":
+		return "??"
+	    case "$5":
+		return "!?"
+	    case "$6":
+		return "?!"
+	    case "$8":
+		return "□"
+	    case "$10":
+		return " ="
+	    case "$13":
+		return " ∞"
+	    case "$14":
+		return " +/="
+	    case "$15":
+		return " =/+"
+	    case "$16":
+		return " +/-"
+	    case "$17":
+		return " -/+"
+	    case "$18":
+		return " +-"
+	    case "$19":
+		return " -+"
+	    case "$40":
+		return " ↑"
+	    case "$41":
+		return " ↑"
+	    case "$44":
+		return " =/∞"
+	    case "$146":
+		return " N"
+	    default:
+		return nag
+	    }
+	}
+	
+	
+	function addNextMove(subEl, mvNr, mvDesc, color, branchLevel, nodeIndx, nodes, skipAppend = false) {
+
+	    if (!skipAppend) {
+		var move = window.document.createElement('div')
+
+		var NAG = (nodes[nodeIndx]['NAG'] !== undefined) ? convertNAG2Symbol(nodes[nodeIndx]['NAG']) : ""
+		move.innerHTML = mvDesc + ' ' + figurine(nodes[nodeIndx]['SAN']) + NAG
+
+		if (nodes[nodeIndx]['Comment'] !== undefined) {
+		    move.innerHTML += '\n{' + nodes[nodeIndx]['Comment'] + '}\n'
+		}
+
+		if (branchLevel === 1){
+		    moves.appendChild(move)
+		} else {
+		    subEl.appendChild(move)
+		}
+	    }
+	    
+	    nextNodes = []
+
+	    
+	    for (var i = 0; nodes[childIndx(nodeIndx, i)] !== undefined; i++) {
+		nextNodes.push(childIndx(nodeIndx, i))
+	    }
+	    
+	    var numNextNodes = nextNodes.length
+	    
+	    if (numNextNodes > 1) {
+
+		
+		// Append main line
+		var mainMove = window.document.createElement('div')
+		var mainNodeIndx = nodeIndx + '(0)'
+		
+		var mainMoveDesc
+		var mainMoveNr
+
+		var pc = ' '
+		if (nodes[nodeIndx]['preComment'] !== undefined) {
+		    pc = '\n{' + nodes[nodeIndx]['preComment'] + '}\n'
+		}
+
+		if (nodes[nodeIndx]['Comment'] !== undefined) {
+		    if (color === 'w') {
+			mainMoveNr = mvNr
+			mainMoveDesc = ' ' + pc + mainMoveNr.toString() + '. ...'
+		    } else {
+			mainMoveNr = mvNr + 1
+			mainMoveDesc = ' ' + pc + mainMoveNr.toString() + '.'
+		    }
+		} else {
+		    if (color === 'w') {
+			mainMoveNr = mvNr
+			mainMoveDesc = skipAppend ? pc + mvNr +'. ...' : pc
+		    } else {
+			mainMoveNr = mvNr + 1
+			mainMoveDesc = ' ' + pc + mainMoveNr.toString() + '.'
+		    }		    
+		}
+
+		var NAG = (nodes[mainNodeIndx]['NAG'] !== undefined) ? convertNAG2Symbol(nodes[mainNodeIndx]['NAG']) : ""
+		mainMove.innerHTML = mainMoveDesc + figurine(nodes[mainNodeIndx]['SAN']) + NAG 
+
+		if (nodes[mainNodeIndx]['Comment'] !== undefined) {
+		    mainMove.innerHTML += '\n{' + nodes[mainNodeIndx]['Comment'] + '}\n'
+		}
+
+		if (branchLevel === 1){
+		    moves.appendChild(mainMove)
+		} else {
+		    subEl.appendChild(mainMove)
+		}
+
+		
+		// Append variations
+
+		for (var i = 1; i < numNextNodes; i++) {
+
+		    
+		    var nextColor = (color === 'w') ? 'b' : 'w'
+		    var nextNodeIndx = childIndx(nodeIndx, i)
+
+		    var nextMvNr
+		    var nextMvDesc = (i === 1) ? ' ' : ''
+
+		    var pc = ' '
+		    if (nodes[nextNodeIndx]['preComment'] !== undefined) {
+			pc = '\n{' + nodes[nextNodeIndx]['preComment'] + '}\n'
+		    }
+		    
+
+		    if (nextColor === 'w') {
+			nextMvNr = mvNr + 1
+			nextMvDesc += varIndicator(branchLevel, "left") + pc + nextMvNr.toString() + '.'
+		    } else {
+			nextMvNr = mvNr
+			nextMvDesc += varIndicator(branchLevel, "left") + pc + nextMvNr.toString() + '. ...'
+		    }
+		    
+
+		    var subVar = window.document.createElement('div')
+		    subEl.appendChild(subVar)
+		    
+		    addNextMove(subVar, nextMvNr, nextMvDesc, nextColor, branchLevel + 1, nextNodeIndx, nodes)
+
+		    if (nodes[nodeIndx + '(0)(0)'] === undefined && i === numNextNodes - 1) {			
+			subVar.lastChild.innerHTML += varIndicator(branchLevel, "right")
+		    }
+		    
+		}
+
+
+		// Continue with main line after variations
+		
+		if (nodes[nodeIndx + '(0)(0)'] !== undefined) {
+		    
+		    var nextColor = (color === 'w') ? 'b' : 'w'
+		    var nextNodeIndx = nodeIndx + '(0)'
+
+		    var nextMvNr
+		    var nextMvDesc
+		    
+		    if (nextColor === 'w') {
+			nextMvNr = mvNr + 1
+		    } else {
+			nextMvNr = mvNr
+		    }
+		    
+		    addNextMove(subEl, nextMvNr, nextMvDesc, nextColor, branchLevel, nextNodeIndx, nodes, skipAppend = true)
+
+		}
+
+	    } else if (numNextNodes === 1) {
+
+		var nextColor = (color === 'w') ? 'b' : 'w'
+		var mainNodeIndx = nodeIndx + '(0)'
+		var mainMoveDesc
+		var mainMoveNr
+
+
+		var sibling = parseInt(nodeIndx.match(/\((\d*)\)$/)[1]) + 1
+		var siblingIndx = nodeIndx.replace(/\(\d*\)$/, '') + '(' + sibling.toString() + ')'
+		var hasSibling = (nodes[siblingIndx] === undefined) ? false : true
+
+		var pc = ' '
+		if (nodes[mainNodeIndx]['preComment'] !== undefined) {
+		    pc = '\n{' + nodes[mainNodeIndx]['preComment'] + '}\n'  
+		}
+		
+		if (nodes[nodeIndx]['Comment'] !== undefined) {
+
+		    if (nextColor === 'w') {
+			mainMoveNr = mvNr + 1
+			mainMoveDesc = ' ' + pc + mainMoveNr.toString() + '.'
+		    } else {
+			mainMoveNr = mvNr
+			mainMoveDesc = ' ' + pc + mainMoveNr.toString() + '. ...'
+		    }
+	
+		} else {
+		    
+		    if (nextColor === 'w') {
+			mainMoveNr = mvNr + 1
+			mainMoveDesc = ' ' + pc + mainMoveNr.toString() + '.'
+		    } else {
+			mainMoveNr = mvNr
+
+			if (mainNodeIndx === '(0)(0)') {
+			    // Main variation should always start with a move description
+			    mainMoveDesc = pc + mainMoveNr.toString() + '. ...'
+			} else {
+			    mainMoveDesc = (hasSibling && sibling === 1) ? pc + mainMoveNr.toString() + '. ...' : pc
+			}
+		    }
+		}
+
+		addNextMove(subEl, mainMoveNr, mainMoveDesc, nextColor, branchLevel, mainNodeIndx, nodes)
+	
+		
+	    } else {
+		// End of variation
+		move.innerHTML += varIndicator(branchLevel, "right")
+	    }
+
+	}
+
+	var moves = window.document.createElement('div')
+
+	moves.innerHTML = ''
+	moves.innerHTML += '[Event "' + board.Event + '"]\n'  
+	moves.innerHTML += '[Site "' + board.Site + '"]\n'  
+	moves.innerHTML += '[Date "' + board.Date + '"]\n'  
+	moves.innerHTML += '[Round "' + board.Round + '"]\n'  
+	moves.innerHTML += '[White "' + board.White + '"]\n'  
+	moves.innerHTML += '[Black "' + board.Black + '"]\n'  
+	moves.innerHTML += '[Result "' + board.Result + '"]\n'  
+	moves.innerHTML += '[WhiteElo "' + board.WhiteElo + '"]\n'  
+	moves.innerHTML += '[BlackElo "' + board.BlackElo + '"]\n'  
+	
+	var first_move = window.document.createElement('div')
+	
+	if (nodes['(0)']['Comment'] !== undefined) {
+	    first_move.innerHTML = '\n{' + nodes['(0)']['Comment'] + '}\n'
+	}
+	moves.appendChild(first_move)
+	
+
+	var parsedFEN = parseFEN(nodes['(0)']['FEN'])
+	
+	if (parsedFEN['sideToMove'] === 'w') {
+	    addNextMove(moves, parsedFEN['moveNr'] - 1, '', 'b', 1, '(0)', nodes, skipAppend = true)
+	} else {
+	    addNextMove(moves, parsedFEN['moveNr'], '', 'w', 1, '(0)', nodes, skipAppend = true)
+	}
+
+	// strip last parenthesis
+	var rv = moves.innerHTML.replace(/\)([^\)]*)$/, '$1' + board.Result)
+
+	callback(rv)
+    }
+
+
+
     
     // Module exports
     module.loadForAnalysis = loadForAnalysis
