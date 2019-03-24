@@ -1053,6 +1053,7 @@ module.exports = function (window,
 	    case "$8":
 		return "□"
 	    case "$10":
+	    case "$11":
 		return " ="
 	    case "$13":
 		return " ∞"
@@ -1126,26 +1127,21 @@ module.exports = function (window,
 		var mainMoveDesc
 		var mainMoveNr
 
-		var pc = ''
-		if (nodes[nodeIndx]['preComment'] !== undefined) {
-		    pc = '<span class="precomment">' + nodes[nodeIndx]['preComment'] + ' ' + '</span>'
-		}
-
 		if (nodes[nodeIndx]['Comment'] !== undefined) {
 		    if (color === 'w') {
 			mainMoveNr = mvNr
-			mainMoveDesc = ' ' + pc + mainMoveNr.toString() + '. ...'
+			mainMoveDesc = ' ' + mainMoveNr.toString() + '. ...'
 		    } else {
 			mainMoveNr = mvNr + 1
-			mainMoveDesc = ' ' + pc + mainMoveNr.toString() + '.'
+			mainMoveDesc = ' ' + mainMoveNr.toString() + '.'
 		    }
 		} else {
 		    if (color === 'w') {
 			mainMoveNr = mvNr
-			mainMoveDesc = skipAppend ? pc + mvNr +'. ...' : pc
+			mainMoveDesc = skipAppend ? mvNr +'. ...' : ''
 		    } else {
 			mainMoveNr = mvNr + 1
-			mainMoveDesc = ' ' + pc + mainMoveNr.toString() + '.'
+			mainMoveDesc = ' ' + mainMoveNr.toString() + '.'
 		    }		    
 		}
 
@@ -2686,7 +2682,35 @@ module.exports = function (window,
 	    pgn = pgn.replace(/<div>/g, '')
 	    pgn = pgn.replace(/<\/div>/g, '')
 	    board.notationStyle = customNotationStyle
-	    callback(pgn)
+
+	    var rv = ''
+	    rv += '[Event "' + board.Event + '"]\n'  
+	    rv += '[Site "' + board.Site + '"]\n'  
+	    rv += '[Date "' + board.Date + '"]\n'  
+	    rv += '[Round "' + board.Round + '"]\n'  
+	    rv += '[White "' + board.White + '"]\n'  
+	    rv += '[Black "' + board.Black + '"]\n'  
+	    rv += '[Result "' + board.Result + '"]\n'  
+	    rv += '[WhiteElo "' + board.WhiteElo + '"]\n'  
+	    rv += '[BlackElo "' + board.BlackElo + '"]\n'  
+
+	    var words = pgn.split(/\s+/g)
+
+	    var i = 0;
+
+	    while (i < words.length) {
+		for (var j = 0; j < 10; j++) {
+		    if (words[i+j]) {
+			rv += ' ' + words[i+j]
+		    }
+		}
+
+		i += 10
+		rv += '\n'
+	    }
+	    
+	    callback(rv)
+	    
 	})
 
     }
@@ -2737,6 +2761,7 @@ module.exports = function (window,
 	    case "$8":
 		return "□"
 	    case "$10":
+	    case "$11":
 		return " ="
 	    case "$13":
 		return " ∞"
@@ -2761,7 +2786,7 @@ module.exports = function (window,
 	    case "$146":
 		return " N"
 	    default:
-		return nag
+		return " " + nag
 	    }
 	}
 	
@@ -2775,7 +2800,7 @@ module.exports = function (window,
 		move.innerHTML = mvDesc + ' ' + figurine(nodes[nodeIndx]['SAN']) + NAG
 
 		if (nodes[nodeIndx]['Comment'] !== undefined) {
-		    move.innerHTML += '\n{' + nodes[nodeIndx]['Comment'] + '}\n'
+		    move.innerHTML += ' {' + nodes[nodeIndx]['Comment'] + '} '
 		}
 
 		if (branchLevel === 1){
@@ -2806,7 +2831,7 @@ module.exports = function (window,
 
 		var pc = ' '
 		if (nodes[nodeIndx]['preComment'] !== undefined) {
-		    pc = '\n{' + nodes[nodeIndx]['preComment'] + '}\n'
+		    pc = ' {' + nodes[nodeIndx]['preComment'] + '} '
 		}
 
 		if (nodes[nodeIndx]['Comment'] !== undefined) {
@@ -2831,7 +2856,7 @@ module.exports = function (window,
 		mainMove.innerHTML = mainMoveDesc + figurine(nodes[mainNodeIndx]['SAN']) + NAG 
 
 		if (nodes[mainNodeIndx]['Comment'] !== undefined) {
-		    mainMove.innerHTML += '\n{' + nodes[mainNodeIndx]['Comment'] + '}\n'
+		    mainMove.innerHTML += ' {' + nodes[mainNodeIndx]['Comment'] + '} '
 		}
 
 		if (branchLevel === 1){
@@ -2854,7 +2879,7 @@ module.exports = function (window,
 
 		    var pc = ' '
 		    if (nodes[nextNodeIndx]['preComment'] !== undefined) {
-			pc = '\n{' + nodes[nextNodeIndx]['preComment'] + '}\n'
+			pc = ' {' + nodes[nextNodeIndx]['preComment'] + '} '
 		    }
 		    
 
@@ -2913,7 +2938,7 @@ module.exports = function (window,
 
 		var pc = ' '
 		if (nodes[mainNodeIndx]['preComment'] !== undefined) {
-		    pc = '\n{' + nodes[mainNodeIndx]['preComment'] + '}\n'  
+		    pc = ' {' + nodes[mainNodeIndx]['preComment'] + '} '  
 		}
 		
 		if (nodes[nodeIndx]['Comment'] !== undefined) {
@@ -2953,23 +2978,11 @@ module.exports = function (window,
 
 	}
 
-	var moves = window.document.createElement('div')
-
-	moves.innerHTML = ''
-	moves.innerHTML += '[Event "' + board.Event + '"]\n'  
-	moves.innerHTML += '[Site "' + board.Site + '"]\n'  
-	moves.innerHTML += '[Date "' + board.Date + '"]\n'  
-	moves.innerHTML += '[Round "' + board.Round + '"]\n'  
-	moves.innerHTML += '[White "' + board.White + '"]\n'  
-	moves.innerHTML += '[Black "' + board.Black + '"]\n'  
-	moves.innerHTML += '[Result "' + board.Result + '"]\n'  
-	moves.innerHTML += '[WhiteElo "' + board.WhiteElo + '"]\n'  
-	moves.innerHTML += '[BlackElo "' + board.BlackElo + '"]\n'  
-	
+	var moves = window.document.createElement('div')	
 	var first_move = window.document.createElement('div')
 	
 	if (nodes['(0)']['Comment'] !== undefined) {
-	    first_move.innerHTML = '\n{' + nodes['(0)']['Comment'] + '}\n'
+	    first_move.innerHTML = ' {' + nodes['(0)']['Comment'] + '} '
 	}
 	moves.appendChild(first_move)
 	
