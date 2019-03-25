@@ -8,8 +8,8 @@ Try it out and visit us at [www.schachfreunde-brand.de](https://www.schachfreund
 
 
 <div style="text-align: center;">
-     ![Database][screenshot1]
-     ![Game][screenshot2]
+     <img src="https://github.com/SFBrand1981/ChessFriend-Fire/blob/master/docs/ChessFriend-Fire_DB.png">
+     <img src="https://github.com/SFBrand1981/ChessFriend-Fire/blob/master/docs/ChessFriend-Fire_game.png">
 </div>
 
 
