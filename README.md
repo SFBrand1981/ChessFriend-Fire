@@ -1,16 +1,17 @@
-# Chessfriend-Fire
+# ChessFriend-Fire
 [![Build Status](https://travis-ci.org/SFBrand1981/ChessFriend-Fire.svg?branch=master)](https://travis-ci.org/SFBrand1981/ChessFriend-Fire)
 [![Twitter Follow](https://img.shields.io/twitter/follow/SFBrand81.svg?style=social)](https://twitter.com/SFBrand81)
 
-[NW.js][nwjs] features demonstrated in a simple project.
 
-![image][screen]
+Use ChessFriend-Fire to create a chess database and analyze all your games.
+Try it out and visit us at [www.schachfreunde-brand.de](https://www.schachfreunde-brand.de)!
 
-This project is part of the article [Building a Cross-Platform Desktop App with NW.js][article] on Sitepoint.
 
-## Requirements
+<div style="text-align: center;">
+     ![Database][screenshot1]
+     ![Game][screenshot2]
+</div>
 
-- [Node.js][nodejs]
 
 ## Installation
 
@@ -33,18 +34,8 @@ To run the application directly in your development environment run:
 $ npm run dev
 ```
 
-## Production
 
-To build the application for Windows 32/64 bit, Mac OS X 64 bit and Linux 32/64 bit run the following:
+[screenshot1]: https://github.com/SFBrand1981/ChessFriend-Fire/blob/master/docs/ChessFriend-Fire_DB.png
+[screenshot2]: https://github.com/SFBrand1981/ChessFriend-Fire/blob/master/docs/ChessFriend-Fire_game.png
+[download]: https://github.com/SFBrand1981/ChessFriend-Fire/releases
 
-```bash
-$ npm run prod
-```
-
-The output files can be found under `dist/`.
-
-[nwjs]: http://nwjs.io/
-[screen]: https://github.com/sitepoint-editors/nw.js-examples/blob/master/.github/screen.png
-[article]: https://www.sitepoint.com/cross-platform-desktop-app-nw-js
-[nodejs]: https://nodejs.org/en/
-[download]: https://github.com/sitepoint-editors/nw.js-examples/archive/master.zip
