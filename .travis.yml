@@ -33,8 +33,10 @@ matrix:
 
 before_deploy:
   # tag this commit
-  - export TRAVIS_TAG=${TRAVIS_TAG:-$(date +'%Y.%m.%d')-$(git log --format=%h -1)}
-  - git tag $TRAVIS_TAG
+  if ! [[ $TRAVIS_TAG ]]; then
+    export TRAVIS_TAG=${TRAVIS_TAG:-$(date +'%Y.%m.%d')-$(git log --format=%h -1)} &&
+    git tag $TRAVIS_TAG
+  fi
 
 deploy:
   provider: releases
