@@ -7,9 +7,8 @@ Use ChessFriend-Fire to create a chess database and analyze all your games.
 Try it out and visit us at [www.schachfreunde-brand.de](https://www.schachfreunde-brand.de)!
 
 
-<div style="display: flex; flex-direction: row;">
-     <img src="https://github.com/SFBrand1981/ChessFriend-Fire/blob/master/docs/ChessFriend-Fire_DB.png">
-     <img src="https://github.com/SFBrand1981/ChessFriend-Fire/blob/master/docs/ChessFriend-Fire_game.png">
+<div style="text-align: center;">
+     <img src="https://github.com/SFBrand1981/ChessFriend-Fire/blob/master/docs/ChessFriend-Fire_collage.png">
 </div>
 
 
