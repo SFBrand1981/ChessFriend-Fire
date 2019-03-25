@@ -40,7 +40,7 @@ Try it out and visit us at [www.schachfreunde-brand.de](https://www.schachfreund
 ## PGN import and export
 
    Click on the `Import` button in order to add games to your database. Start with importing the game
-   [Kasparov_vs_Topalov.pgn][Kasparov_vs_Topalov], which you can find in the `tests` directory inside the installation folder.
+   [Kasparov_vs_Topalov.pgn][Kasparov_vs_Topalov], which you can find in the `tests` directory inside your installation folder.
 
   
 
