@@ -14,27 +14,19 @@ Try it out and visit us at [www.schachfreunde-brand.de](https://www.schachfreund
 
 ## Installation
 
-1. Clone or [download][download] this repository
-2. Navigate to the project folder with a CLI
-3. Run the following:
+1. [Download][download] and unzip the latest release
+2. Change into the directory where you have unzipped your files
+2.1 On Windows, execute `chessfriendfire.bat`
+2.2 On Linux and macOS, run the following in terminal:
 
    ```bash
-   $ npm install
-   $ cd src/
-   $ npm install
-   $ cd ..
+   $ npm run dev
    ```
 
-## Development
-
-To run the application directly in your development environment run:
-
-```bash
-$ npm run dev
-```
+## Features
 
 
-[screenshot1]: https://github.com/SFBrand1981/ChessFriend-Fire/blob/master/docs/ChessFriend-Fire_DB.png
-[screenshot2]: https://github.com/SFBrand1981/ChessFriend-Fire/blob/master/docs/ChessFriend-Fire_game.png
+
+
 [download]: https://github.com/SFBrand1981/ChessFriend-Fire/releases
 
