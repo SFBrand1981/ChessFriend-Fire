@@ -46,5 +46,4 @@ deploy:
   - ./release_osx.tar.gz
   skip_cleanup: true
   on:
-    tags: true
     repo: SFBrand1981/ChessFriend-Fire
