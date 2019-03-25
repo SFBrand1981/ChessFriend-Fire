@@ -23,12 +23,20 @@ Try it out and visit us at [www.schachfreunde-brand.de](https://www.schachfreund
       ```
 
 
-   2. On Linux and macOS, run the following in terminal:
+   2. On macOS, run the following in terminal:
 
       ```bash
-      $ npm run dev
+      $ ./node_modules/nw/bin/nw ./src/
       ```
 
+   3. On Linux, you need to have [nwjs][nwjs] installed 
+
+      ```bash
+      $ sudo apt-get install nodejs
+      $ npm install
+      $ npm run dev
+      ```
+   
 
 ## UCI chess engine support
 
@@ -44,7 +52,7 @@ Try it out and visit us at [www.schachfreunde-brand.de](https://www.schachfreund
 
   
 
-
+[nwjs]: https://nodejs.org/en/
 [release]: https://github.com/SFBrand1981/ChessFriend-Fire/releases
 [stockfish]: https://github.com/SFBrand1981/ChessFriend-Fire/tree/master/src/bin
 [Kasparov_vs_Topalov]: https://github.com/SFBrand1981/ChessFriend-Fire/blob/master/tests/Kasparov_vs_Topalov.pgn
