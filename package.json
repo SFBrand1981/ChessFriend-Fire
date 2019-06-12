@@ -1,18 +1,25 @@
 {
-  "name": "chessfriendfire",
-  "version": "1.0.0",
+  "name": "ChessFriend-Fire",
+  "version": "2.0.0",
   "main": "views/main.html",
   "scripts": {
-    "dev": "nw src/",
-    "prod": "nwbuild --flavor sdk --platforms osx64 --buildDir dist/ src/"
+    "start": "nw src/",
+    "test": "node tests/test.js",
+    "prod": "nwbuild --macIcns src/icon/icon.icns --flavor sdk --platforms osx64 --buildDir dist/ src/",
+    "osx": "nwbuild --macIcns src/icon/icon.icns --flavor normal --platforms osx64 --buildDir dist/ src/",
+    "win": "nwbuild --winIco src/icon/icon.ico --flavor normal --platforms win64 --buildDir dist/ src/",
+    "linux": "nwbuild --flavor normal --platforms linux64 --buildDir dist/ src/"
   },
   "license": "MIT",
   "dependencies": {
+    "awesomplete": "^1.1.4",
     "chess.js": "^0.10.2",
+    "dexie": "^2.0.4",
+    "event-stream": "^4.0.1",
     "font-awesome": "^4.7.0",
-    "level-js": "^4.0.0",
-    "linvodb3": "^3.26.0",
-    "nw": "^0.39.0",
+    "indexeddbshim": "^4.1.0",
+    "node": "^11.13.0",
+    "nw": "^0.37.4",
     "nw-builder": "^3.5.7"
   },
   "repository": {
