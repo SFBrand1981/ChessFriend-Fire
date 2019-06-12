@@ -1,0 +1,15 @@
+﻿[Event "?"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "?"]
+[White "?"]
+[Black "?"]
+[Result "*"]
+[Custom "Extra header"]
+
+1. a4 a5 2. b4 b5 3. c4 ({Precomment 3. axb5} 3. axb5 {Comment 3. axb5} c5 4.
+c4 ( 4. bxc5 ) ( 4. bxa5 ) {Precomment 4... d5} 4. ... d5
+( 4. ... axb4 {Comment 4. ... axb4} 5. d4 ) ( 4. ... cxb4 ) 5. d4 e5 )
+3. ... c5 4. d4 d5 ( 
+4. ... axb4 5. axb5 ( 5. cxb5 d5 ( 5. ... cxd4 6. e4 ( 6. f4 d5 ( 6. ... 
+e5 7. e4 ( 7. g4 ) ) ) ) ) ) 5. e4 *

@@ -2,123 +2,96 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>ChessFriend-Fire - Search</title>
-    
+    <title>ChessFriend-Fire - Setup position</title>
     <link rel="stylesheet" href="../css/common.css">
-    <script src="../app/chessfriend.js"></script>
-    
   </head>
 
   
   <body>
 
-    <div class="game-container">
+   
+    <div id="container">
 
-      <div class="board-view setup noRightBorder">
-	<div id="game-board"></div>
-      </div>
-
-      <div class="search-view setup noLeftBorder">
-	<div class="search-window">
-
-	  <form onsubmit="return false;">
-	    <div id="pieceContainer"></div>
-
-	    <br>
-	    <label>Search position from FEN:</label><br>
-	    <input type="text" class="searchbox" id="FENinput" name="FENinput" value="rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1" oninput="insertFEN()">
-	  
-	    <div style="display: flex; flex-direction: row; margin-top: 8px;">
-
-	      <div style="width: 50%; margin-right: 16px;">
-		<div style="width: 100%;">
-		  <label style="display: inline-block; width: 100%;">Player White:<br>
-		    <input class="customInput" id="playerWhite" type="text" style="width: 100%;">
-		  </label>
-		</div>
-	      </div>
-	      
-	    
-	      <div style="width: 50%;">
-		<div>
-		  <label>Player Black:<br>
-		    <input class="customInput" id="playerBlack" type="text" style="width: 100%;">
-		  </label>
-		</div>
-	      </div>
-
-	    </div>
-	    
-	  </form>
-
-	  <br>
-	  <div style="text-align: center">
-	    <button onclick="search()">Search</button>
-	  </div>
-
+ 
+      <div id="left_panel">
+	<div class="sidebar">
+	  <!-- sidebar -->
+	  <ul id="sidebarItems"></ul>
+	  <!-- open games -->
+	  <ul id="openGames"></ul>
 	</div>
       </div>
+	
+     
+      <div id="right_panel">
 
-    </div>
+	<div class="container">
+	  
+	  <div id="drag">
+	    &nbsp;
+	    <!-- resize -->
+	  </div>
+
+	  <div class="gameContainer">
+	  
+	    <div class="boardContainer" id="boardContainer"></div>
+
+	    <div class="notationContainer" id="notationContainer">
+	      <!-- notation -->
+	      <div class="searchInfoContainer">
+		<table class="searchInfoTable">
+		  <tr class="selectable">
+		    <td><i class="fa" id="searchSelected"></i></td>
+		    <td colspan="2" id="searchSelectedLabel">Search position</td>
+		  </tr>
+		  <tr class="selectable">
+		    <td><i class="fa" id="addNewSelected"></i></td>
+		    <td colspan="2" id="addNewSelectedLabel">New game from position</td>
+		  </tr>
+		  <tr>
+		    <td></td>
+		    <td>Side to move:</td>
+		    <td>
+		      <select name="stm" id="stm_inp" class="searchInfoSelect">
+			<option value="w">White</option>
+			<option value="b">Black</option>
+		      </select>
+		    </td>
+		  </tr>
+		  <tr>
+		    <td></td>
+		    <td>Move &#8470;:</td>
+		    <td><input id="mvNr_inp" type="number" min="1" value="1" class="searchInfoInput"></td>
+		  </tr>
+		</table>
+
+		<!-- search btns -->
+		<div class="searchBtnContainer"></div>
+	      </div>
+	      
+	    </div>
+
+	  </div>
+	    
+	</div> <!-- container class -->
+	
+      </div> <!-- right panel -->
+    </div> <!-- container -->
+   
+
   </body>
 </html>
 
-
-
 <script>
-
+  
+  // load dependencies
   var path = require('path')
-  var boardContainer = document.getElementById('game-board')
-  var FENContainer = document.getElementById('FENinput')
-  var pieceContainer = document.getElementById("pieceContainer")
-  var BoardHandling = require(path.join(process.cwd(), '/app/boardHandling.js'))
-  var db = require(path.join(process.cwd(), '/app/chessfriendDB.js'))  
-  var DBHandling = require(path.join(process.cwd(), '/app/dbHandling.js'))
-  var dbHandler = new DBHandling(window, db)
+  var WindowHandler = require(path.join(process.cwd(), '/app/window.js'))
+ 
+  var win = new WindowHandler(window)
+  win.createChessboard()
+  win.createBoardControls()
+  win.createSearchControls()
+  win.setActiveSidebarItem("Setup position")
   
-  var Container = {}
-  Container.boardContainer = boardContainer
-  Container.FENContainer = FENContainer
-  Container.pieceContainer = pieceContainer
-  
-  var board = new BoardHandling(window, Container, db)
-  board.loadForSearch()
-
-  
-  function insertFEN() {
-      var fen = FENContainer.value
-      board.insertFEN(fen)
-  }
-
-
-  function search() {
-
-      var playerWhite = document.getElementById("playerWhite").value
-      var playerBlack = document.getElementById("playerBlack").value
-      
-
-      var searchObj = {}
-      if (playerWhite !== "") {
-	  var re = new RegExp( '^' + playerWhite, "i")
-	  searchObj.White = { $regex: re }
-      }
-
-      if (playerBlack !== "") {
-	  var re = new RegExp( '^' + playerBlack, "i")
-	  searchObj.Black = { $regex: re }
-      }
-
-      if (FENContainer.value !== "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1") {
-	  searchObj.positions = FENContainer.value.split(' ')[0] 
-      }
-
-      if (Object.keys(searchObj).length !== 0) {
-	  dbHandler.searchDB(searchObj)
-      } else {
-	  alert ("Please specify your search")
-      }
-      
-  }
-
-
 </script>

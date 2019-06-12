@@ -1,93 +1,114 @@
 // Worker to import large number of PGNs into DB
-var fs = require('fs')
+
 var path = require('path')
-var cfdt = require(path.join(process.cwd(), '/app/chessfriendDevTools'))
-var BoardHandling = require(path.join(process.cwd(), '/app/boardHandling.js'))
+var fs = require('fs')
+var es = require('event-stream');
+var PGNHandler = require(path.join(process.cwd(), '/app/pgn.js'))
+var ph = new PGNHandler()
 
-var board = new BoardHandling()
-var nodes = {}
+// NOT WORKING WITH CURRENT NWJS VERSION
+// const setGlobalVars = require('indexeddbshim')
+// const Dexie = require('dexie')
 
-var batch_size = 100
+// //
+// // Configure Dexie to use the IndexedDB shim.
+// //
+// // The intermediary shim object is required so we can pull out the objects
+// // we need to configure Dexie without needing to pollute the global namespace.
+// //
+// // checkOrigin:false is required to avoid  SecurityError Cannot open
+// // an IndexedDB database from an opaque origin.
+// //
+// const shim = {}
+// setGlobalVars(shim, {checkOrigin: false})
+// const { indexedDB, IDBKeyRange } = shim
+// Dexie.dependencies.indexedDB = indexedDB
+// Dexie.dependencies.IDBKeyRange = IDBKeyRange
 
-var import_data
+// // Test Dexie
+// const db = new Dexie('hellodb')
+// db.version(1).stores({
+//   tasks: '++id,date,description,done'
+// })
+
+// db.tasks.bulkPut([
+//   {date: Date.now(), description: 'First item', done: 0},
+//   {data: Date.now(), description: 'Second item', done: 1},
+//   {data: Date.now(), description: 'Third item', done: 0}
+// ]).then(() => {
+//   db.tasks.where('done').above(0).toArray().then((tasks) => {
+//     console.log(`Completed tasks: ${JSON.stringify(tasks, 0, 2)}`)
+//   })
+// }).catch((e) => {
+//   console.error(`Error: ${e}`)
+// })
+
+var readstream
+var pgn
 var num_games
-var num_imported
 
-board.setNotationStyle('algebraic') // faster!
-
-function importBatch() {
-
-    var games = import_data.split(/(\[Event\s.*\])/)
-    var offset = num_imported
-
+function sendGameInfo() {
     
-    for (var i = 2*offset; i < 2*(offset + batch_size); i += 2) {
-
-	if (i >= 2*num_games) {
-	    return
-	}
-	
-	var game = games[i+1] + games[i+2]
-
-	board.importOneGame(game, function(pgn) {
-	    board.createNodesFromPGN(pgn, nodes, function(n) {
-		
-		num_imported += 1
-		
-		process.send({ importWorker : {importing : true,
-	     				       pgn : pgn,
-	     				       nodes : n,
-	     				       num_imported : num_imported} })
-
-		if (num_imported === num_games) {
-		    process.send({ importWorker : 'imported' })
-		}
-		
-	    })
-	})
-
-    }
+    var pgnData = ph.parsePGNData(pgn)
+    var nodes = ph.pgnMovesToNodes(pgnData['Moves'], pgnData['FEN'])
     
-    process.send({ importWorker : {batch_completed : true,
-	     			   num_imported : num_imported} })
-
-	
+    process.send({
+	importWorker : {readGame : true,
+			num_games : num_games,
+			pgnData: pgnData,
+			nodes: nodes}
+    })
 }
-
-
 
 process.on('message', (msg) => {
 
-
     if (msg.importWorker.startImport) {
-	
-	fs.readFile(msg.importWorker.filename, 'utf8', function (err, data) {
 
-	    if (err) {
-		alert("There was an error attempting to read your data.")
-		cfdt.warn(err.message)
-		return
-	    }
-	
-	    function count() {
-		const re = /\[Event\s.*\]/g
-		return ((data || '').match(re) || []).length
-	    }
-	    
-	    num_games = count()
-	    process.send({ importWorker : {num_games : num_games} })
-	    
-	    import_data = data
-	    num_imported = 0
+	num_games = 0
+	pgn = ''
 
-	    importBatch()
+	readstream = fs.createReadStream(msg.importWorker.pgn_file)
+	    .pipe(es.split())
+	    .pipe(es.mapSync(function(line){
 
-	})
-	
+		// pause the readstream
+		readstream.pause();
+		
+		// process line here and call s.resume() when rdy		
+		if (/(\[Event\s.*\])/.test(line)) {
+
+		    if (num_games !== 0) {
+			sendGameInfo()
+			num_games += 1
+			pgn = ' ' + line
+		    } else {
+			num_games += 1
+			pgn += line
+			readstream.resume()
+		    }
+		} else {
+		    // continue reading
+		    pgn += ' ' + line 
+		    readstream.resume()
+		}
+		
+	    }).on('error', function(err){
+		console.log('Error while reading file.', err);
+	    }).on('end', function(){
+
+		sendGameInfo()
+
+		// finish
+		process.send({
+		    importWorker : {completedImport : true}
+		})
+
+	    }))
+
     }
 
-    if (msg.importWorker === 'continueImport') {
-	importBatch()
+    if (msg.importWorker.resumeImport) {
+	readstream.resume()
     }
 })
 

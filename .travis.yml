@@ -14,21 +14,21 @@ matrix:
       - export npm_config_build_from_source=true
       - export npm_config_node_gyp=$(which nw-gyp)
       - npm install
-      - npm install nwjs
-      - tar -zcf release_win.tar.gz --exclude=release_win.tar.gz .
+      - npm run win
+      - zip -r release_win.tar.gz --exclude=release_win.zip .
 
    - os: linux
      script:
       - npm install
-      - npm install nwjs
+      - npm run linux 
       - mkdir artefacts
-      - tar -zcf ./artefacts/release_linux.tar.gz --exclude=./artefacts/release_linux.tar.gz .
+      - tar -zcf ./artefacts/release_linux.tar.gz --exclude=./artefacts/release_linux.tar.gz
 
    - os: osx
      script:
       - npm install
-      - npm install nwjs
-      - tar -zcf release_osx.tar.gz --exclude=release_osx.tar.gz .
+      - npm run osx
+      - tar -zcf release_osx.tar.gz --exclude=release_osx.tar.gz
 
 
 before_deploy:
@@ -42,7 +42,7 @@ deploy:
   api_key:
     secure: TrViLi4jvQBj22URn0heNX/qspe+rFsKv3o5iiAeEOF9yph46vOz+N9zA0Cx2vhZ0QHT9T0ezMBN1m4gSRYKYkRzrNV8sIxMwswBCG4YqLi5qrIhjkYzSaOaTt3mp+mXHVlBlOaDg+XNTdKd1dr4Hl/qnnP8BPr50BugDdibwndkFNOwmgOpqhE/ygPcbIoLTGDt1/Am9v98aQbtmUK2lsn02oiQ1SMt6YfTn5uFHRvNKVb0H+OPQ0XiEt9YKMCf4XlWEI5e7qYgMKEJOSdQfZIi2yt2HRo7U7O9eG5jDLS0ZVd+ZS3lX9ZmmbZJf2NaifArO7aQ8HyBmCZJSOq7J/dXpC90iqRNwthP8FeM7+r8FmOShjZ0yyzbENLEAOxP2Um7pyU/W8kjiOQkfdffwERIYudm0GD3mdPuvVdvN9HYK12FqmEMwXg9UXvIuOOnNswGfIZH2YWFqZOyP6BiZhadxooLd+/lrzWBB+ifHa5Z1Fv6hHJrt8FBMXtOmc/QVfGpYvDDrJjE2/dltiPp50Bst5dHaULjmaGtK8TW2GjG2/qJhlgtYvFWl6FUJPtaTcUZZBrWW2Tn3YRkmatxeNcdz1Ls89rdvNML+aOUad0TALXBmSul0BFWEimDzfMLktGGUNrpercIZ9YMXZpK5ZcBvuC91n2o93LASCg5p4A=
   file:
-  - ./release_win.tar.gz
+  - ./release_win.zip
   - ./artefacts/release_linux.tar.gz
   - ./release_osx.tar.gz
   skip_cleanup: true
