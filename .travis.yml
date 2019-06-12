@@ -22,13 +22,13 @@ matrix:
       - npm install
       - npm run linux 
       - mkdir artefacts
-      - tar -zcf ./artefacts/release_linux.tar.gz --exclude=./artefacts/release_linux.tar.gz
+      - tar -zcf ./artefacts/release_linux.tar.gz --exclude=./artefacts/release_linux.tar.gz .
 
    - os: osx
      script:
       - npm install
       - npm run osx
-      - tar -zcf release_osx.tar.gz --exclude=release_osx.tar.gz
+      - tar -zcf release_osx.tar.gz --exclude=release_osx.tar.gz .
 
 
 before_deploy:
