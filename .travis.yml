@@ -15,7 +15,7 @@ matrix:
       - export npm_config_node_gyp=$(which nw-gyp)
       - npm install
       - npm run win
-      - zip -r release_win.tar.gz --exclude=release_win.zip .
+      - zip -r release_win.zip --exclude=release_win.zip .
 
    - os: linux
      script:
