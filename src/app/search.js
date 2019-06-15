@@ -18,6 +18,13 @@ module.exports = function (window) {
 	controlClear.addEventListener("click", clearBoard)
 	controlClear.id = 'controlClear'
 
+
+	var tooltip = document.createElement('span')
+	tooltip.innerHTML = 'clear board'
+	tooltip.classList.add('tooltip')
+	controlClear.appendChild(tooltip)
+
+	
 	var boardControlContainer = window.document.getElementById("boardControlContainer")
 	boardControlContainer.appendChild(controlClear)
 
@@ -190,6 +197,7 @@ module.exports = function (window) {
 	var pieceContainer = window.document.createElement("div")
 	pieceContainer.classList.add("pieceContainer")
 	container.appendChild(pieceContainer)
+
 
 	var wpSquare = window.document.createElement("div")
 	wpSquare.classList.add("searchSquare")

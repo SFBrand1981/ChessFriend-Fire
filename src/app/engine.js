@@ -23,11 +23,22 @@ module.exports = function (window) {
 	controlStart.addEventListener("click", startEngine)
 	controlStart.id = 'controlStart'
 
+
+	var startTooltip = document.createElement('span')
+	startTooltip.innerHTML = 'start engine'
+	startTooltip.classList.add('tooltip')
+	controlStart.appendChild(startTooltip)
+	
 	var controlStop = document.createElement('div')
 	controlStop.innerHTML = '<i class="fa">&#xf04c;</i>'
 	controlStop.addEventListener("click", stopEngine)
 	controlStop.style.display = "none"
 	controlStop.id = 'controlStop'
+
+	var stopTooltip = document.createElement('span')
+	stopTooltip.innerHTML = 'stop engine'
+	stopTooltip.classList.add('tooltip')
+	controlStop.appendChild(stopTooltip)
 
 	var boardControlContainer = window.document.getElementById(
 	    "boardControlContainer")
@@ -148,9 +159,10 @@ module.exports = function (window) {
 
     
     function startEngine() {
-
+	
 	window.document.getElementById('controlStart').style.display = 'none'
 	window.document.getElementById('controlStop').style.display = 'block'
+
 	
 	if (engineInfo.status != 'initialized') {
 	    console.log("starting engine")

@@ -117,6 +117,13 @@ module.exports = function (window) {
     function createSaveBtn() {
 	var saveBtn = window.document.createElement('div')
 	saveBtn.innerHTML = '<i class="fa">&#xf0c7;</i>'
+
+
+	var tooltip = document.createElement('span')
+	tooltip.innerHTML = 'save'
+	tooltip.classList.add('tooltip')
+	saveBtn.appendChild(tooltip)
+	
 	saveBtn.addEventListener('click', function (evt) {
 	    var gameSavedEvent = new CustomEvent("gameSavedEvt", {
 		detail: { currentBoard : currentBoard }
@@ -293,6 +300,12 @@ module.exports = function (window) {
 	
 	var flip = document.createElement('div')
 	flip.innerHTML = '<i class="fa">&#xf021;</i>'
+
+	var tooltip = document.createElement('span')
+	tooltip.innerHTML = 'flip board'
+	tooltip.classList.add('tooltip')
+	flip.appendChild(tooltip)
+	
 	flip.addEventListener("click", function(evt) {
 	    currentBoard = flipBoard(currentBoard)
 	    sessionStorage.setItem(currentBoard.id, JSON.stringify(currentBoard))

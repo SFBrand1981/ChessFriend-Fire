@@ -61,6 +61,7 @@ body {
     pointer-events: none;
 }
 
+
 .sidebarSeparator {
     border-bottom: 2px solid var(--base0-color);
 }
@@ -284,8 +285,12 @@ body {
     color: var(--base6-color);
 }
 
-.db-entries th:hover {
+.db-entries th span:hover {
     color: var(--base8-color);
+ }
+
+.db-entries th span:hover:after {
+    content: '\25BE';
 }
 
 .db-entries th:last-child {
@@ -334,22 +339,18 @@ body {
     text-align: center;
 }
 
-.searchordered {
+.db-entries .searchordered {
     color: var(--yellow1-color);
 }
 
-.searchordered:hover {
+.db-entries .searchordered:hover {
     color: var(--base8-color);
 }
 
-.searchordered:after {
-    color: var(--yellow1-color);
+.db-entries .searchordered:after {
     content: '\25BE';
 }
 
-.searchordered:hover:after {
-    color: var(--base8-color);
-}
 
 .fa {
     font-family: "Lato", "FontAwesome";
@@ -394,6 +395,10 @@ body {
 .gameInfoInput:hover {
     box-shadow: 0 0 8px -2px var(--base0-color);
     color: var(--base8-color);
+}
+
+.gameInfoInput::placeholder {
+    color: var(--base7-color);
 }
 
 .gameInfoSelect:hover {
@@ -611,6 +616,7 @@ body {
 .boardControlContainer div {
     width: 12.5%;
     text-align: center;
+    position: relative;
 }
 
 .boardControlContainer div:hover {
@@ -640,8 +646,8 @@ body {
 /* Loader */
 
 .loader {
-    border: 4px solid lightgray; /* Light grey */
-    border-top: 4px solid #F26419;
+    border: 4px solid var(--base6-color);
+    border-top: 4px solid var(--red-color);
     border-radius: 50%;
     width: 32px;
     height: 32px;
@@ -746,6 +752,7 @@ body {
 /* Engine */
 
 .engineOut {
+    margin-top: 16px;
     margin-left: 14px;
     flex-grow: 1;
     display: flex;
@@ -926,6 +933,9 @@ body {
 
 .pieceContainer {
     margin: auto;
+    padding-top: 4px;
+    padding-left: 2px;
+    padding-right: 2px;
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
@@ -1016,3 +1026,43 @@ div.awesomplete {
     width: 100%;
 }
 
+
+/* tooltip */
+.tooltip {
+    display: none; 
+    position: absolute;
+    background-color: var(--base2-color);
+    color: var(--base7-color);
+    font-size: smaller;
+    width: 100px;
+    top: 100%;
+    left: 50%;
+    margin-left: -50px;
+}
+
+.boardControlContainer div:hover span.tooltip {
+    display: block;
+}
+
+
+/* icons */
+
+/* div[id="Games"]:before { */
+/*     font-family: FontAwesome; */
+/*     content:"\f03a\a0"; */
+/* } */
+
+/* div[id="Import"]:before { */
+/*     font-family: FontAwesome; */
+/*     content:"\f019\a0"; */
+/* } */
+
+/* div[id="Setup position"]:before { */
+/*     font-family: FontAwesome; */
+/*     content:"\f1a5\a0"; */
+/* } */
+
+div[id="Starred"]:before {
+    font-family: FontAwesome;
+    content:"\f005\a0";
+}

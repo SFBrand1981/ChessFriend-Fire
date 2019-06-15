@@ -30,7 +30,7 @@ module.exports = function (window) {
     // history of open games
     var hh = new HistoryHandler()
 
-    
+
     // create sidebar
     var sb = new SidebarHandler(window)
     var sidebarItems = window.document.getElementById('sidebarItems')

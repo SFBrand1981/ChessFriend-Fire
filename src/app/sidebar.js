@@ -9,7 +9,6 @@ module.exports = function (window) {
     var hh = new HistoryHandler()
     
     var openGames = new Map (JSON.parse(localStorage.getItem('openGames')))
-
     
     function selectGameInSidebar(game_id, title) {
 
@@ -19,7 +18,6 @@ module.exports = function (window) {
 	})
 	window.document.dispatchEvent(gameSelectedInSidebarEvt)
     }
-    
 
     function createSidebarElement(container, desc) {
 	var li = document.createElement('li')
@@ -43,8 +41,9 @@ module.exports = function (window) {
     function createSidebar(container) {
 
 	createSidebarElement(container, "Games")
-	createSidebarElement(container, "Import Game")
+	createSidebarElement(container, "Import")
 	createSidebarElement(container, "Setup position")
+	createSidebarElement(container, "Starred")
 
 
 	// sidebar separator
@@ -62,10 +61,10 @@ module.exports = function (window) {
 	})
 				  
 	
-	var importBtn = window.document.getElementById('Import Game')
+	var importBtn = window.document.getElementById('Import')
 	importBtn.addEventListener('click', function(e) {
 
-	    setActiveSidebarItem('Import Game')
+	    setActiveSidebarItem('Import')
 	    
 	    var event = new CustomEvent("sidebarImportEvt", {
 	    	detail: {}
@@ -78,7 +77,7 @@ module.exports = function (window) {
 	setupBtn.addEventListener('click', function(e) {
 	    window.open('/views/search.html', '_self')
 	})
-
+	
 
 	// event listeners
 	window.document.addEventListener('gameEditedEvt', function(evt) {
