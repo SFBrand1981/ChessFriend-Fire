@@ -464,10 +464,6 @@ module.exports = function (window) {
 	td2.classList.add('db-entry-player')
 	td2.innerHTML = entry.white
 
-	td2.addEventListener('click', function (evt) {
-	    loadEntry(entry)
-	})
-
 	var td3 = document.createElement('td')
 	td3.classList.add('db-entry-dwz')
 	td3.innerHTML = entry.elow
@@ -504,6 +500,30 @@ module.exports = function (window) {
 	var td8 = document.createElement('td')
 	td8.classList.add('db-entry-date')
 	td8.innerHTML = entry.date ? entry.date.slice(0,4) : ""
+
+
+
+	td2.addEventListener('click', function (evt) {
+	    loadEntry(entry)
+	})
+	td3.addEventListener('click', function (evt) {
+	    loadEntry(entry)
+	})
+	td4.addEventListener('click', function (evt) {
+	    loadEntry(entry)
+	})
+	td5.addEventListener('click', function (evt) {
+	    loadEntry(entry)
+	})
+	td6.addEventListener('click', function (evt) {
+	    loadEntry(entry)
+	})
+	td7.addEventListener('click', function (evt) {
+	    loadEntry(entry)
+	})
+	td8.addEventListener('click', function (evt) {
+	    loadEntry(entry)
+	})	
 
 	tr.appendChild(td1)
 	tr.appendChild(td2)

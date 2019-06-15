@@ -32,7 +32,7 @@ var engineInfo = {
     targetPosition : undefined,
     enginePath : enginePath,
     multiPV : 5,
-    threads : 2
+    threads : 1
 }
 
 
