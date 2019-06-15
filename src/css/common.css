@@ -348,7 +348,7 @@ body {
 }
 
 .db-entries .searchordered:after {
-    content: '\25BE';
+    /* content: '\25BE'; */
 }
 
 
@@ -1049,20 +1049,21 @@ div.awesomplete {
 
 /* div[id="Games"]:before { */
 /*     font-family: FontAwesome; */
-/*     content:"\f03a\a0"; */
+/*     content:"\2654\a0"; */
 /* } */
 
 /* div[id="Import"]:before { */
 /*     font-family: FontAwesome; */
-/*     content:"\f019\a0"; */
+/*     content:"\2655\a0"; */
 /* } */
 
 /* div[id="Setup position"]:before { */
 /*     font-family: FontAwesome; */
-/*     content:"\f1a5\a0"; */
+/*     content:"\2656\a0"; */
 /* } */
 
-div[id="Starred"]:before {
-    font-family: FontAwesome;
-    content:"\f005\a0";
-}
+/* div[id="Starred"]:before { */
+/*     font-family: FontAwesome; */
+/*     content:"\f005\a0"; */
+/*     font-size: 10pt; */
+/* } */

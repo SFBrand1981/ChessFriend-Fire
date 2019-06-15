@@ -2,20 +2,37 @@
 var fs = require('fs')
 var readline = require('readline');
 var path = require('path')
+var os = require('os');
 
 
 const { spawn } = require('child_process')
 
 
 // init engine and its interface
+var enginePath = ''
+switch (os.platform()) {
+case 'win32':
+case 'win64':
+    enginePath = path.join(process.cwd(), '/bin/stockfish_10_x64.exe')
+    break
+case 'linux':
+    enginePath = path.join(process.cwd(), '/bin/stockfish_10_x64')
+    break
+case 'darwin':
+default:
+    enginePath = path.join(process.cwd(), '/bin/stockfish-10-64')
+    break
+}
+
+
 var engineInfo = {
     status : undefined,
     targetStatus : undefined,
     position : 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
     targetPosition : undefined,
-    enginePath : path.join(process.cwd(), '/bin/stockfish-10-64'),
+    enginePath : enginePath,
     multiPV : 5,
-    threads : 1
+    threads : 2
 }
 
 

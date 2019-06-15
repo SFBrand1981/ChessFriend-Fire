@@ -43,7 +43,6 @@ module.exports = function (window) {
 	createSidebarElement(container, "Games")
 	createSidebarElement(container, "Import")
 	createSidebarElement(container, "Setup position")
-	createSidebarElement(container, "Starred")
 
 
 	// sidebar separator
