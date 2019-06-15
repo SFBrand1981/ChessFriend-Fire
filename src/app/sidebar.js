@@ -74,8 +74,8 @@ module.exports = function (window) {
 	})
 
 
-	var searchBtn = window.document.getElementById('Setup position')
-	searchBtn.addEventListener('click', function(e) {
+	var setupBtn = window.document.getElementById('Setup position')
+	setupBtn.addEventListener('click', function(e) {
 	    window.open('/views/search.html', '_self')
 	})
 

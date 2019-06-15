@@ -191,77 +191,113 @@ module.exports = function (window) {
 	pieceContainer.classList.add("pieceContainer")
 	container.appendChild(pieceContainer)
 
+	var wpSquare = window.document.createElement("div")
+	wpSquare.classList.add("searchSquare")
 	var wp = window.document.createElement("img")
 	wp.classList.add("pieces")
 	wp.id = "P"
 	wp.src = '../assets/pieces/wp.svg'
-	pieceContainer.appendChild(wp)
+	wpSquare.appendChild(wp)
+	pieceContainer.appendChild(wpSquare)
 
+	var bpSquare = window.document.createElement("div")
+	bpSquare.classList.add("searchSquare")
 	var bp = window.document.createElement("img")
 	bp.classList.add("pieces")
 	bp.id = "p"
 	bp.src = '../assets/pieces/bp.svg'
-	pieceContainer.appendChild(bp)
+	bpSquare.appendChild(bp)
+	pieceContainer.appendChild(bpSquare)
 
+	var wnSquare = window.document.createElement("div")
+	wnSquare.classList.add("searchSquare")
 	var wn = window.document.createElement("img")
 	wn.classList.add("pieces")
 	wn.id = "N"
 	wn.src = '../assets/pieces/wn.svg'
-	pieceContainer.appendChild(wn)
+	wnSquare.appendChild(wn)
+	pieceContainer.appendChild(wnSquare)
 
+	var bnSquare = window.document.createElement("div")
+	bnSquare.classList.add("searchSquare")
 	var bn = window.document.createElement("img")
 	bn.classList.add("pieces")
 	bn.id = "n"
 	bn.src = '../assets/pieces/bn.svg'
-	pieceContainer.appendChild(bn)
+	bnSquare.appendChild(bn)
+	pieceContainer.appendChild(bnSquare)
 
+	var wbSquare = window.document.createElement("div")
+	wbSquare.classList.add("searchSquare")
 	var wb = window.document.createElement("img")
 	wb.classList.add("pieces")
 	wb.id = "B"
 	wb.src = '../assets/pieces/wb.svg'
-	pieceContainer.appendChild(wb)
+	wbSquare.appendChild(wb)
+	pieceContainer.appendChild(wbSquare)
 
+	var bbSquare = window.document.createElement("div")
+	bbSquare.classList.add("searchSquare")
 	var bb = window.document.createElement("img")
 	bb.classList.add("pieces")
 	bb.id = "b"
 	bb.src = '../assets/pieces/bb.svg'
-	pieceContainer.appendChild(bb)
+	bbSquare.appendChild(bb)
+	pieceContainer.appendChild(bbSquare)
 
+	var wrSquare = window.document.createElement("div")
+	wrSquare.classList.add("searchSquare")
 	var wr = window.document.createElement("img")
 	wr.classList.add("pieces")
 	wr.id = "R"
 	wr.src = '../assets/pieces/wr.svg'
-	pieceContainer.appendChild(wr)
+	wrSquare.appendChild(wr)
+	pieceContainer.appendChild(wrSquare)
 
+	var brSquare = window.document.createElement("div")
+	brSquare.classList.add("searchSquare")
 	var br = window.document.createElement("img")
 	br.classList.add("pieces")
 	br.id = "r"
 	br.src = '../assets/pieces/br.svg'
-	pieceContainer.appendChild(br)
-
+	brSquare.appendChild(br)
+	pieceContainer.appendChild(brSquare)
+	
+	var wqSquare = window.document.createElement("div")
+	wqSquare.classList.add("searchSquare")
 	var wq = window.document.createElement("img")
 	wq.classList.add("pieces")
 	wq.id = "Q"
 	wq.src = '../assets/pieces/wq.svg'
-	pieceContainer.appendChild(wq)
+	wqSquare.appendChild(wq)
+	pieceContainer.appendChild(wqSquare)
 
+	var bqSquare = window.document.createElement("div")
+	bqSquare.classList.add("searchSquare")
 	var bq = window.document.createElement("img")
 	bq.classList.add("pieces")
 	bq.id = "q"
 	bq.src = '../assets/pieces/bq.svg'
-	pieceContainer.appendChild(bq)
-
+	bqSquare.appendChild(bq)
+	pieceContainer.appendChild(bqSquare)
+	
+	var wkSquare = window.document.createElement("div")
+	wkSquare.classList.add("searchSquare")
 	var wk = window.document.createElement("img")
 	wk.classList.add("pieces")
 	wk.id = "K"
 	wk.src = '../assets/pieces/wk.svg'
-	pieceContainer.appendChild(wk)
-
+	wkSquare.appendChild(wk)
+	pieceContainer.appendChild(wkSquare)
+	
+	var bkSquare = window.document.createElement("div")
+	bkSquare.classList.add("searchSquare")
 	var bk = window.document.createElement("img")
 	bk.classList.add("pieces")
 	bk.id = "k"
 	bk.src = '../assets/pieces/bk.svg'
-	pieceContainer.appendChild(bk)
+	bkSquare.appendChild(bk)
+	pieceContainer.appendChild(bkSquare)
 	
 	var empty_square = window.document.createElement("div")
 	empty_square.classList.add("pieces", "empty-square")

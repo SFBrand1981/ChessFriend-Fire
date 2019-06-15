@@ -916,19 +916,27 @@ body {
     margin-bottom: 0;
 }
 
-.pieceContainer {
-    margin: auto;
-    margin-left: 32px;
-    margin-right: 24px;
+.searchSquare {
+    height: 0;
+    width: 15%;
+    padding-bottom: 15%;
+    display: inline-block;
     text-align: center;
 }
 
-.pieces {
-    width: 13.5%;
-    border: 3px solid var(--base5-color);
-    margin: -1px 0.5px;
+.pieceContainer {
+    margin: auto;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
     background-color: var(--base5-color);
-    padding-bottom: 2%;
+}
+
+.pieces {
+    width: 90%;
+    border: 3px solid var(--base5-color);
+    background-color: var(--base5-color);
+    box-sizing: border-box;
 }
 
 .pieces:hover {
