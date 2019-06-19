@@ -2,6 +2,7 @@
 module.exports = function () {
 
     var fs = require('fs')
+    var path = require('path')
     var Chess = require('chess.js').Chess
 
 
@@ -22,6 +23,31 @@ module.exports = function () {
 	}	
     }
 
+
+    function exportGameAsTex(templateValues) {
+
+	// read LaTeX template
+	var templPath = path.join(process.cwd(), '/assets/latex/template.tex')
+	var template = fs.readFileSync(templPath, 'utf8')
+	var callback
+
+	var tex = ''
+	
+	traverseNodes(templateValues.nodes, function(nodeIndx) {
+	    tex += nodesToLaTeX(templateValues.nodes, nodeIndx)
+	})
+
+
+	fs.writeFile(templateValues.filename, template, function (err) {
+            if (err) {
+		console.info("There was an error attempting to save your data.")
+		console.warn(err.message)
+		return
+            } else if (callback) {
+		// callback()
+            }
+	})
+    }
 
     function parsePGNData(pgn) {
 
@@ -286,6 +312,8 @@ module.exports = function () {
 	// Test if node is last child of current branch
 	function testLastChild() {
 	    while(nodes[branchIndx]['branchLevel'] != branchLevel-1) {
+
+		
 		childIndx = parseInt(branchIndx.match(/\((\d*)\)$/)[1])
 		branchIndx = nodes[branchIndx]['parentIndx']
 		branchSAN = nodes[branchIndx]['SAN']
@@ -318,7 +346,31 @@ module.exports = function () {
 	return testLastChild()
     }
 
-    
+
+    function numOfSiblingBranches(nodes, nodeIndx) {
+
+
+	if (nodes[nodeIndx]['branchLevel'] == 0) {
+	    // mainline has no siblings
+	    return 0
+	}
+	
+	var branchIndx = nodes[nodeIndx]['parentIndx']
+	var childIndx = nodeIndx
+	var branchLevel = nodes[nodeIndx]['branchLevel']
+	
+	while(nodes[branchIndx]['branchLevel'] != branchLevel-1) {
+	    childIndx = branchIndx
+	    branchIndx = nodes[branchIndx]['parentIndx']
+	}
+
+	var numSiblings = nodes[branchIndx]['children'].length - 1
+	var siblingIndx = parseInt(childIndx.match(/\((\d*)\)$/)[1])
+
+	return {numSiblings: numSiblings, siblingIndx: siblingIndx}
+    }
+
+        
     function nodesToHTML(nodes, nodeIndx) {
 
 	var parentIndx = nodes[nodeIndx]['parentIndx']
@@ -560,6 +612,164 @@ module.exports = function () {
 	
     }
     
+
+    function nodesToLaTeX(nodes, nodeIndx) {
+
+	var parentIndx = nodes[nodeIndx]['parentIndx']
+	var grandParent = nodes[parentIndx] ?
+	    nodes[parentIndx]['parentIndx'] : undefined
+
+	var children = nodes[nodeIndx]['children']
+	var branchLevel = nodes[nodeIndx]['branchLevel']
+	var FEN = nodes[nodeIndx]['FEN']
+	var mvNr = FEN.split(' ')[5]
+	var sideToMove = FEN.split(' ')[1]
+	var displayMvNr = false
+	var numSiblings = numOfSiblingBranches(nodes, nodeIndx)
+	var startBold = false
+
+	var rv = ''
+
+	
+	// root node
+	if (nodeIndx === '(0)') {
+	    rv += '\\diagram\n\n'
+	}
+
+	// continuation after comment
+	if (nodes[parentIndx] &&
+	    nodes[parentIndx]['comment'] != undefined) {
+
+	    displayMvNr = true
+	    startBold = (branchLevel == 0) ? true : false
+	}
+	
+	// beginning of variation
+	if (nodes[parentIndx] &&
+	    nodes[parentIndx]['branchLevel'] !== nodes[nodeIndx]['branchLevel']) {
+
+	    if (branchLevel < HTMLIndentLevel) {
+
+		if (numSiblings.numSiblings == 1) {
+		    rv += (branchLevel == 1) ? '\n\n' : '('
+		} else {
+		    if (numSiblings.siblingIndx == 1) {
+			rv += '\n\n\\begin{enumerate}\n\\item\n'
+		    } else {
+			rv += '\n\n\\item\n'
+		    }
+		}
+
+	    } else {
+		rv += '('
+	    }
+	    
+	    displayMvNr = true
+	}
+
+	// mainline continuation after variation
+	if (nodes[parentIndx] && nodes[grandParent] &&
+	    nodes[grandParent]['branchLevel'] === nodes[nodeIndx]['branchLevel'] &&
+	    nodes[grandParent]['children'].length > 1) {
+
+	    displayMvNr = true
+	    startBold = (branchLevel == 0) ? true : false
+	}
+
+	if (nodes[nodeIndx]['startComment'] != undefined) {
+
+	    rv += (branchLevel == 0) ? '\n\n' : ''
+	    rv += nodes[nodeIndx]['startComment'] 
+	    rv += (branchLevel == 0) ? '\n\n' : ' '
+
+	    displayMvNr = true
+	    startBold = (branchLevel == 0) ? true : false
+	}
+
+	if (nodeIndx !== '(0)' && sideToMove === 'b') {
+	    displayMvNr = true
+	}
+
+
+	// mainline SAN
+	if (startBold) {
+	    rv += '{\\bf '
+	} else {
+	    if (nodeIndx == '(0)(0)') {
+		rv += '{\\bf '
+	    }
+	}
+	
+
+	// move number
+	if (displayMvNr === true || nodeIndx === '(0)(0)') {
+	    
+	    if (sideToMove === 'b') {
+		rv += mvNr + '.'
+	    } else {
+		rv += parseInt(mvNr)-1  + '...'
+	    }
+	}
+
+	
+	if (nodes[nodeIndx]['SAN'] != undefined) {
+
+	    var spacing = (children.length == 0) ? '' : ' '
+	    
+	    
+	    var NAG = nodes[nodeIndx]['NAG']
+	    if (NAG != undefined) {
+		rv += nodes[nodeIndx]['SAN'] + convertNAG2Symbol(NAG) + spacing
+	    } else {
+		rv += nodes[nodeIndx]['SAN'] + spacing
+	    }
+
+	    
+	    if (branchLevel == 0 && nodes[nodeIndx]['comment'] != undefined) {
+		rv += '}'
+	    } else {
+		if (branchLevel == 0 &&
+		    nodes[parentIndx] && nodes[parentIndx]['children'].length > 1) {
+		    rv += '}'
+		}
+	    }
+
+	    
+	}
+
+	if (nodes[nodeIndx]['comment'] != undefined) {
+	    rv += (branchLevel == 0) ? '\n\n' : ' '
+	    rv += nodes[nodeIndx]['comment']
+	    rv += (branchLevel == 0) ? '\n\n' : ' '
+	}
+
+	
+	// end of variation
+	if (children.length === 0) {
+	    
+	    if (branchLevel >= HTMLIndentLevel) {
+		var numClosed = numOfClosedParenthesesAfterNode(nodes, nodeIndx)
+		for (var i = 0; i < numClosed.num; i++) {
+		    rv += ')'
+		}
+	    } else {
+
+		if (branchLevel == 0) {
+		    // end of game
+		} else if (numSiblings.numSiblings == 1) {
+		    rv += (branchLevel == 1) ? '\n\n' : ') '
+		} else {
+
+		    if ((numSiblings.siblingIndx) == numSiblings.numSiblings) {
+			rv += '\n\\end{enumerate}\n\n'
+		    }
+		}
+	    }
+	}
+
+	return rv
+    }
+
     
     // Module exports
     module.readGamesFromFile = readGamesFromFile
@@ -567,6 +777,7 @@ module.exports = function () {
     module.pgnMovesToNodes = pgnMovesToNodes
     module.nodesToHTML = nodesToHTML
     module.traverseNodes = traverseNodes
+    module.exportGameAsTex = exportGameAsTex
     
     return module
 }

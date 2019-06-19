@@ -432,6 +432,25 @@ module.exports = function (window) {
 		boardState.deleteGame()
 	    }
 	}))
+
+	menu.append(new nw.MenuItem({
+	    label: 'Export to LaTeX',
+	    click: function(){
+
+		var exportDialog = document.createElement('input')
+		exportDialog.style.display = 'none'
+		exportDialog.type = 'file'
+		exportDialog.id = 'exportDialog'
+		exportDialog.accept = '.tex'
+		exportDialog.nwsaveas = "ChessFriend-Fire_Export.tex"
+		window.document.body.appendChild(exportDialog)
+		exportDialog.click()
+		exportDialog.addEventListener("change", function (evt) {
+		    boardState.exportGameAsTex(this.value)
+		})
+		
+	    }
+	}))
 	
 	// Hooks for the "contextmenu" event
 	notationContainer.addEventListener('contextmenu', function(ev) {

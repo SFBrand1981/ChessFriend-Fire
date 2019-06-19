@@ -5,8 +5,10 @@ module.exports = function (window) {
     var Chess = require('chess.js').Chess
     var tools = require(path.join(process.cwd(), '/app/tools.js'))
     var BoardHandler = require(path.join(process.cwd(), '/app/board.js'))
-    var PGNHandler = require(path.join(process.cwd(), '/app/pgn.js'))
 
+    var PGNHandler = require(path.join(process.cwd(), '/app/pgn.js'))
+    var ph = new PGNHandler()
+    
     // reference to current board state
     var bh = new BoardHandler()
     var currentBoard = bh.board
@@ -83,7 +85,6 @@ module.exports = function (window) {
 
 	var container = window.document.getElementById('notationContainer')
 	var notation = ''
-	var ph = new PGNHandler()
 	
 	ph.traverseNodes(currentBoard.nodes, function(nodeIndx) {
 	    notation += ph.nodesToHTML(currentBoard.nodes, nodeIndx)
@@ -1522,6 +1523,16 @@ module.exports = function (window) {
     function insertEngineMove(sq_start, sq_stop) {
 	currentBoard = insertMove(currentBoard, sq_start, sq_stop)
     }
+
+
+    function exportGameAsTex(filename) {
+
+	var templateValues = {}
+	templateValues.filename = filename
+	templateValues.nodes = currentBoard.nodes
+	ph.exportGameAsTex(templateValues)
+	
+    }
     
     module.createMoveIndicator = createMoveIndicator
     module.createBoardControls = createBoardControls
@@ -1542,6 +1553,7 @@ module.exports = function (window) {
     module.deleteGame = deleteGame
     module.createSaveBtn = createSaveBtn
     module.insertEngineMove = insertEngineMove
+    module.exportGameAsTex = exportGameAsTex
     
     return module
 }

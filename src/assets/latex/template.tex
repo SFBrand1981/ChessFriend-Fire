@@ -39,7 +39,7 @@
 %---------------------------------------------------------------
 
 
-%\setmainfont[Ligatures=TeX]{Linux Libertine O}
+\setmainfont[Ligatures=TeX]{Linux Libertine O}
 %\setsansfont[Ligatures=TeX, Scale=MatchUppercase]{Calibri}
 
 
@@ -85,36 +85,36 @@
 %---------------------------------------------------------------
 
 
-%\newfontfamily\chess{SkakNew-Figurine}
-%
-%\newcommand\wking{{\chess K}}
-%\newcommand\wqueen{{\chess Q}}
-%\newcommand\wrook{{\chess R}}
-%\newcommand\wbishop{{\chess B}}
-%\newcommand\wknight{{\chess N}}
-%\newcommand\wpawn{{\chess p}}
+\newfontfamily\chess{SkakNew-Figurine}
 
-
-\notationoff
+\newcommand\wking{{\chess K}}
+\newcommand\wqueen{{\chess Q}}
+\newcommand\wrook{{\chess R}}
+\newcommand\wbishop{{\chess B}}
+\newcommand\wknight{{\chess N}}
+\newcommand\wpawn{{\chess p}}
 
 
 \newcounter{diagram}[section]
-\def\thediagram{\arabic{diagram}}
+\def\thediagram{D\arabic{diagram}}
 
 
 \newcommand{\diagram}{
-	\vspace{-11pt}
-
-	\begin{center}
-    	\chessboard[setfen=2r5/R4bk1/4np2/1p2p1p1/1q1pP1Qp/1Nr4P/1nP2PPB/R4BK1 b - - 5 47,
+	\begin{figure}
+		\begin{center}
+    	\chessboard[
+			setfen=2r5/R4bk1/4np2/1p2p1p1/1q1pP1Qp/1Nr4P/1nP2PPB/R4BK1 b - - 5 47,
     		showmover=true,labelleft=false,labelbottom=false,
     		marginright=false,marginleft=false]\\
-    		\label{dgr1}\textbf{D\thediagram:} Position after 1. e4
-    \end{center}
+    		\caption{Position after 1. e4}
+			\label{\thediagram}		
+		\end{center}
+    \end{figure}
     \refstepcounter{diagram}
-   }
+}	
 
-
+\renewcommand{\figurename}{Diagram}
+\def\figureautorefname{Diagram}
 
 
 %---------------------------------------------------------------
@@ -180,908 +180,349 @@
   \end{@twocolumnfalse}
   ]
 
+
+
+
+%---------------------------------------------------------------
+% Beginning of game
+%---------------------------------------------------------------
+
 \diagram
 
-\bf
 
-{\nf KASPAROV CHESS}
-  1. e4
-{\nf Nothing betokened a storm when I made this move. Topalov who is always eager to fight no matter if he has Black or White, if he plays me or any other adversary answered with }
-  1. ... d6  2. d4  Nf6  3. Nc3  g6  4. Be3  Bg7  5. Qd2  c6  6. f3  b5  7. Nge2  Nbd7  8. Bh6  Bxh6  9. Qxh6  Bb7  10. a3 N  e5  11. O-O-O  Qe7  12. Kb1  a6  13. Nc1  O-O-O  14. Nb3  exd4!  15. Rxd4  c5  16. Rd1  Nb6!  17. g3  Kb8  18. Na5  Ba8  19. Bh3  d5  20. Qf4+  Ka7  21. Rhe1  d4  22. Nd5  Nbxd5  23. exd5  Qd6  24. Rxd4!! cxd4?! 
+KASPAROV CHESS GM Garry Kasparov:
 
-\begin{enumerate}\nf
+{\bf 1.e4 }
+
+Nothing betokened a storm when I made this move. Topalov who is always eager to fight no matter if he has Black or White, if he plays me or any other adversary answered with
+
+{\bf 1...d6 }
+
+I was sincerely surprised. Pirc-Ufimtsev Defense is not a usual one for Topalov, and this opening is hardly worth using in the tournaments of the highest category. White has too many opportunities for anybody's liking: one can lead an acute or a positional game, one can vary different ways of developing the initiative. Nevertheless, Topalov obviously counted on surprise, as he thought that I would play worse in a situation I was not ready for, and besides, he hoped to avoid my opening preparation, which he had faced before.
+
+{\bf 2.d4 Nf6 3.Nc3 g6 }
+
+That was when I began to think. I was actually engrossed in thoughts on the third move, I had often played 3.f3 threatening with King's Indian Defense. However, this opening couldn't scare Topalov off as he was used to it, moreover, that was what he reckoned on. That is why I decided to play at sight. I went for a position I had a definite idea about but never met in practice and, frankly speaking, had never seriously analyzed.
+
+{\bf 4.Be3 Bg7 }
+
+4...c6 5.Qd2 b5 6.f3 Bg7
+
+{\bf 5.Qd2 c6 }
+
+As far as I know, Black usually plays c6 and b5 before the move Bg7, but I don't think that this shift changes something seriously.
+
+{\bf 6.f3 }
+
+It was also possible to play 6.Nf3 b5 7.Bd3 probably it was even better, but here I have to repeat that in this opening both adversaries relied not on exact knowledge but on common sense. 
+
+{\bf 6...b5 7.Nge2 }
+
+A strange move.
+
+
+
+If White wanted to play 7.Bh6!? he could do it at once, leaving the e2-square free for the other Knight and providing an opportunity to develop the other Bishop on d3. Theoretically this Knight could move to h3 one day. 
+
+
+
+Generally speaking, the move 7.Nge2 has no sense, its reason is purely psychological. I remembered that before the game, when we discussed the strategy with Yury Dokhoian, he said suddenly looking through Topalov's games: "You know, Garry, he does not like when the opponent makes the moves he can not predict. This affects him strangely." That is why I played 7.Nge2 and surprised Topalov. This move does not contain any threats but continues the development. However, it seemed to me that he did not like the character of the fight, as it did not correspond the ideas he had before the game.
+
+{\bf 7...Nbd7 8.Bh6 }
+
+Better late than never. It is useful to exchange the Bishop.
+
+{\bf 8...Bxh6 9.Qxh6 }
+
+White achieved some sort of success as Black can not castle in a shorter direction. However, this achievement is rather ephemeral because the King can hide on the Queen-side as well. White King will also castle there as a result. Maneuverable fight is waiting ahead and White can not count on significant gains.
+
+{\bf 9...Bb7 }
+
+Actually, if Black shows activity 9...Qa5  then there is a move 10.Nc1 and then the Knight moves to b3 with tempo. White will manage to stabilize the game and he will devoid Black of the opportunity to use the diversion of the white Queen on h6. 
+
+{\bf 10.a3 N }
+
+I did not want to castle at once, because it was not clear how to defend the King after Qa5 from the b4 threat. That is why White makes a wait-and-see move that prepares a long castling and again, on Qa5 there is a move Nc1 that repulses the b4 threat.
+
+
+
+10.O-O-O Qa5 11.a3 (11.Qd2 b4 12.Nb1) 11...b4 12.axb4 (12.Nb1) 
+
+{\bf 10...e5 }
+
+Topalov, after thinking for 11 minutes, decided to strengthen the position in the center and to prepare to castle long. Black had alternative plans, but this one looked most logical.
+
+{\bf 11.O-O-O Qe7 12.Kb1 a6 }
+
+It was probably possible to castle at once, but Topalov defends his King from the potential threat of d5 just to be on the safe side. I doubt that this threat was that real, but Black found this move desirable.
+
+
+
+White did not have a lot of opportunities either; he had to unravel the tangle of his pieces. That was why I decided to transfer the Knight to b3, taking advantage of the fact that now Black's attempt to play actively with a7-a5 would be repulsed: 12...a5?! 13.Nc1 b4 14.dxe5! dxe5 (14...Ng8 15.Qg7 Qxe5 16.Qxe5+ dxe5 17.Na4 +/-) 15.Na4 bxa3 16.b3 +/-
+
+{\bf 13.Nc1 O-O-O 14.Nb3 }
+
+The development of both sides is coming to its end. However, Black has to show some enterprise, as he is under some pressure. If White develops with g3, Bh3, and Rhe1, then it won't be easy for Black. Black's King is slightly weakened and, of course, he should have considered playing c6-c5, but then White would have a choice: close the position by playing d5, or even to exchange. It is probably more promising to close the center. White's space advantage lets him push for an attack. Then I hoped to make use of Black's weaknesses on the Queen-side. It was possible to move the Queen from h6 to b6 or to a7. This was an absurd thought: it flashed across my mind and immediately disappeared, but subconsciously I formed the idea that the Queen on b6 together with the Knight on a5 could make a lot of trouble, especially if the white Bishop appears on h3. This did affect the calculation of variations, but, the mere fact that such an idea surfaced served as a prologue to a wonderful combination.
+
+{\bf 14...exd4! }
+
+A very good decision: relief in the center. Taking advantage of the fact that White is a bit backward in development, Black does not hesitate to open the game and relies on the possibility that active pieces will compensate for the weakened position of the King.
+
+{\bf 15.Rxd4 c5 16.Rd1 Nb6! }
+
+A good move. Black prepares d6-d5, and I had to think hard for 10 minutes. Now we already have dim contours of a combination. I still could not imagine how it would look like but I realized that the moves g3 and Bh3 could not be bad.
+
+{\bf 17.g3 }
+
+Now the Bishop will move to h3, the Queen will return to f4, the Knight will go to a5, and the blow will take place somewhere in that area. At that moment, however, I did not know exactly what this blow would be like. Nevertheless, the idea to dispose the pieces in such a way already reigned over my mind.
+
+
+
+\begin{enumerate}
 \item
-
-{\nf Maybe, if Topalov had played }
-24. ... Kb6!
-{\nf then I could have found the move }
- 
-{\nf Maybe, if Topalov had played }
-25.Nb3!
-{\nf which again makes it impossible to capture the Rook: }
- 
-
-\begin{enumerate}\nf
-\item
-
-{\nf I was intending to play }
-25. b4
-{\nf as I underestimated the fact that after }
-  25. ... Qxf4  26. Rxf4  Nxd5  27. Rxf7  cxb4  28. axb4  Nxb4  29. Nb3  Rd6
-{\nf Black's position is better. }
-
-\end{enumerate}
-  25. ...Bxd5! 
-
-\begin{enumerate}\nf
-\item
- 25. ... cxd4?  26. Qxd4+  Kc7  27. Qa7+  Bb7  28. Nc5  Rb8  29. Re7+ +-
-\end{enumerate}
-  26. Qxd6+  Rxd6  27. Rd2  Rhd8  28. Red1 =
-{\nf and White keeps equality, but not more. }
-
-\end{enumerate}
+What does White do next? Let's say if 17.a4?!  then Black gets a good position after 17...b4 18.a5 bxc3 19.axb6 Nd7
 
 \item
- 24. ... Bxd5?!  25. Rxd5  Nxd5  26. Qxf7+  Nc7  27. Re6  Rd7  28. Rxd6  Rxf7  29. Nc6+  Ka8  30. f4
+And in case of 17.Na5 d5 18.Nxb7 (18.g3 d4) 18...Kxb7 19.exd5 Nbxd5 20.Nxd5 Nxd5 21.Bd3 f5 22.Rhe1 Qc7 23.Bf1 c4 we have a complicated position with mutual chances. Of course, the black King is out in the open, but the white Bishop is hemmed in by the pawns. Black is sound in the center, and it is most likely that the position is in a state of dynamic balance. 
 \end{enumerate}
-  25. Re7+!
-{\nf  1-0 }
 
-%
-%
-%\item
-%{\nf And in case of }
-%
-%17. Na5  d5  18.Nxb7 
-%\begin{enumerate}\nf
-%\item
-% 18. g3  d4
-%\end{enumerate}
-%
-% 18. ... Kxb7  19. exd5  Nbxd5  20. Nxd5  Nxd5  21. Bd3  f5  22. Rhe1  Qc7  23. Bf1  c4
-%{\nf we have a complicated position with mutual chances. Of course, the black King is out in the open, but the white Bishop is hemmed in by the pawns. Black is sound in the center, and it is most likely that the position is in a state of dynamic balance. }
-%
-%\end{enumerate}
-%
-%  17. ... Kb8
-%{\nf Topalov thinks that he has some time and can calmly prepare for d6-d5. }
-%
-%  18.Na5 
-%\begin{enumerate}\nf
-%\item
-%
-%{\nf It is important to say that if White had not played the Knight to a5 on the 18th move but immediately played }
-%
-%18. Bh3
-%{\nf then the white Knight would not have reached the a5-square after Nb3. }
-%
-%
-%\end{enumerate}
-%
-% 18. ... Ba8  19. Bh3  d5
-%{\nf So, both sides have fulfilled what was planned: White has finished the development and Black has played d6-d5. Though, generally speaking, there was such an opportunity and it was possible to play Rhe1, but that would have been another game. I tried to systematically fulfill the plan that I expected to end in a sacrifice. The move 24.Rxd4 was already clear in my mind, though I had not yet realized the possibility of a draw by repetition of moves. I just saw the outline of an attack. }
-%
-%  20. Qf4+  Ka7  21. Rhe1
-%{\nf That was when I saw the possibility of a draw. Moreover, I felt that there was a possibility to continue the game, to play without the Rook, though I could not imagine what it would lead to. However, the image of the black King on a5 comforted my heart and intuition given to every man from birth, intuition of an "attacker" ( let's call it that way ) , told me that there would be decision and a mate net around the black King would be spun in spite of the huge material advantage of the adversary. Besides, I was whipped up by curiosity of unexplored. Will there ever be another opportunity to lure out the black King into the center of my own camp!? In the long run, Lasker's ancient game with a sacrifice on h7 and King's move g8-g1 was like a myth to us. Such a thing could happen only in those distant times, we assume. And suddenly, this opportunity! Topalov looked quite confident. He played }
-%
-%  21. ...d4 
-%\begin{enumerate}\nf
-%\item
-%
-%{\nf Certainly, after }
-%
-%21. ... dxe4?  22. fxe4
-%{\nf the game is open and now the threat 23.Nd5 gives Black a lot of trouble: the black King is too weak. }
-%
-%
-%\end{enumerate}
-%
-%  22.Nd5
-%{\nf Frankly speaking, this move is not the strongest but it serves as a prologue for a further combination. }
-%
-% 
-%\begin{enumerate}\nf
-%\item
-%
-%{\nf White, of course, could have played }
-%
-%22. Na2
-%{\nf but after }
-%
-%  22. ... Rhe8
-%{\nf or h7-h6 the game would have become very complicated. So naturally, my hand led the Knight to the center. }
-%
-%
-%\end{enumerate}
-%
-%  22. ... Nbxd5  23. exd5  Qd6
-%{\nf ( White to move ) It seemed to me that Topalov was a bit surprised, as he thought that attacking resources had dried out. A check on c6 was senseless, the Knight will be beaten, the King will go to b6, and there is hardly any opportunity for White to move his Rooks toward the black King. The d4-pawn safely protects the d-rank, and there are no squares for intrusion on the e-rank. Actually, this was not quite right, and my next move, made without any hesitation, turned out to be an unpleasant surprise for Topalov. }
-%
-%  24. Rxd4!!
-%{\nf When I made this move, I saw only the repetition of the moves and the opportunity to continue the attack, though the whole picture of the combination was not yet clear. I already saw the idea 30. ..Rd6 31.Rb6, but I still could not get rid of the thought that all lines should be checked to the very end. Maybe black will find some opportunity for defense. Topalov spent about 15 minutes thinking. I walked around the hall - rather, I fled - and at these feverish moments it seemed to me that there were very few participants and that most of the games had already been finished. My mind worked only in one direction, and one of these moments brought me the image of the whole cluster of various lines. I saw the move 37.Rd7. I don't even remember how this line was formed in my head, but I saw the whole line up to the end. I saw the journey of the black King after 36.Bf1, 37.Rd7 and I could no longer suppress my excitement, because at that same moment I realized that the move 24. ..Kb6 ruined the whole construction. The mere thought that I could spoil such a combination drove me crazy, and I only prayed that Topalov would capture on d4. I still was not sure that this would win, but the beauty of the combination I saw impressed me. I could not believe my own eyes when Veselin twitched abruptly and grabbed the Rook. As he explained after the game, he was exhausted by the tense fight and he thought that White would have to force a draw by the repetition of moves after the Rook was captured. He saw the main idea of the combination, but it did not occur to him that White would play without the Rook, trying to make use of the King's forward position on a4. }
-%
-%  24. ...cxd4?!
-%{\nf This move loses the game, but it is worth an exclamation mark, as great combinations cannot be created without partners. If Topalov had not taken the Rook, the game could have finished in a draw: Veselin would have had half a point more, I - half a point less. He would have win a little bit, I would have lost a little bit, but chess and chess amateurs would have lost a lot. However, Caissa was kind to me that day... I do not know what I was rewarded for, but the development of events became forced after the capture on d4. }
-%
-% 
-%\begin{enumerate}\nf
-%\item
-%
-%{\nf Maybe, if Topalov had played }
-%
-%24. ... Kb6!
-%{\nf then I could have found the move }
-%
-% 
-%{\nf Maybe, if Topalov had played }
-%
-%25.Nb3!
-%{\nf which again makes it impossible to capture the Rook: }
-%
-% 
-%\begin{enumerate}\nf
-%\item
-%
-%{\nf I was intending to play }
-%
-%25. b4
-%{\nf as I underestimated the fact that after }
-%
-% 
-%{\nf I was intending to play }
-%
-%25. ...Qxf4 
-%\begin{enumerate}\nf
-%\item
-% 25. ... Nxd5  26. Qxd6+  Rxd6  27. bxc5+  Kxc5  28. Nb3+  Kb6  29. Kb2  Rhd8  30. Red1  Bc6  31. f4  Kc7 =
-%\end{enumerate}
-%
-%  26. Rxf4  Nxd5  27. Rxf7  cxb4  28. axb4  Nxb4  29. Nb3  Rd6
-%{\nf Black's position is better. }
-%
-%
-%\end{enumerate}
-%
-%  25. ...Bxd5! 
-%\begin{enumerate}\nf
-%\item
-% 25. ... cxd4?  26. Qxd4+  Kc7  27. Qa7+  Bb7  28. Nc5  Rb8  29. Re7+ +-
-%\end{enumerate}
-%
-%
-%item
-% 25. ... Nxd5?  26. Qxf7  Rhf8  27. Qg7  Rg8  28. Qh6  Qf8  29. Rh4 +/-
-%\end{enumerate}
-%
-%  26. Qxd6+  Rxd6  27. Rd2  Rhd8  28. Red1 =
-%{\nf and White keeps equality, but not more. }
-%
-%
-%\end{enumerate}
-%
-%
-%item
-% 24. ... Bxd5?!  25. Rxd5  Nxd5  26. Qxf7+  Nc7  27. Re6  Rd7  28. Rxd6  Rxf7  29. Nc6+  Ka8  30. f4
-%\end{enumerate}
-%
-%  25.Re7+!
-%{\nf I made this move with lightening speed. And there was nothing to think about. The Rook was inviolable. Such moves are always made with pleasure, and all I have said before ( that the d-rank is closed by the d4-pawn and that there are no squares for intrusion on the e-rank ) turned out to be ruined. Two white Rooks sacrifice themselves, and thus, the way to the black camp is opened for White's pieces. The construction I dreamt of - Queen on b6, Knight on a5 - has suddenly come true, because of the Bishop on h3. }
-%
-% 
-%\begin{enumerate}\nf
-%\item
-%
-%{\nf I have to say that }
-%
-%25. Qxd4+?
-%{\nf did not achieve the goal because of }
-%
-%  25. ... Qb6  26. Re7+  Nd7
-%{\nf and White's attack fades away. }
-%
-%
-%\end{enumerate}
-%
-%  25. ...Kb6 
-%\begin{enumerate}\nf
-%\item
-%
-%{\nf If Black moves }
-%
-%25. ... Kb8?  26. Qxd4!
-%{\nf then after }
-%
-%  26. ... Nd7  27. Bxd7  Bxd5  28. c4!  Qxe7  29. Qb6+  Ka8  30. Qxa6+  Kb8  31. Qb6+  Ka8  32. Bc6+!  Bxc6  33. Nxc6
-%{\nf Black loses by force. }
-%
-%
-%\end{enumerate}
-%
-%  26. Qxd4+ Kxa5 
-%\begin{enumerate}\nf
-%\item
-%
-%{\nf Some of the participants, including Anand, asserted that the move }
-%
-%26. ... Qc5
-%{\nf saved the game. However, after }
-%
-%  27. Qxf6+  Qd6  28. Be6!!
-%{\nf White closed the rank but left the opportunity to vary threats and to force Black into a desperate position. For example }
-%
-%  28. ...Bxd5 
-%\begin{enumerate}\nf
-%\item
-% 28. ... Rhe8  29. b4 +-
-%\end{enumerate}
-%
-%  29. b4!  Ba8  30. Qxf7  Qd1+  31. Kb2  Qxf3  32. Bf5
-%{\nf would be the simplest way, as all the lines are closed and mate threats become inevitable. }
-%
-%
-%\end{enumerate}
-%
-%  27. b4+  Ka4  28.Qc3
-%{\nf I made the last move without hesitations. Frankly speaking, I could not make myself think as I strove for the end. I already saw it, and it seemed to me that it was the way to finish the game, that Black could not avoid it, and that there were no other defenses. Veselin gave me time when he was thinking himself, but I could not make myself look for another opportunity. My hopes were in vain! However, it is difficult to judge. It seems to me that the beauty of this combination is not inferior to a side line. Though in order to be objective from the point of view of chess truth, it would be stronger to play 28.Ra7! }
-%
-% 
-%\begin{enumerate}\nf
-%\item
-% 28. Ra7!
-%{\nf The strongest move, as in the game itself, is }
-%
-%  28. ...Bb7 
-%\begin{enumerate}\nf
-%\item
-%
-%{\nf So, after 28.Ra7! both captures on d5 lose quickly: }
-%
-%28. ... Nxd5  29. Rxa6+!!  Qxa6  30. Qb2  Nc3+  31. Qxc3  Bd5  32. Kb2 +-
-%{\nf ( Black to move ) and we approached the position when there was no defense from the threat of Queen's self-sacrifice on b3. Black can not attract another piece to control the a2-g8 diagonal, as the white Bishop controls the e6-square. }
-%
-%
-%\end{enumerate}
-%
-%
-%item
-%
-%{\nf The Bishop's capture on d5 also loses: }
-%
-%28. ... Bxd5  29. Qc3  Rhe8  30. Kb2  Re2
-%{\nf Black linked the c2-pawn and defended from the Qb3 threat. And here the Queen suddenly changes its route - }
-%
-%  31. Qc7!
-%{\nf threatening with a mate from a5. And after }
-%
-%  31. ... Qxc7  32. Rxa6+
-%{\nf the King turn s out to be mated by the white Rook. A wonderful scheme of mating pieces! }
-%
-%
-%\end{enumerate}
-%
-%  29. Rxb7
-%{\nf The continuation after }
-%
-%  29. ...Qxd5 
-%\begin{enumerate}\nf
-%\item
-%
-%{\nf After }
-%
-%29. ... Nxd5
-%{\nf White finds a new mating construction }
-%
-%  30. Bd7!
-%{\nf threatening with Bxb5+ to expose the black King and to mate it again with the Rook, and after }
-%
-%  30. ... Rxd7
-%{\nf White varies the threats by the move }
-%
-%  31. Qb2
-%{\nf threatening with a mate on from b3. The only move is }
-%
-%  31. ... Nxb4
-%{\nf and then }
-%
-%  32. Rxd7
-%{\nf attacks the Queen again. And there is a mate from b4 after }
-%
-%  32. ...Qxd7
-%{\nf  }
-%
-% 
-%\begin{enumerate}\nf
-%\item
-% 32. ... Qc5  33. Rd4
-%{\nf threatens to capture on b4 and on h8. And after }
-%
-%  33. ... Rc8
-%{\nf White plays }
-%
-%  34. Qb3+  Ka5  35. axb4+
-%{\nf and Black suffers crucial material losses. }
-%
-%
-%\end{enumerate}
-%
-%
-%\end{enumerate}
-%
-%  30. Rb6 a5
-%{\nf  }
-%
-% 
-%\begin{enumerate}\nf
-%\item
-%
-%{\nf In case of }
-%
-%30. ... Ra8
-%{\nf White restores the material balance after }
-%
-%  31. Qxf6
-%{\nf and continues the crucial attack }
-%
-%  31. ... a5  32. Bf1  Rhb8  33. Rd6
-%{\nf driving away the black Queen and the white Queen comes back and mates. }
-%
-%
-%\end{enumerate}
-%
-% 
-%{\nf It seems that after }
-%
-%31. Ra6
-%{\nf Black can defend himself playing }
-%
-%  31. ... Ra8
-%{\nf but then a sudden change of a mating construction follows: }
-%
-%  32. Qe3!!
-%{\nf Right here, as after }
-%
-%  32. ... Rxa6
-%{\nf goes }
-%
-%  33. Kb2
-%{\nf ( which threatens mate on a3 ) , and after }
-%
-%  33. ... axb4  34. axb4
-%{\nf The only defense is }
-%
-%  34. ...Qa2+ 
-%\begin{enumerate}\nf
-%\item
-%
-%{\nf A capture on b4 }
-%
-%34. ... Kxb4
-%{\nf postpones the mate by one more move. }
-%
-%  35. Qc3+  Ka4  36. Qa3#
-%{\nf checkmate. }
-%
-%
-%\end{enumerate}
-%
-%  35. Kxa2  Kxb4+  36. Kb2
-%{\nf Black has rat her good material - two Rooks for the Queen - but White continues the attack and there is no escape from it: }
-%
-%  36. ... Rc6  37. Bf1
-%{\nf threatening with a mate from a3. }
-%
-%  37. ... Ra8  38. Qe7+  Ka5  39. Qb7
-%{\nf A mate threat on b5 results in the win of the Rook. }
-%
-%
-%\end{enumerate}
-%
-%  28. ...Qxd5
-%{\nf Here, Topalov had less than half an hour, I had 32 minutes. }
-%
-% 
-%\begin{enumerate}\nf
-%\item
-%
-%{\nf It would be even weaker to play }
-%
-%28. ... Bxd5
-%{\nf because of }
-%
-%  29. Kb2!
-%{\nf with inevitable mate. }
-%
-%
-%\end{enumerate}
-%
-%  29. Ra7!  Bb7  30.Rxb7 
-%\begin{enumerate}\nf
-%\item
-%
-%{\nf White refuses the last opportunity to force a perpetual checkmate playing }
-%
-%30. Qc7
-%{\nf I was sure that White would achieve more. }
-%
-%  30. ... Qd1+  31. Kb2  Qd4+  32. Kb1 =
-%\end{enumerate}
-%
-% 30. ...Qc4
-%{\nf This is the most natural defense, and I counted on it, too. Moreover, this is the defense that leads to the most effective mating end that I had no rest from for the last 15-20 minutes, ever since its image mysteriously arose in my mind. Actually, Black had two other defenses, and each of them could have ruined the delicate conception that I had in mind. }
-%
-% 
-%\begin{enumerate}\nf
-%\item
-%
-%{\nf The first one was }
-%
-%30. ... Rhe8
-%{\nf Thus, White plays }
-%
-%  31. Rb6  Ra8  32.Bf1!!
-%{\nf Objecting to ...Qc4, White creates a quiet threat Rd6, which is crucial in the case of Nd7. }
-%
-% 
-%\begin{enumerate}\nf
-%\item
-%
-%{\nf It is important to note that the move }
-%
-%32. Be6
-%{\nf which suggests itself, does not achieve the goal: }
-%
-%  32. ... Rxe6  33. Rxe6
-%{\nf And Black, of course, can not capture the rook on e6, as after Kb2 there is no defense from the mate, butplays }
-%
-%  33. ... Qc4
-%{\nf White has to beat c4: }
-%
-%  34. Qxc4  bxc4  35. Rxf6  Kxa3
-%{\nf and then }
-%
-%  36. Rxf7  Re8
-%{\nf Black starts a counter-attack and, strange as it may seem, keeps good chances to win the ending. White cannot allow such exchanges and, as we can see, the c4-square is now crucial. Black could change the defense, playing 30. ..Rhe8. In this case one Rook would defend the a6-pawn from a8, and the move Kb2 faces Qe5. The Rook controls the e5-square, and the Queen is ready to move to c4. That is why the key move is 32.Bf1!! }
-%
-%
-%\end{enumerate}
-%
-%  32. ...Re1+
-%{\nf ( after 32.Bf1 ) }
-%
-% 
-%\begin{enumerate}\nf
-%\item
-% 32. ... Nd7  33. Rd6!  Rec8  34. Qb2
-%\end{enumerate}
-%
-%
-%item
-%
-%{\nf If }
-%
-%32. ... Re6
-%{\nf then White simply makes an exchange on e6 }
-%
-%  33. Rxe6  fxe6
-%{\nf and plays }
-%
-%  34. Kb2
-%\end{enumerate}
-%
-%
-%item
-%
-%{\nf If }
-%
-%32. ... Red8
-%{\nf White plays }
-%
-%  33. Rc6
-%{\nf and creates a threat Rc5, now we have Rd6 anyway after }
-%
-%  33. ...Nd7
-%{\nf as the d-rank is closed. }
-%
-% 
-%\begin{enumerate}\nf
-%\item
-%
-%{\nf And after }
-%
-%33. ... Nh5
-%{\nf we can, for instance, play }
-%
-%  34. Rc5  Rac8  35. Kb2
-%{\nf And there is no way out again! }
-%
-%
-%\end{enumerate}
-%
-%  34. Rd6
-%{\nf  }
-%
-%
-%\end{enumerate}
-%
-%  33. Qxe1  Nd7
-%{\nf However, after 33. ..Nd7 White makes a diverting Rook-sacrifice - }
-%
-%  34.Rb7! 
-%\begin{enumerate}\nf
-%\item
-%
-%{\nf and after }
-%
-%34. Qc3  Nxb6  35. Kb2
-%{\nf this Knight checks the King from c4, }
-%
-%  35. ... Nc4+
-%{\nf after }
-%
-%  36. Ka2
-%{\nf he checks the King from d2, }
-%
-%  36. ... Nd2+
-%{\nf controls the b3-square, and suddenly Black wins. }
-%
-%
-%\end{enumerate}
-%
-% 34. ...Qxb7
-%{\nf there is that very computerlike ending: }
-%
-% 
-%\begin{enumerate}\nf
-%\item
-%
-%{\nf It is necessary to beat the Rook, as after }
-%
-%34. ... Ne5  35. Qc3  Qxf3
-%{\nf the easiest way to the victory would be }
-%
-%  36. Bd3  Qd5  37. Be4
-%\end{enumerate}
-%
-%  35. Qd1  Kxa3  36. c3
-%{\nf and the white Queen mates in a stair-like way Qc1-c2-a2. Checkmate is inevitable! I do not know if it is possible to find this line during a game, but the beauty of the combination is absolutely irresistible. In essence, we deal with a problem of changing mates, which, as far as I can remember, have never been practiced by serious chess players. Such interchange of mates is characteristic only of special chess problems. }
-%
-%
-%\end{enumerate}
-%
-%
-%item
-%
-%{\nf Black has another counter-opportunity: he can make a sudden Knight-sacrifice }
-%
-%30. ... Ne4!
-%{\nf and after }
-%
-%  31. fxe4  Qc4
-%{\nf After 31. ..Qc4 the right move would be }
-%
-%  32.Ra7
-%{\nf as it threatens with a mate on a6 again. }
-%
-% 
-%\begin{enumerate}\nf
-%\item
-%
-%{\nf Of course, White does not have to play }
-%
-%32. Qf6
-%{\nf though after }
-%
-%  32. ... Kxa3  33. Qxa6+  Kxb4  34. Bd7
-%{\nf he is not at risk. The game, however, would end in a draw }
-%
-%
-%\end{enumerate}
-%
-%
-%item
-%
-%{\nf The move }
-%
-%32. Qe3?
-%{\nf is not promising either. Black plays }
-%
-%  32. ... Rc8
-%{\nf which is the same counter-sacrifice }
-%
-%  33. Bxc8  Rxc8
-%{\nf approaching to the counter-attack: }
-%
-%  34. Qc1  Qd4!
-%{\nf - the best way. And White has accept a draw. }
-%
-%
-%\end{enumerate}
-%
-%
-%item
-%
-%{\nf A capture on c4 gives Black chances to win and leads to a complicated ending: }
-%
-%32. Qxc4?!  bxc4  33. Kb2
-%{\nf The best move is }
-%
-%  33. ... f5
-%{\nf and after }
-%
-%  34. exf5
-%{\nf Black has to play }
-%
-%  34. ...c3+
-%{\nf and give an intermediate checkmate }
-%
-% 
-%\begin{enumerate}\nf
-%\item
-%
-%{\nf as after }
-%
-%34. ... Rd6  35. fxg6  c3+
-%{\nf White plays }
-%
-%  36. Ka2  hxg6  37. Bf1
-%{\nf and we come across mating constructions once again: either Bc4-Bb3, or Bb5-Ra7. }
-%
-%
-%\end{enumerate}
-%
-% 
-%{\nf However, after }
-%
-%35. Kxc3  Kxa3  36. f6  Rd6  37. f7  Rc6+  38. Kd4  Rxc2  39. Bf1
-%{\nf White has some chances to win. Maybe he will win the ending because of a strong pawn and the opportunity to push the King to g7. However, White didn't start this combination to win the ending. Fortunately, a detailed analysis shows that White has a better opportunity. }
-%
-%
-%\end{enumerate}
-%
-%  32. ...Rd1+ 
-%\begin{enumerate}\nf
-%\item
-%
-%{\nf Now after }
-%
-%32. ... Ra8
-%{\nf White wins playing }
-%
-%  33. Qe3
-%{\nf in order to play Kb2 after }
-%
-%  33. ... Rxa7
-%\end{enumerate}
-%
-%  33. Kb2  Qxc3+  34. Kxc3  Rd6
-%{\nf we come to an ending, but this ending if different from the previous one. The black King is still threatened with a mate. The pawn has not yet left the b5-square and White can continue forcing threats, in spite of the disappearance of the Queens: }
-%
-%  35. e5  Rb6  36. Kb2 Re8 
-%\begin{enumerate}\nf
-%\item
-%
-%{\nf where else? if }
-%
-%36. ... Rd8
-%{\nf then }
-%
-%  37. Bd7
-%\end{enumerate}
-%
-%  37. Bg2!
-%{\nf Thus, after }
-%
-%  37. ...Rd8
-%{\nf Black controls the d5-square, and then }
-%
-% 
-%\begin{enumerate}\nf
-%\item
-%
-%{\nf in order to play }
-%
-%37. ... Rxe5  38. Bb7
-%{\nf and then }
-%
-%  38. ... Re7  39. Bd5
-%{\nf and suddenly the Bishop gets at b3. As we know, the result would be just as if the Queen were there. }
-%
-%
-%\end{enumerate}
-%
-%  38. Bb7  Rd7  39. Bc6!!
-%{\nf ( Black to move ) Now after }
-%
-%  39. ...Rd2 
-%\begin{enumerate}\nf
-%\item
-%
-%{\nf And after }
-%
-%39. ... Rd8  40. Bd7
-%{\nf we receive the position in question. Black is paralyzed and can do nothing but wait for a disgraceful end. }
-%
-%
-%\end{enumerate}
-%
-% 
-%{\nf the move }
-%
-%40. Be8
-%{\nf will decide. }
-%
-%
-%\end{enumerate}
-%
-%
-%item
-%
-%{\nf Of course, }
-%
-%30. ... Rd6  31. Rb6!
-%{\nf is an effective variant, but not very complicated. The black Rook on d6 can not do two things simultaneously: defend the a6-pawn and control the d4-square, as Black has to play Qd4 after Kb2. }
-%
-%  31. ... Rxb6  32. Kb2  Qd4  33. Qxd4  Nd7  34. Qd3  Nc5  35. Qb3+  Nxb3  36. cxb3#
-%\end{enumerate}
-%
-%  31. Qxf6 Kxa3
-%{\nf Topalov still erred in thinking that White had nothing better than 32.Qxa6 Kxb4 and 33.Bd7. Really, White has no other possibilities as the King is under mate himself. }
-%
-% 
-%\begin{enumerate}\nf
-%\item
-%
-%{\nf Black misses the best defense that let him continue the resistance in the ending playing }
-%
-%31. ... Rd1+!
-%{\nf And then }
-%
-%  32. Kb2  Ra8  33. Qb6!
-%{\nf threatening a mate from a5. }
-%
-%  33. ...Qd4+ 
-%\begin{enumerate}\nf
-%\item
-%
-%{\nf At }
-%
-%33. ... a5  34. Bd7
-%{\nf is decisive }
-%
-%
-%\end{enumerate}
-%
-%  34. Qxd4  Rxd4  35.Rxf7
-%{\nf Technically, it is the most complicated decision. }
-%
-% 
-%\begin{enumerate}\nf
-%\item
-%
-%{\nf I planned to play 35.Bd7. Analysis showed that this was also enough for the victory. White tries to dominate, to press the black pieces, and he prepares to move the King-side pawns, taking advantage of the fact that the Rook should be on a8. Black tries to defend himself from Bb5+ and not to let the Bishop go to b3. Nevertheless, he does not succeed. After }
-%
-%35. Bd7!?  Rd2  36. Bc6  f5  37. Rb6  Ra7  38. Be8  Rd4  39. f4
-%{\nf Black is nearly stalemated. }
-%
-%  39. ... Rc4  40. Bf7  Rxb4+  41. axb4  Rxf7  42. c3
-%{\nf After }
-%
-%  42. ... Ra7
-%{\nf the only way is to play }
-%
-%  43. Re6  a5  44. Re1
-%{\nf and we come across a new mating construction. This time it is a front checkmate from a1; the Rook mates the black King on the a-rank. }
-%
-%
-%\end{enumerate}
-%
-% 
-%{\nf Black must play }
-%
-%35. ... a5  36. Be6  axb4  37. Bb3+  Ka5  38. axb4+
-%{\nf and it turn s out that the Rook can not capture on b4 because after c3 this Rook is trapped and the ending is technically won. Then after }
-%
-%  38. ...Kb6 
-%\begin{enumerate}\nf
-%\item
-% 38. ... Rxb4  39. c3
-%\end{enumerate}
-%
-%  39. Rxh7  Rc8  40. h4
-%{\nf White has to win this position without much trouble. The Bishop and three pawns are much stronger than the Rook. White's disposition is marvelous and his victory is a point of time. However, the continuation 35.Bd7 was more effective, and I counted on it during the game because, frankly speaking, I did not see that after 38.axb4+ Rxb4 the move 39. c3 trapped the Rook. }
-%
-%
-%\end{enumerate}
-%
-% 
-%{\nf Nevertheless, Topalov took on a3 with the King, and the line I dreamt of came true! Once again, tried to check the lines, and, afraid to believe my own eyes, I made sure that what I had thought of for so long was just about to happen. It seemed to go on for ages, but in fact, it took not more than two minutes. Then followed }
-%
-%32. Qxa6+  Kxb4
-%{\nf ( White to move ) }
-%
-%  33. c3+!
-%{\nf Probably, that was when Topalov realized everything. Of course, he saw the move 36. ..Rd2 and then, as it often happens to chess players, he immediately saw 37.Rd7. Black has no choice, he has to take with the King on c3. }
-%
-%  33. ... Kxc3  34. Qa1+ Kd2 
-%\begin{enumerate}\nf
-%\item
-%
-%{\nf There is no way back: }
-%
-%34. ... Kb4  35. Qb2+  Ka5  36. Qa3+  Qa4  37. Ra7+
-%{\nf winning the Queen. }
-%
-%
-%\end{enumerate}
-%
-%  35. Qb2+ Kd1
-%{\nf The black King has made the way to his Calvary - from e8 to d1 - across the whole chessboard! And when it seems that he has reached a quiet harbor ( White has no more checkmates ) , the Bishop, which was on h3 and did nothing but shot in the emptiness and defended the e6 square, made his move. }
-%
-% 
-%\begin{enumerate}\nf
-%\item
-%
-%{\nf Another change of mating constructions! In fact, we should not forget another opportunity: in stead of 35. ..Kd1 }
-%
-%35. ... Ke3
-%{\nf can be played, then the continuation would be }
-%
-%  36. Re7+  Kxf3  37. Qg2#
-%\end{enumerate}
-%
-%  36.Bf1!
-%{\nf ( Black to move ) White attacked the Queen who can not escape: if he retreats along the c-rank the move 37.Qe2 and a checkmate would follow, and retreat to e6 will cause a mate from c1. }
-%
-% 
-%\begin{enumerate}\nf
-%\item
-%
-%{\nf This is one more of the innumerable mating finals. Thus, after }
-%
-%36. Bf1
-%{\nf the Bishop is also inviolable, as after }
-%
-%  36. ... Qxf1  37. Qc2+  Ke1  38. Re7+
-%{\nf - I don't know who would like such a mate. This is a trifle in comparison with all we had before. }
-%
-%
-%\end{enumerate}
-%
-%  36. ...Rd2
-%{\nf Black makes a counterblow and for another second it seems that the worst is left behind, because White seems to have no more resources. }
-%
-% 
-%\begin{enumerate}\nf
-%\item
-% 36. ... Qc5  37. Qe2#
-%\end{enumerate}
-%
-%
-%item
-% 36. ... Qe6  37. Qc1#
-%\end{enumerate}
-%
-% 
-%{\nf With one more second to rest, Black will announce checkmate to the white King himself. But this is where the white Rook enters. }
-%
-%37. Rd7!
-%{\nf ( Black to move  The weakness of the a1-h8 diagonal is the most important element of this combination. Usually everything depends on such trifles. If only the black Rook had been on g8, there would have been no combination at all... And after 37.Rd7 Black has nothing else to hope for. However, Topalov still continued the fight mechanically. Black has to take the Rook on d7. }
-%
-%  37. ... Rxd7!  38. Bxc4  bxc4  39. Qxh8  Rd3
-%{\nf This moves gives the illusion of activity. If Black suddenly takes on h7, then after c3 he will queen the black pawn. But we did not play draughts, it was not obligatory to capture, and now the Queen could show her true strength. }
-%
-%  40. Qa8
-%{\nf Moving closer to the battlefield. }
-%
-%  40. ... c3  41. Qa4+  Ke1  42. f4
-%{\nf And thus Black is deprived of the last hope to get a position of "the Rook against the Queen" that demands a certain accuracy from the strongest side, if playing a computer. And still, as practice has proved, a weaker side in the battle of two chess players is not able to resist, as it is nearly impossible to make a "computer move" that would take the Rook away from the King. However, it is not necessary to know all these nuances. White keeps a lot of pawns so that Black could hope to win them sometime. }
-%
-%  42. ... f5  43. Kc1
-%{\nf Neutralizes any Black's hope connected with c-pawn. }
-%
-%  43. ... Rd2  44. Qa7
-%{\nf The Queen starts attacking black pawns, and the h2-pawn is inviolablebecause of Qg1+. Topalov resigned and this wonderful game was over. 1-0 }
+{\bf 17...Kb8 }
+
+Topalov thinks that he has some time and can calmly prepare for d6-d5.
+
+{\bf 18.Na5 }
+
+It is important to say that if White had not played the Knight to a5 on the 18th move but immediately played 18.Bh3 then the white Knight would not have reached the a5-square after Nb3. 
+
+{\bf 18...Ba8 19.Bh3 d5 }
+
+So, both sides have fulfilled what was planned: White has finished the development and Black has played d6-d5. Though, generally speaking, there was such an opportunity and it was possible to play Rhe1, but that would have been another game. I tried to systematically fulfill the plan that I expected to end in a sacrifice. The move 24.Rxd4 was already clear in my mind, though I had not yet realized the possibility of a draw by repetition of moves. I just saw the outline of an attack.
+
+{\bf 20.Qf4+ Ka7 21.Rhe1 }
+
+That was when I saw the possibility of a draw. Moreover, I felt that there was a possibility to continue the game, to play without the Rook, though I could not imagine what it would lead to. However, the image of the black King on a5 comforted my heart and intuition given to every man from birth, intuition of an "attacker" ( let's call it that way ) , told me that there would be decision and a mate net around the black King would be spun in spite of the huge material advantage of the adversary. Besides, I was whipped up by curiosity of unexplored. Will there ever be another opportunity to lure out the black King into the center of my own camp!? In the long run, Lasker's ancient game with a sacrifice on h7 and King's move g8-g1 was like a myth to us. Such a thing could happen only in those distant times, we assume. And suddenly, this opportunity! Topalov looked quite confident. He played
+
+{\bf 21...d4 }
+
+Certainly, after 21...dxe4? 22.fxe4 the game is open and now the threat 23.Nd5 gives Black a lot of trouble: the black King is too weak. 
+
+{\bf 22.Nd5 }
+
+Frankly speaking, this move is not the strongest but it serves as a prologue for a further combination.
+
+
+
+White, of course, could have played 22.Na2  but after 22...Rhe8 or h7-h6 the game would have become very complicated. So naturally, my hand led the Knight to the center. 
+
+{\bf 22...Nbxd5 23.exd5 Qd6 }
+
+( White to move ) It seemed to me that Topalov was a bit surprised, as he thought that attacking resources had dried out. A check on c6 was senseless, the Knight will be beaten, the King will go to b6, and there is hardly any opportunity for White to move his Rooks toward the black King. The d4-pawn safely protects the d-rank, and there are no squares for intrusion on the e-rank. Actually, this was not quite right, and my next move, made without any hesitation, turned out to be an unpleasant surprise for Topalov.
+
+{\bf 24.Rxd4!! }
+
+When I made this move, I saw only the repetition of the moves and the opportunity to continue the attack, though the whole picture of the combination was not yet clear. I already saw the idea 30...Rd6 31.Rb6, but I still could not get rid of the thought that all lines should be checked to the very end. Maybe black will find some opportunity for defense. Topalov spent about 15 minutes thinking. I walked around the hall - rather, I fled - and at these feverish moments it seemed to me that there were very few participants and that most of the games had already been finished. My mind worked only in one direction, and one of these moments brought me the image of the whole cluster of various lines. I saw the move 37.Rd7. I don't even remember how this line was formed in my head, but I saw the whole line up to the end. I saw the journey of the black King after 36.Bf1, 37.Rd7 and I could no longer suppress my excitement, because at that same moment I realized that the move 24...Kb6 ruined the whole construction. The mere thought that I could spoil such a combination drove me crazy, and I only prayed that Topalov would capture on d4. I still was not sure that this would win, but the beauty of the combination I saw impressed me. I could not believe my own eyes when Veselin twitched abruptly and grabbed the Rook. As he explained after the game, he was exhausted by the tense fight and he thought that White would have to force a draw by the repetition of moves after the Rook was captured. He saw the main idea of the combination, but it did not occur to him that White would play without the Rook, trying to make use of the King's forward position on a4.
+
+{\bf 24...cxd4?! }
+
+This move loses the game, but it is worth an exclamation mark, as great combinations cannot be created without partners. If Topalov had not taken the Rook, the game could have finished in a draw: Veselin would have had half a point more, I - half a point less. He would have win a little bit, I would have lost a little bit, but chess and chess amateurs would have lost a lot. However, Caissa was kind to me that day... I do not know what I was rewarded for, but the development of events became forced after the capture on d4.
+
+
+
+\begin{enumerate}
+\item
+Maybe, if Topalov had played 24...Kb6!  then I could have found the move 25.Nb3!  which again makes it impossible to capture the Rook: (I was intending to play 25.b4  as I underestimated the fact that after 25...Qxf4 (25...Nxd5 26.Qxd6+ Rxd6 27.bxc5+ Kxc5 28.Nb3+ Kb6 29.Kb2 Rhd8 30.Red1 Bc6 31.f4 Kc7 =) 26.Rxf4 Nxd5 27.Rxf7 cxb4 28.axb4 Nxb4 29.Nb3 Rd6 Black's position is better. ) 25...Bxd5! 
+
+\begin{enumerate}
+\item
+25...cxd4? 26.Qxd4+ Kc7 27.Qa7+ Bb7 28.Nc5 Rb8 29.Re7+ +-
+
+\item
+25...Nxd5? 26.Qxf7 Rhf8 27.Qg7 Rg8 28.Qh6 Qf8 29.Rh4 +/-
+\end{enumerate}
+
+26.Qxd6+ Rxd6 27.Rd2 Rhd8 28.Red1 = and White keeps equality, but not more. 
+
+\item
+24...Bxd5?! 25.Rxd5 Nxd5 26.Qxf7+ Nc7 27.Re6 Rd7 28.Rxd6 Rxf7 29.Nc6+ Ka8 30.f4
+\end{enumerate}
+
+{\bf 25.Re7+! }
+
+I made this move with lightening speed. And there was nothing to think about. The Rook was inviolable. Such moves are always made with pleasure, and all I have said before ( that the d-rank is closed by the d4-pawn and that there are no squares for intrusion on the e-rank ) turned out to be ruined. Two white Rooks sacrifice themselves, and thus, the way to the black camp is opened for White's pieces. The construction I dreamt of - Queen on b6, Knight on a5 - has suddenly come true, because of the Bishop on h3.
+
+
+
+I have to say that 25.Qxd4+?  did not achieve the goal because of 25...Qb6 26.Re7+ Nd7 and White's attack fades away. 
+
+{\bf 25...Kb6 }
+
+If Black moves 25...Kb8? 26.Qxd4!  then after 26...Nd7 27.Bxd7 Bxd5 28.c4! Qxe7 29.Qb6+ Ka8 30.Qxa6+ Kb8 31.Qb6+ Ka8 32.Bc6+! Bxc6 33.Nxc6 Black loses by force. 
+
+{\bf 26.Qxd4+ Kxa5 }
+
+Some of the participants, including Anand, asserted that the move 26...Qc5  saved the game. However, after 27.Qxf6+ Qd6 28.Be6!!  White closed the rank but left the opportunity to vary threats and to force Black into a desperate position. For example 28...Bxd5 (28...Rhe8 29.b4 +-) 29.b4! Ba8 30.Qxf7 Qd1+ 31.Kb2 Qxf3 32.Bf5 would be the simplest way, as all the lines are closed and mate threats become inevitable. 
+
+{\bf 27.b4+ Ka4 28.Qc3 }
+
+I made the last move without hesitations. Frankly speaking, I could not make myself think as I strove for the end. I already saw it, and it seemed to me that it was the way to finish the game, that Black could not avoid it, and that there were no other defenses. Veselin gave me time when he was thinking himself, but I could not make myself look for another opportunity. My hopes were in vain! However, it is difficult to judge. It seems to me that the beauty of this combination is not inferior to a side line. Though in order to be objective from the point of view of chess truth, it would be stronger to play 28.Ra7!
+
+
+
+28.Ra7!  The strongest move, as in the game itself, is 28...Bb7 
+
+\begin{enumerate}
+\item
+So, after 28.Ra7! both captures on d5 lose quickly: 28...Nxd5 29.Rxa6+!! Qxa6 30.Qb2 Nc3+ 31.Qxc3 Bd5 32.Kb2 +- ( Black to move ) and we approached the position when there was no defense from the threat of Queen's self-sacrifice on b3. Black can not attract another piece to control the a2-g8 diagonal, as the white Bishop controls the e6-square. 
+
+\item
+The Bishop's capture on d5 also loses: 28...Bxd5 29.Qc3 Rhe8 30.Kb2 Re2  Black linked the c2-pawn and defended from the Qb3 threat. And here the Queen suddenly changes its route - 31.Qc7!  threatening with a mate from a5. And after 31...Qxc7 32.Rxa6+ the King turn s out to be mated by the white Rook. A wonderful scheme of mating pieces! 
+\end{enumerate}
+
+29.Rxb7  The continuation after 29...Qxd5 (After 29...Nxd5  White finds a new mating construction 30.Bd7!  threatening with Bxb5+ to expose the black King and to mate it again with the Rook, and after 30...Rxd7  White varies the threats by the move 31.Qb2  threatening with a mate on from b3. The only move is 31...Nxb4  and then 32.Rxd7  attacks the Queen again. And there is a mate from b4 after 32...Qxd7  ) (32...Qc5 33.Rd4  threatens to capture on b4 and on h8. And after 33...Rc8  White plays 34.Qb3+ Ka5 35.axb4+ and Black suffers crucial material losses. ) 30.Rb6 a5   (In case of 30...Ra8  White restores the material balance after 31.Qxf6  and continues the crucial attack 31...a5 32.Bf1 Rhb8 33.Rd6 driving away the black Queen and the white Queen comes back and mates. ) It seems that after 31.Ra6  Black can defend himself playing 31...Ra8  but then a sudden change of a mating construction follows: 32.Qe3!!  Right here, as after 32...Rxa6  goes 33.Kb2  ( which threatens mate on a3 ) , and after 33...axb4 34.axb4  The only defense is 34...Qa2+ (A capture on b4 34...Kxb4  postpones the mate by one more move. 35.Qc3+ Ka4 36.Qa3\# checkmate. ) 35.Kxa2 Kxb4+ 36.Kb2  Black has rat her good material - two Rooks for the Queen - but White continues the attack and there is no escape from it: 36...Rc6 37.Bf1  threatening with a mate from a3. 37...Ra8 38.Qe7+ Ka5 39.Qb7 A mate threat on b5 results in the win of the Rook. 
+
+{\bf 28...Qxd5 }
+
+Here, Topalov had less than half an hour, I had 32 minutes.
+
+
+
+It would be even weaker to play 28...Bxd5  because of 29.Kb2! with inevitable mate. 
+
+{\bf 29.Ra7! Bb7 30.Rxb7 }
+
+White refuses the last opportunity to force a perpetual checkmate playing 30.Qc7  I was sure that White would achieve more. 30...Qd1+ 31.Kb2 Qd4+ 32.Kb1 =
+
+
+
+It is important that there is no checkmate on d1, because the white King suddenly goes to a2 and it turns out that the threat Qb3 can be also supported by the King from the a2-square. That is why the black Queen has to be on d5 ( one has to understand this very important moment ) , in order to control the b3-square and to be able to play Qd4 if the white King is on b2. Therefore, the Rook should be on d8. It leaves enough opportunities for most various problem motives that are more vivid in this particular line. Both adversaries saw the line and Topalov, having spent some of his precious minutes, played
+
+{\bf 30...Qc4 }
+
+This is the most natural defense, and I counted on it, too. Moreover, this is the defense that leads to the most effective mating end that I had no rest from for the last 15-20 minutes, ever since its image mysteriously arose in my mind. Actually, Black had two other defenses, and each of them could have ruined the delicate conception that I had in mind.
+
+
+
+\begin{enumerate}
+\item
+The first one was 30...Rhe8  Thus, White plays 31.Rb6 Ra8 32.Bf1!!  Objecting to ...Qc4, White creates a quiet threat Rd6, which is crucial in the case of Nd7. (It is important to note that the move 32.Be6  which suggests itself, does not achieve the goal: 32...Rxe6 33.Rxe6  And Black, of course, can not capture the rook on e6, as after Kb2 there is no defense from the mate, butplays 33...Qc4  White has to beat c4: 34.Qxc4 bxc4 35.Rxf6 Kxa3  and then 36.Rxf7 Re8 Black starts a counter-attack and, strange as it may seem, keeps good chances to win the ending. White cannot allow such exchanges and, as we can see, the c4-square is now crucial. Black could change the defense, playing 30...Rhe8. In this case one Rook would defend the a6-pawn from a8, and the move Kb2 faces Qe5. The Rook controls the e5-square, and the Queen is ready to move to c4. That is why the key move is 32.Bf1!! ) Lichterink, most likely with the help of computer, found a unique defense. This is a counter-sacrifice that faces a marvelous, though probably also computer, denial. This is 32...Re1+  ( after 32.Bf1 ) 
+
+\begin{enumerate}
+\item
+32...Nd7 33.Rd6! Rec8 34.Qb2
+
+\item
+If 32...Re6  then White simply makes an exchange on e6 33.Rxe6 fxe6  and plays 34.Kb2
+
+\item
+If 32...Red8  White plays 33.Rc6  and creates a threat Rc5, now we have Rd6 anyway after 33...Nd7  as the d-rank is closed. (And after 33...Nh5  we can, for instance, play 34.Rc5 Rac8 35.Kb2 And there is no way out again! ) 34.Rd6  
+\end{enumerate}
+
+33.Qxe1 Nd7  However, after 33...Nd7 White makes a diverting Rook-sacrifice - 34.Rb7! (and after 34.Qc3 Nxb6 35.Kb2  this Knight checks the King from c4, 35...Nc4+  after 36.Ka2  he checks the King from d2, 36...Nd2+ controls the b3-square, and suddenly Black wins. ) And after 34...Qxb7  there is that very computerlike ending: (It is necessary to beat the Rook, as after 34...Ne5 35.Qc3 Qxf3  the easiest way to the victory would be 36.Bd3 Qd5 37.Be4) 35.Qd1 Kxa3 36.c3 and the white Queen mates in a stair-like way Qc1-c2-a2. Checkmate is inevitable! I do not know if it is possible to find this line during a game, but the beauty of the combination is absolutely irresistible. In essence, we deal with a problem of changing mates, which, as far as I can remember, have never been practiced by serious chess players. Such interchange of mates is characteristic only of special chess problems. 
+
+\item
+Black has another counter-opportunity: he can make a sudden Knight-sacrifice 30...Ne4!  and after 31.fxe4 Qc4  After 31...Qc4 the right move would be 32.Ra7  as it threatens with a mate on a6 again. 
+
+\begin{enumerate}
+\item
+Of course, White does not have to play 32.Qf6  though after 32...Kxa3 33.Qxa6+ Kxb4 34.Bd7 he is not at risk. The game, however, would end in a draw 
+
+\item
+The move 32.Qe3?  is not promising either. Black plays 32...Rc8  which is the same counter-sacrifice 33.Bxc8 Rxc8  approaching to the counter-attack: 34.Qc1 Qd4! - the best way. And White has accept a draw. 
+
+\item
+A capture on c4 gives Black chances to win and leads to a complicated ending: 32.Qxc4?! bxc4 33.Kb2  The best move is 33...f5  and after 34.exf5  Black has to play 34...c3+  and give an intermediate checkmate (as after 34...Rd6 35.fxg6 c3+  White plays 36.Ka2 hxg6 37.Bf1 and we come across mating constructions once again: either Bc4-Bb3, or Bb5-Ra7. ) However, after 35.Kxc3 Kxa3 36.f6 Rd6 37.f7 Rc6+ 38.Kd4 Rxc2 39.Bf1 White has some chances to win. Maybe he will win the ending because of a strong pawn and the opportunity to push the King to g7. However, White didn't start this combination to win the ending. Fortunately, a detailed analysis shows that White has a better opportunity. 
+\end{enumerate}
+
+And after 32...Rd1+ (Now after 32...Ra8  White wins playing 33.Qe3  in order to play Kb2 after 33...Rxa7) 33.Kb2 Qxc3+ 34.Kxc3 Rd6  we come to an ending, but this ending if different from the previous one. The black King is still threatened with a mate. The pawn has not yet left the b5-square and White can continue forcing threats, in spite of the disappearance of the Queens: 35.e5 Rb6 36.Kb2 Re8 (where else? if 36...Rd8  then 37.Bd7) 37.Bg2!  Thus, after 37...Rd8  Black controls the d5-square, and then (in order to play 37...Rxe5 38.Bb7  and then 38...Re7 39.Bd5 and suddenly the Bishop gets at b3. As we know, the result would be just as if the Queen were there. ) 38.Bb7 Rd7 39.Bc6!!  ( Black to move ) Now after 39...Rd2 (And after 39...Rd8 40.Bd7 we receive the position in question. Black is paralyzed and can do nothing but wait for a disgraceful end. ) the move 40.Be8 will decide. 
+
+\item
+Of course, 30...Rd6 31.Rb6!  is an effective variant, but not very complicated. The black Rook on d6 can not do two things simultaneously: defend the a6-pawn and control the d4-square, as Black has to play Qd4 after Kb2. 31...Rxb6 32.Kb2 Qd4 33.Qxd4 Nd7 34.Qd3 Nc5 35.Qb3+ Nxb3 36.cxb3\#
+\end{enumerate}
+
+{\bf 31.Qxf6 Kxa3 }
+
+Topalov still erred in thinking that White had nothing better than 32.Qxa6 Kxb4 and 33.Bd7. Really, White has no other possibilities as the King is under mate himself.
+
+
+
+Black misses the best defense that let him continue the resistance in the ending playing 31...Rd1+!  And then 32.Kb2 Ra8 33.Qb6!  threatening a mate from a5. 33...Qd4+ (At 33...a5 34.Bd7 is decisive ) 34.Qxd4 Rxd4 35.Rxf7  Technically, it is the most complicated decision. (I planned to play 35.Bd7. Analysis showed that this was also enough for the victory. White tries to dominate, to press the black pieces, and he prepares to move the King-side pawns, taking advantage of the fact that the Rook should be on a8. Black tries to defend himself from Bb5+ and not to let the Bishop go to b3. Nevertheless, he does not succeed. After 35.Bd7!? Rd2 36.Bc6 f5 37.Rb6 Ra7 38.Be8 Rd4 39.f4  Black is nearly stalemated. 39...Rc4 40.Bf7 Rxb4+ 41.axb4 Rxf7 42.c3  After 42...Ra7  the only way is to play 43.Re6 a5 44.Re1 and we come across a new mating construction. This time it is a front checkmate from a1; the Rook mates the black King on the a-rank. ) Black must play 35...a5 36.Be6 axb4 37.Bb3+ Ka5 38.axb4+  and it turn s out that the Rook can not capture on b4 because after c3 this Rook is trapped and the ending is technically won. Then after 38...Kb6 (38...Rxb4 39.c3) 39.Rxh7 Rc8 40.h4 White has to win this position without much trouble. The Bishop and three pawns are much stronger than the Rook. White's disposition is marvelous and his victory is a point of time. However, the continuation 35.Bd7 was more effective, and I counted on it during the game because, frankly speaking, I did not see that after 38.axb4+ Rxb4 the move 39. c3 trapped the Rook. 
+
+
+
+Nevertheless, Topalov took on a3 with the King, and the line I dreamt of came true! Once again, tried to check the lines, and, afraid to believe my own eyes, I made sure that what I had thought of for so long was just about to happen. It seemed to go on for ages, but in fact, it took not more than two minutes. Then followed
+
+{\bf 32.Qxa6+ Kxb4 }
+
+( White to move )
+
+{\bf 33.c3+! }
+
+Probably, that was when Topalov realized everything. Of course, he saw the move 36...Rd2 and then, as it often happens to chess players, he immediately saw 37.Rd7. Black has no choice, he has to take with the King on c3.
+
+{\bf 33...Kxc3 34.Qa1+ Kd2 }
+
+There is no way back: 34...Kb4 35.Qb2+ Ka5 36.Qa3+ Qa4 37.Ra7+ winning the Queen. 
+
+{\bf 35.Qb2+ Kd1 }
+
+The black King has made the way to his Calvary - from e8 to d1 - across the whole chessboard! And when it seems that he has reached a quiet harbor ( White has no more checkmates ) , the Bishop, which was on h3 and did nothing but shot in the emptiness and defended the e6 square, made his move.
+
+
+
+Another change of mating constructions! In fact, we should not forget another opportunity: in stead of 35...Kd1 35...Ke3  can be played, then the continuation would be 36.Re7+ Kxf3 37.Qg2\#
+
+{\bf 36.Bf1! }
+
+( Black to move ) White attacked the Queen who can not escape: if he retreats along the c-rank the move 37.Qe2 and a checkmate would follow, and retreat to e6 will cause a mate from c1.
+
+
+
+This is one more of the innumerable mating finals. Thus, after 36.Bf1  the Bishop is also inviolable, as after 36...Qxf1 37.Qc2+ Ke1 38.Re7+ - I don't know who would like such a mate. This is a trifle in comparison with all we had before. 
+
+{\bf 36...Rd2 }
+
+Black makes a counterblow and for another second it seems that the worst is left behind, because White seems to have no more resources.
+
+
+
+\begin{enumerate}
+\item
+36...Qc5 37.Qe2\#
+
+\item
+36...Qe6 37.Qc1\#
+\end{enumerate}
+
+
+
+With one more second to rest, Black will announce checkmate to the white King himself. But this is where the white Rook enters.
+
+{\bf 37.Rd7! }
+
+( Black to move ) The weakness of the a1-h8 diagonal is the most important element of this combination. Usually everything depends on such trifles. If only the black Rook had been on g8, there would have been no combination at all... And after 37.Rd7 Black has nothing else to hope for. However, Topalov still continued the fight mechanically. Black has to take the Rook on d7.
+
+{\bf 37...Rxd7! 38.Bxc4 bxc4 39.Qxh8 Rd3 }
+
+This moves gives the illusion of activity. If Black suddenly takes on h7, then after c3 he will queen the black pawn. But we did not play draughts, it was not obligatory to capture, and now the Queen could show her true strength.
+
+{\bf 40.Qa8 }
+
+Moving closer to the battlefield.
+
+{\bf 40...c3 41.Qa4+ Ke1 42.f4 }
+
+And thus Black is deprived of the last hope to get a position of "the Rook against the Queen" that demands a certain accuracy from the strongest side, if playing a computer. And still, as practice has proved, a weaker side in the battle of two chess players is not able to resist, as it is nearly impossible to make a "computer move" that would take the Rook away from the King. However, it is not necessary to know all these nuances. White keeps a lot of pawns so that Black could hope to win them sometime.
+
+{\bf 42...f5 43.Kc1 }
+
+Neutralizes any Black's hope connected with c-pawn.
+
+{\bf 43...Rd2 44.Qa7}
+
+The Queen starts attacking black pawns, and the h2-pawn is inviolablebecause of Qg1+. Topalov resigned and this wonderful game was over.
+
+
+
 
 
 %---------------------------------------------------------------

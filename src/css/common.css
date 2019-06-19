@@ -491,6 +491,7 @@ body {
 
 #PGNContainer {
     padding-top: 8px;
+    line-height: normal;
 }
 
 .gameContainer{
@@ -535,40 +536,40 @@ body {
 
 .branchLevel0 {
     padding-left: 8px;
-    padding-top: 4px;
-    padding-bottom: 4px;
+    padding-top: 8px;
+    padding-bottom: 8px;
 }
 
 .branchLevel1 {
     padding-left: 8px;
     background-color: var(--green1-color);
     color: var(--base7-color);
-    padding-top: 4px;
-    padding-bottom: 4px;
+    padding-top: 8px;
+    padding-bottom: 8px;
 }
 
 .branchLevel2 {
     background-color: var(--green2-color);
     color: var(--base7-color);
     padding-left: 40px;
-    padding-top: 4px;
-    padding-bottom: 4px;
+    padding-top: 8px;
+    padding-bottom: 8px;
 }
 
 .branchLevel3 {
     background-color: var(--green3-color);
     color: var(--base7-color);
     padding-left: 72px;
-    padding-top: 4px;
-    padding-bottom: 4px;
+    padding-top: 8px;
+    padding-bottom: 8px;
 }
 
 .branchLevel4 {
     background-color: var(--green4-color);
     color: var(--base7-color);
     padding-left: 104px;
-    padding-top: 4px;
-    padding-bottom: 4px;
+    padding-top: 8px;
+    padding-bottom: 8px;
 }
 
 .branchLevel5 {
@@ -599,10 +600,19 @@ body {
 
 .branchLevel0 .comment {
     display: block;
+    padding-top: 8px;
+    padding-bottom: 8px;
 }
 
 .branchLevel0 .startComment {
     display: block;
+    padding-top: 0px;
+    padding-bottom: 8px;
+}
+
+.selectableMove:hover {
+    color: var(--base1-color);
+    background-color: var(--base8-color);
 }
 
 .boardControlContainer {
