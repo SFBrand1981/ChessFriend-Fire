@@ -1530,6 +1530,9 @@ module.exports = function (window) {
 	var templateValues = {}
 	templateValues.filename = filename
 	templateValues.nodes = currentBoard.nodes
+	templateValues.playerWhite = currentBoard.gameInfo.white
+	templateValues.playerBlack = currentBoard.gameInfo.black
+	templateValues.event = currentBoard.gameInfo.event
 	ph.exportGameAsTex(templateValues)
 	
     }

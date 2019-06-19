@@ -32,10 +32,18 @@ module.exports = function () {
 	var callback
 
 	var tex = ''
+
+
+	template = template.replace('--playerWhite--', templateValues.playerWhite)
+	template = template.replace('--playerBlack--', templateValues.playerBlack)
+	template = template.replace('--event--', templateValues.event)
 	
 	traverseNodes(templateValues.nodes, function(nodeIndx) {
 	    tex += nodesToLaTeX(templateValues.nodes, nodeIndx)
 	})
+
+	template = template.replace('--latexCode--', tex)
+	template = template.replace(/\#\s/g, '\\# ')
 
 
 	fs.writeFile(templateValues.filename, template, function (err) {
@@ -630,11 +638,6 @@ module.exports = function () {
 
 	var rv = ''
 
-	
-	// root node
-	if (nodeIndx === '(0)') {
-	    rv += '\\diagram\n\n'
-	}
 
 	// continuation after comment
 	if (nodes[parentIndx] &&
