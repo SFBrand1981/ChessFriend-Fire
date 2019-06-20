@@ -8,7 +8,7 @@ matrix:
       - rm -rf ./node_modules
       - npm install
       - npm run win
-      - tar -zcf release_win.tar.gz --exclude=release_win.tar.gz .
+      - tar --exclude=release_win.tar.gz --exlude=./build -zcf release_win.tar.gz .
 
    - os: linux
      script:
@@ -16,14 +16,14 @@ matrix:
       - npm install
       - npm run linux
       - mkdir artefacts
-      - tar -zcf ./artefacts/release_linux.tar.gz --exclude=./artefacts/release_linux.tar.gz .
+      - tar --exclude=./artefacts/release_linux.tar.gz --exlude=./build -zcf ./artefacts/release_linux.tar.gz .
 
    - os: osx
      script:
       - rm -rf ./node_modules
       - npm install
       - npm run osx
-      - tar -zcf release_osx.tar.gz --exclude=release_osx.tar.gz .
+      - tar --exlude=release_osx.tar.gz --exclude=./build -zcf release_osx.tar.gz .
 
 before_deploy:
   # tag this commit
