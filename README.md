@@ -51,33 +51,33 @@ By default, ChessFriend-Fire ships with Stockfish 10, one of the strongest chess
 ### One-click annotations
 
 <div style="text-align: center;">
-     <img src="https://github.com/SFBrand1981/ChessFriend-Fire/blob/master/docs/ChessFriend-Fire_menu.png" width="200"/>
+     <img src="https://github.com/SFBrand1981/ChessFriend-Fire/blob/master/docs/ChessFriend-Fire_menu.png" width="40%"/>
 </div>
 
 
 ### Open your games in tabs
 
 <div style="text-align: center;">
-     <img src="https://github.com/SFBrand1981/ChessFriend-Fire/blob/master/docs/ChessFriend-Fire_tabs.png" width="200"/>
+     <img src="https://github.com/SFBrand1981/ChessFriend-Fire/blob/master/docs/ChessFriend-Fire_tabs.png" width="40%"/>
 </div>
 
 
 ### Fast database search
 
 <div style="text-align: center;">
-     <img src="https://github.com/SFBrand1981/ChessFriend-Fire/blob/master/docs/ChessFriend-Fire_search.png" width="200"/>
+     <img src="https://github.com/SFBrand1981/ChessFriend-Fire/blob/master/docs/ChessFriend-Fire_search.png" width="40%"/>
 </div>
 
 ### Analyse any position
 
 <div style="text-align: center;">
-     <img src="https://github.com/SFBrand1981/ChessFriend-Fire/blob/master/docs/ChessFriend-Fire_setup.png" width="200"/>
+     <img src="https://github.com/SFBrand1981/ChessFriend-Fire/blob/master/docs/ChessFriend-Fire_setup.png" width="40%"/>
 </div>
 
 ### LaTeX export
 
 <div style="text-align: center;">
-     <img src="https://github.com/SFBrand1981/ChessFriend-Fire/blob/master/docs/ChessFriend-Fire_latex.png" width="200"/>
+     <img src="https://github.com/SFBrand1981/ChessFriend-Fire/blob/master/docs/ChessFriend-Fire_latex.png" width="40%"/>
 </div>
 
   
