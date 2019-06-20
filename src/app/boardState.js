@@ -767,6 +767,7 @@ module.exports = function (window) {
 	for (var i = 1; i < 9; i++) {
 	    var file = document.createElement('td')
 	    file.classList.add('coord')
+	    file.classList.add('square')
 	    file.id = "col" + i.toString()
 	    file.innerHTML = file_names[i-1]
 
@@ -788,15 +789,15 @@ module.exports = function (window) {
 	var x = window.document.getElementsByClassName("square");
 
 	var elem = window.document.getElementsByClassName("chessrow")[0];
-
-	if (x.length != 0) { 
-            var pB = parseFloat(window.getComputedStyle(elem, null).getPropertyValue("width"))/8.0
-	    
+        var pB = parseFloat(window.getComputedStyle(elem, null).getPropertyValue("width"))/8.0
+	
+	if (x.length != 0) {     
             for (var i = 0, len = x.length; i < len; i++) {
 		x[i].style.paddingBottom = parseInt(pB)+'px'
 		x[i].style.width = parseInt(pB)+'px'
             }    
-	}    
+	}
+	
     }
 
 

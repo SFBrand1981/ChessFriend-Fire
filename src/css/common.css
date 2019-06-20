@@ -943,17 +943,19 @@ body {
 
 .pieceContainer {
     margin: auto;
-    padding-top: 4px;
     padding-left: 2px;
     padding-right: 2px;
     display: flex;
     justify-content: space-between;
+    align-items: center;
     flex-wrap: wrap;
     background-color: var(--base5-color);
+    height: 20%;
 }
 
 .pieces {
     width: 90%;
+    padding-bottom: 4px;
     border: 3px solid var(--base5-color);
     background-color: var(--base5-color);
     box-sizing: border-box;
