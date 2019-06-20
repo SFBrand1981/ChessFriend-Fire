@@ -64,6 +64,10 @@ module.exports = function (window) {
     var pageSize = localStorage.getItem('pageSize')
     function displayDBEntryCount() {
 	db.getQueryCount().then(function (count) {
+
+	    // if (count == 0) {
+	    // 	alert('Your database is empty!')
+	    // }
 	    
 	    var searchParams = JSON.parse(localStorage.getItem('searchParams'))
 	    var lower = (count == 0) ? 0 : searchParams.pageNum * pageSize + 1

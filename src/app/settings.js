@@ -11,7 +11,7 @@ module.exports = function () {
 	setSetting('numEngineLines', 5)
 	setSetting('openGames', JSON.stringify([...new Map()]))
 	setSetting('gameHistory', JSON.stringify([]))
-	setSetting('pageSize', 5)
+	setSetting('pageSize', 20)
 
 	
 	// reset on startup
