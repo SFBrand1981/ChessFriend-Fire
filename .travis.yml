@@ -9,7 +9,6 @@ matrix:
       - npm install
       - npm run win
       - tar --exclude=release_win.tar.gz --exclude=./build -zcf release_win.tar.gz .
-      - tar xzf release_win.tar.gz && zip release_win.zip $(tar tf release_win.tar.gz)
 
    - os: linux
      script:
@@ -17,7 +16,7 @@ matrix:
       - npm install
       - npm run linux
       - mkdir artefacts
-      - tar --exclude=./artefacts/release_linux.tar.gz --exclude=./build -zcf ./artefacts/release_linux.tar.gz .
+      - tar --exclude=./artefacts/release_linux.tar.gz -zcf ./artefacts/release_linux.tar.gz .
 
    - os: osx
      script:

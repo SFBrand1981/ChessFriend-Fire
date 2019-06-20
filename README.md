@@ -14,7 +14,7 @@ Try it out and visit us at [www.schachfreunde-brand.de](https://www.schachfreund
 
 ## Installation
 
-   1. Download and unzip the latest [release][release]. 
+   1. Download and unzip the latest [release][release]. For Windows, you can use the tool [7zip][7zip] for this purpose.  
    2. Change into the directory where you have unzipped your files
       1. On Windows, double-click on the following file:
 
@@ -29,7 +29,7 @@ Try it out and visit us at [www.schachfreunde-brand.de](https://www.schachfreund
       $ ./node_modules/nw/bin/nw ./src/
       ```
 
-      3. On Linux, you need to have [nwjs][nwjs] installed 
+      3. On Linux, you need to have npm and [nodejs][nodejs] installed 
 
       ```bash
       $ sudo apt-get install nodejs
@@ -50,8 +50,6 @@ You can use any other UCI compatible engine.
 
 <br clear="both"/>
 
-
-<div style="width: 100%;">Break</div>
 
 
 ### One-click annotations
@@ -88,8 +86,8 @@ Insert NAGs with one click.
 </div>
 
   
-
-[nwjs]: https://nodejs.org/en/
+[7zip]: https://www.7-zip.org/download.html
+[nodejs]: https://nodejs.org/en/
 [release]: https://github.com/SFBrand1981/ChessFriend-Fire/releases
 [stockfish]: https://github.com/SFBrand1981/ChessFriend-Fire/tree/master/src/bin
 [Kasparov_vs_Topalov]: https://github.com/SFBrand1981/ChessFriend-Fire/blob/master/tests/Kasparov_vs_Topalov.pgn
