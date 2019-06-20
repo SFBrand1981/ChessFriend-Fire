@@ -7,7 +7,7 @@
     "test": "node tests/test.js",
     "prod": "nwbuild --macIcns src/icon/icon.icns --flavor sdk --platforms osx64 src/",
     "osx": "nwbuild --macIcns src/icon/icon.icns --flavor normal --platforms osx64 src/",
-    "win": "nwbuild . --winIco src/icon/icon.ico --flavor normal --platforms win64 -o build",
+    "win": "nwbuild --winIco src/icon/icon.ico --flavor normal --platforms win64 src/",
     "linux": "nwbuild --flavor normal --platforms linux64 src/"
   },
   "license": "MIT",
