@@ -1,6 +1,10 @@
 // settings
 module.exports = function () {
 
+
+    var path = require('path')
+    var fs = require('fs')
+    
     // Default settings
     function setDefaults() {
 	setSetting('sidebarRatio', 0.68)
@@ -48,10 +52,32 @@ module.exports = function () {
 	'*': '4'
     }
 
+
+    var engineSettingsFilePath = path.join(process.cwd(), 'engineSettings.json')
+    function readEngineSettings () {
+	return JSON.parse(fs.readFileSync(engineSettingsFilePath, 'utf8'))
+    }
+
+    // save engine settings to file for easier worker communication
+    function saveEngineSettings (settings) {
+
+	return new Promise (function(resolve, reject) {		    
+	    fs.writeFile(engineSettingsFilePath, settings, function (err) {
+		if (err) {
+		    reject('There was an error attempting to save your settings')
+		} else {
+		    resolve(settings)
+		}
+	    })
+	})
+    }		   
+    
     
     // Module exports
     module.setDefaults = setDefaults
     module.res_enum = res_enum
+    module.readEngineSettings = readEngineSettings
+    module.saveEngineSettings = saveEngineSettings
     
     return module
 }

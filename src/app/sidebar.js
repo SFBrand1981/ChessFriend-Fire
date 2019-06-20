@@ -249,7 +249,13 @@ module.exports = function (window) {
 	sessionStorage.removeItem(game_id)
 	
 	
-	// load last game from history    
+	// load last game from history
+	loadLastGameFromHistory(game_id)
+
+    }
+
+
+    function loadLastGameFromHistory(game_id) {
 	var prevGameId = hh.previousGame(game_id)
 	if (prevGameId != null && !window.location.pathname.endsWith('/main.html')) {
 	    var prevTitle = openGames.get(prevGameId).title
@@ -258,7 +264,7 @@ module.exports = function (window) {
 	    window.open('/views/main.html', '_self')
 	}
     }
-
+    
 
     function addOpenGamesToSidebar(container) {
 
@@ -329,6 +335,7 @@ module.exports = function (window) {
     module.updateSidebarGame = updateSidebarGame
     module.removeGameFromSidebar = removeGameFromSidebar
     module.setActiveSidebarItem = setActiveSidebarItem
+    module.loadLastGameFromHistory = loadLastGameFromHistory
     
     return module
 }

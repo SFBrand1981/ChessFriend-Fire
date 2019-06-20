@@ -632,6 +632,7 @@ module.exports = function () {
 	var FEN = nodes[nodeIndx]['FEN']
 	var mvNr = FEN.split(' ')[5]
 	var sideToMove = FEN.split(' ')[1]
+	var mvDesc = (sideToMove === 'b') ? mvNr + '.' : parseInt(mvNr)-1 + '...'
 	var displayMvNr = false
 	var numSiblings = numOfSiblingBranches(nodes, nodeIndx)
 	var startBold = false
@@ -706,12 +707,7 @@ module.exports = function () {
 
 	// move number
 	if (displayMvNr === true || nodeIndx === '(0)(0)') {
-	    
-	    if (sideToMove === 'b') {
-		rv += mvNr + '.'
-	    } else {
-		rv += parseInt(mvNr)-1  + '...'
-	    }
+	    rv += mvDesc
 	}
 
 	
@@ -740,9 +736,26 @@ module.exports = function () {
 	    
 	}
 
+	// diagrams
 	if (nodes[nodeIndx]['comment'] != undefined) {
+
+	}
+	
+	// comments
+	if (nodes[nodeIndx]['comment'] != undefined) {
+	    
 	    rv += (branchLevel == 0) ? '\n\n' : ' '
-	    rv += nodes[nodeIndx]['comment']
+
+	    if (/\\diagram/.test(nodes[nodeIndx]['comment'])) {
+		var diagram = '\\diagram{'
+		    + nodes[nodeIndx]['FEN'] + '}{'
+		    + mvDesc
+		    + nodes[nodeIndx]['SAN'] + '}'
+		rv += nodes[nodeIndx]['comment'].replace(/\\diagram/, diagram)
+	    } else {
+		rv += nodes[nodeIndx]['comment']
+	    }
+
 	    rv += (branchLevel == 0) ? '\n\n' : ' '
 	}
 

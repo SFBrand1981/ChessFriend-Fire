@@ -1077,3 +1077,98 @@ div.awesomplete {
 /*     content:"\f005\a0"; */
 /*     font-size: 10pt; */
 /* } */
+
+
+/* big table */
+
+.big-table-container {
+    height: 100%;
+    overflow-y: auto;
+    background-color: var(--base2-color);
+}
+
+.big-table {
+    width: 100%;
+    table-layout: fixed;
+    white-space: nowrap;
+    border-collapse: collapse;
+    font-size: 90%;
+    background-color: var(--base4-color);
+    color: var(--base7-color);
+}
+
+
+.big-table tbody {
+    width: 100%;
+    height: 100px;
+    overflow: auto;
+}
+
+.big-table td {
+    border-top: 1pt solid var(--base0-color);
+    border-bottom: 1pt solid var(--base0-color);
+    display: table-cell;
+    padding: 8px 4px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.big-table th:first-child {
+    padding-left: 10px;
+}
+
+.big-table td:first-child {
+    padding-left: 10px;
+}
+
+.big-table th {
+    font-weight: normal;
+    padding: 12px 4px;
+    text-align: center;
+    display: table-cell;
+    background-color: var(--base3-color);
+    color: var(--base6-color);
+}
+
+.big-table th span:hover {
+    color: var(--base8-color);
+ }
+
+.big-table th span:hover:after {
+    content: '\25BE';
+}
+
+.big-table th:last-child {
+    padding-right: 12px;
+}
+
+.big-table td:last-child {
+    padding-right: 12px;
+}
+
+.big-table tbody tr:hover {
+    box-shadow: 0 0 8px -2px var(--base0-color);
+    color: var(--base8-color);
+}
+
+.big-table-input {
+    width: 100%;
+    box-sizing: border-box;
+    background-color: var(--base4-color);
+    border: 0;
+    color: var(--base7-color);
+}
+
+.big-table-input:hover {
+    box-shadow: 0 0 8px -2px var(--base4-color);
+    color: var(--base8-color);
+}
+
+.big-table-input::placeholder {
+    color: var(--base7-color);
+}
+
+.big-table-select:hover {
+    box-shadow: 0 0 8px -2px var(--base0-color);
+    color: var(--base8-color);
+}

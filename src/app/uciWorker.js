@@ -9,21 +9,34 @@ const { spawn } = require('child_process')
 
 
 // init engine and its interface
-var enginePath = ''
-switch (os.platform()) {
-case 'win32':
-case 'win64':
-    enginePath = path.join(process.cwd(), '/bin/stockfish_10_x64.exe')
-    break
-case 'linux':
-    enginePath = path.join(process.cwd(), '/bin/stockfish_10_x64')
-    break
-case 'darwin':
-default:
-    enginePath = path.join(process.cwd(), '/bin/stockfish-10-64')
-    break
-}
+var engineSettings = {}
+var enginePath 
 
+(function readEngineSettings() {
+    
+    var engineSettingsFile = path.join(process.cwd(), 'engineSettings.json')
+    engineSettings = JSON.parse(fs.readFileSync(engineSettingsFile, 'utf8'))
+
+
+    if (engineSettings['Engine path'] == 'default') { 
+	switch (os.platform()) {
+	case 'win32':
+	case 'win64':
+	    enginePath = path.join(process.cwd(), '/bin/stockfish_10_x64.exe')
+	    break
+	case 'linux':
+	    enginePath = path.join(process.cwd(), '/bin/stockfish_10_x64')
+	    break
+	case 'darwin':
+	default:
+	    enginePath = path.join(process.cwd(), '/bin/stockfish-10-64')
+	    break
+	}
+    } else {
+	enginePath = engineSettings['Engine path']
+    }
+    
+})()
 
 var engineInfo = {
     status : undefined,
@@ -31,8 +44,8 @@ var engineInfo = {
     position : 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
     targetPosition : undefined,
     enginePath : enginePath,
-    multiPV : 5,
-    threads : 1
+    multiPV : parseInt(engineSettings['multiPV']),
+    threads : parseInt(engineSettings['Threads'])
 }
 
 

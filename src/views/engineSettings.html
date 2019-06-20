@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>ChessFriend-Fire - Game</title>
+    <title>ChessFriend-Fire - Settings</title>
     <link rel="stylesheet" href="../css/common.css">
   </head>
 
@@ -32,15 +32,26 @@
 	    <!-- resize -->
 	  </div>
 
-	  <div class="gameContainer">
-	  
-	    <div class="boardContainer" id="boardContainer"></div>
+	  <div class="big-table-container">
 
-	    <div class="notationContainer" id="notationContainer">
-	      <!-- notation -->
+	    <div class="stickyOnTop">
+	      <table class="big-table">
+		<thead>
+		  <tr>
+		    <th colspan="2">Settings</th>
+		  </tr>
+		</thead>
+	      </table>
 	    </div>
+	    
+	    <table class="big-table" id="engineSettings">
+	    </table>
 
+	    <div class="searchBtnContainer">
+	      <span class="btn" id="confirmSettings">Ok</span>
+	    </div>
 	  </div>
+
 	    
 	</div> <!-- container class -->
 	
@@ -58,18 +69,6 @@
   var WindowHandler = require(path.join(process.cwd(), '/app/window.js'))
   
   var win = new WindowHandler(window)
-  win.createMoveIndicator()
-  win.createChessboard()
-  win.createBoardControls()
-  win.displayNotation()
-  win.displayGameInfo()
-  win.createEngineControls()
-  win.createSaveBtn()
-
-  var contextMenu = new nw.Menu();
-  win.createContextMenu(contextMenu)
-
-  var engineSettingsMenu = new nw.Menu();
-  win.createEngineSettingsMenu(engineSettingsMenu)
+  win.makeSettingsConfirmable()
   
 </script>

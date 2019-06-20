@@ -2,6 +2,7 @@
 module.exports = function (window) {
 
     var path = require('path')
+    var os = require('os')
     var tools = require(path.join(process.cwd(), '/app/tools.js'))
     var ResizeHandler = require(path.join(process.cwd(), '/app/resize.js'))
     var DBHandler = require(path.join(process.cwd(), '/app/db.js'))
@@ -496,6 +497,104 @@ module.exports = function (window) {
 	var sq_end = move[2] + move[3]
 	boardState.insertEngineMove(sq_start, sq_end)
     })
+
+
+    // engine settings
+    function createEngineSettingsMenu(menu) {
+
+	// Add menu items with label in this menu
+	menu.append(new nw.MenuItem({
+	    label: 'Engine settings',
+	    click: function(){
+		window.open('/views/engineSettings.html', '_self')
+	    }
+	}))
+
+
+	var engineLines = window.document.querySelector('.engineOut')
+	engineLines.addEventListener('contextmenu', function(ev) {
+	    // Prevent to showing default context menu event
+	    //ev.preventDefault();
+	    // display Popup the native context menu at place you clicked
+	    menu.popup(ev.x, ev.y)  
+	})
+
+
+    }
+
+
+    // save engine settins
+    function makeSettingsConfirmable() {
+
+	var engineSettingsTable = window.document.getElementById("engineSettings")
+	var tbody = window.document.createElement('tbody')
+	engineSettingsTable.appendChild(tbody)
+
+	
+	function createSettingEntry(key, value) {
+	    var tr = window.document.createElement('tr')
+	    var tdKey = window.document.createElement('td')
+	    var tdValue = window.document.createElement('td')
+	    var inp = window.document.createElement('input')
+
+
+	    tdKey.innerHTML = key
+
+	    inp.classList.add("big-table-input")
+	    inp.type = 'text'
+	    inp.value = value
+	    inp.id = key
+
+	    tdValue.appendChild(inp)
+	    tr.appendChild(tdKey)
+	    tr.appendChild(tdValue)
+	    tbody.appendChild(tr)
+	    
+	}
+
+	var engineSettings = sh.readEngineSettings()
+	var enginePath
+	
+	if (engineSettings['Engine path'] == 'default') { 
+	    switch (os.platform()) {
+	    case 'win32':
+	    case 'win64':
+		enginePath = path.join(process.cwd(), '/bin/stockfish_10_x64.exe')
+		break
+	    case 'linux':
+		enginePath = path.join(process.cwd(), '/bin/stockfish_10_x64')
+		break
+	    case 'darwin':
+	    default:
+		enginePath = path.join(process.cwd(), '/bin/stockfish-10-64')
+		break
+	    }
+	} else {
+	    enginePath = engineSettings['Engine path']
+	}
+
+	createSettingEntry("Engine path", enginePath)
+	createSettingEntry("multiPV", engineSettings['multiPV'])
+	createSettingEntry("Threads", engineSettings['Threads'])
+	
+
+	var confirmSettingsBtn = window.document.getElementById('confirmSettings')
+	confirmSettingsBtn.addEventListener('click', function (evt) {
+
+	    var newSettings = {}
+	    var values = window.document.querySelectorAll('.big-table-input')
+	    for (var i = 0, len = values.length; i < len; i++) {
+		newSettings[values[i]['id']] = values[i]['value']
+	    }
+	    
+	    
+	    sh.saveEngineSettings(JSON.stringify(newSettings)).then( settings => {
+		sb.loadLastGameFromHistory(undefined)
+	    }).catch( e => {
+		alert(e)
+	    })
+	})
+    }
     
     
     // Module exports
@@ -515,6 +614,8 @@ module.exports = function (window) {
     module.createContextMenu = createContextMenu
     module.setActiveSidebarItem = setActiveSidebarItem
     module.createSaveBtn = createSaveBtn
+    module.createEngineSettingsMenu = createEngineSettingsMenu
+    module.makeSettingsConfirmable = makeSettingsConfirmable
     
     return module
 }
