@@ -41,13 +41,15 @@ Try it out and visit us at [www.schachfreunde-brand.de](https://www.schachfreund
 
 ### Ships with Stockfish 10
 
+<div>
+
 <img align="left" src="https://github.com/SFBrand1981/ChessFriend-Fire/blob/master/docs/ChessFriend-Fire_engine.png" width="40%"/>
 
 By default, ChessFriend-Fire ships with Stockfish 10, one of the strongest chess engines available.
 You can use any other UCI compatible engine.
 
+</div>
 
-<div style="clear: both;"></div>
 
 
 ### One-click annotations
