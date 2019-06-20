@@ -41,19 +41,18 @@ Try it out and visit us at [www.schachfreunde-brand.de](https://www.schachfreund
 
 ### Ships with Stockfish 10
 
-<img align="left" src="https://github.com/SFBrand1981/ChessFriend-Fire/blob/master/docs/ChessFriend-Fire_engine.png" width="40%"/>
+<img style="float:left; width:40%;" src="https://github.com/SFBrand1981/ChessFriend-Fire/blob/master/docs/ChessFriend-Fire_engine.png"/>
 
 By default, ChessFriend-Fire ships with Stockfish 10, one of the strongest chess engines available.
 You can use any other UCI compatible engine.
 
 
-<div>Break</div>
+<div style="width: 100%;">Break</div>
 
 
 ### One-click annotations
 
-
-<img align="left" src="https://github.com/SFBrand1981/ChessFriend-Fire/blob/master/docs/ChessFriend-Fire_menu.png" width="40%"/>
+<img style="float:left; width:40%;" src="https://github.com/SFBrand1981/ChessFriend-Fire/blob/master/docs/ChessFriend-Fire_menu.png"/>
 
 
 Insert NAGs with one click.
