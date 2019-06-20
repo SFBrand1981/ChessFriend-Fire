@@ -41,7 +41,7 @@ Try it out and visit us at [www.schachfreunde-brand.de](https://www.schachfreund
 
 ### Ships with Stockfish 10
 
-<div>
+<div style="display: block; width: 100%;">
 
 <img align="left" src="https://github.com/SFBrand1981/ChessFriend-Fire/blob/master/docs/ChessFriend-Fire_engine.png" width="40%"/>
 
