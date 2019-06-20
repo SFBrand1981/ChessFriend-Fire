@@ -1258,8 +1258,7 @@ module.exports = function (window) {
 
     function promoteVariationHandler() {
 
-	var selectedIndx = parseInt(currentBoard.curNodeIndx.match(/\((\d*)\)$/)[1])	
-	if (selectedIndx == 0) {
+	if (currentBoard.nodes[currentBoard.curNodeIndx]['branchLevel'] == 0) {
 	    // already mainline
 	    return
 	}
