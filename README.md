@@ -47,7 +47,7 @@ By default, ChessFriend-Fire ships with Stockfish 10, one of the strongest chess
 You can use any other UCI compatible engine.
 
 
----
+<div style="clear: both;"></div>
 
 
 ### One-click annotations
