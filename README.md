@@ -41,12 +41,13 @@ Try it out and visit us at [www.schachfreunde-brand.de](https://www.schachfreund
 
 ### Ships with Stockfish 10
 
-<div style="text-align: center;">
-     <img src="https://github.com/SFBrand1981/ChessFriend-Fire/blob/master/docs/ChessFriend-Fire_engine.png" width="200"/>
+<div style="text-align: center; display: inline-block;">
+     <img src="https://github.com/SFBrand1981/ChessFriend-Fire/blob/master/docs/ChessFriend-Fire_engine.png" width="40%"/>
 </div>
 
+<div style="display: inline-block;">
 By default, ChessFriend-Fire ships with Stockfish 10, one of the strongest chess engines available.
-
+</div>
 
 ### One-click annotations
 
