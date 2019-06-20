@@ -8,47 +8,77 @@ Try it out and visit us at [www.schachfreunde-brand.de](https://www.schachfreund
 
 
 <div style="text-align: center;">
-     <img src="https://github.com/SFBrand1981/ChessFriend-Fire/blob/master/docs/ChessFriend-Fire_collage.png">
+     <img src="https://github.com/SFBrand1981/ChessFriend-Fire/blob/master/docs/ChessFriend-Fire_collage.png"/>
 </div>
 
 
 ## Installation
 
-1. Download and unzip the latest [release][release]
-2. Change into the directory where you have unzipped your files
-   1. On Windows, double-click on the following file:
+   1. Download and unzip the latest [release][release]. 
+   2. Change into the directory where you have unzipped your files
+      1. On Windows, double-click on the following file:
 
       ```
       chessfriendfire.bat
       ```
 
 
-   2. On macOS, run the following in terminal:
+      2. On macOS, run the following in terminal:
 
       ```bash
       $ ./node_modules/nw/bin/nw ./src/
       ```
 
-   3. On Linux, you need to have [nwjs][nwjs] installed 
+      3. On Linux, you need to have [nwjs][nwjs] installed 
 
       ```bash
       $ sudo apt-get install nodejs
       $ npm install
       $ npm run dev
       ```
-   
 
-## UCI chess engine support
+## Features
 
-  Open `Menu > Preferences` and specify the path to your chess engine. 
-  By default, ChessFriend-Fire ships with Stockfish 10, one of the strongest chess engines available.
-  You can find the [relevant binaries][stockfish] in the `bin` directory inside your installation folder.
+### Ships with Stockfish 10
+
+    <div style="text-align: center;">
+    	 <img src="https://github.com/SFBrand1981/ChessFriend-Fire/blob/master/docs/ChessFriend-Fire_engine.png" width="200"/>
+    </div>
+
+    By default, ChessFriend-Fire ships with Stockfish 10, one of the strongest chess engines available.
 
 
-## PGN import and export
+### One-click annotations
 
-   Click on the `Import` button in order to add games to your database. Start with importing the game
-   [Kasparov_vs_Topalov.pgn][Kasparov_vs_Topalov], which you can find in the `tests` directory inside your installation folder.
+    <div style="text-align: center;">
+    	 <img src="https://github.com/SFBrand1981/ChessFriend-Fire/blob/master/docs/ChessFriend-Fire_menu.png" width="200"/>
+    </div>
+
+
+### Open your games in tabs
+
+    <div style="text-align: center;">
+    	 <img src="https://github.com/SFBrand1981/ChessFriend-Fire/blob/master/docs/ChessFriend-Fire_tabs.png" width="200"/>
+    </div>
+
+
+### Fast database search
+
+    <div style="text-align: center;">
+    	 <img src="https://github.com/SFBrand1981/ChessFriend-Fire/blob/master/docs/ChessFriend-Fire_search.png" width="200"/>
+    </div>
+
+### Analyse any position
+
+    <div style="text-align: center;">
+    	 <img src="https://github.com/SFBrand1981/ChessFriend-Fire/blob/master/docs/ChessFriend-Fire_setup.png" width="200"/>
+    </div>
+
+### LaTeX export
+
+    <div style="text-align: center;">
+    	 <img src="https://github.com/SFBrand1981/ChessFriend-Fire/blob/master/docs/ChessFriend-Fire_latex.png" width="200"/>
+    </div>
 
   
 
