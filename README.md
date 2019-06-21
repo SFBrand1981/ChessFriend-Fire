@@ -41,6 +41,10 @@ Try it out and visit us at [www.schachfreunde-brand.de](https://www.schachfreund
       $ npm run linux
       ```
 
+
+---
+
+
 ## Features
 
 ### Ships with Stockfish 10
@@ -58,6 +62,7 @@ is allowed to use (default: 1).
 
 <br clear="both"/>
 
+---
 
 ### One-click annotations
 
@@ -81,6 +86,7 @@ ChessFriend-Fire opens all your games in tabs. It has never been easier to switc
 
 <br clear="both"/>
 
+---
 
 ### Fast database search
 
@@ -94,6 +100,8 @@ ChessFriend-Fire also allows you to tag your games with custom labels, which mak
 
 <br clear="both"/>
 
+---
+
 ### Analyse any position
 
 
@@ -105,6 +113,8 @@ or add it as the starting point of a new game. Move the pieces around with a cli
 
 
 <br clear="both"/>
+
+---
 
 
 ### LaTeX export
@@ -121,7 +131,12 @@ you need to have a LaTeX processor like [xelatex][xelatex] installed
 
 <br clear="both"/>
 
+---
+
 ### Keyboard shortcuts
+
+
+<div style="text-align: center">
 
 
 | Command     | Function           |
@@ -130,6 +145,8 @@ you need to have a LaTeX processor like [xelatex][xelatex] installed
 | Arrow right | Next move          |
 | Space	      | Insert engine move |
 | \diagram (as text in comments) | Insert diagram in LaTeX-export |
+
+</div>
 
 <br clear="both"/>
 
