@@ -41,7 +41,7 @@ Try it out and visit us at [www.schachfreunde-brand.de](https://www.schachfreund
       $ npm run linux
       ```
 
-   3. When you run ChessFriend-Fire for the first time, click on the *Import* button and select the file `KingBaseLite2019-04.pgn` from the
+   3. When you run ChessFriend-Fire for the first time, click on the **Import** button and select the file `KingBaseLite2019-04.pgn` from the
    installation directory. This will import about 7000 games from [kingbase-chess.net][kingbase] into your database (duration: approx. 10min).
 
 ---
@@ -145,8 +145,8 @@ you need to have a LaTeX processor like [xelatex][xelatex] installed
 
 | Command                          | Function           |
 |----------------------------------|--------------------|
-| <kbd>#&leftarrow;</kbd>            | Previous move      |
-| <kbd>#&rightarrow;</kbd>           | Next move          |
+| <kbd>&leftarrow;</kbd>            | Previous move      |
+| <kbd>&rightarrow;</kbd>           | Next move          |
 | <kbd>Space</kbd>	           | Insert engine move |
 | <kbd>\diagram</kbd>(as text in comments)   | Insert diagram in LaTeX-export |
 
