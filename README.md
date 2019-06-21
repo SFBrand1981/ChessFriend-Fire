@@ -74,6 +74,8 @@ selection will be automatically inserted after the currently highlighted move.
 
 <br clear="both"/>
 
+---
+
 
 ### Open your games in tabs
 
@@ -136,7 +138,7 @@ you need to have a LaTeX processor like [xelatex][xelatex] installed
 ### Keyboard shortcuts
 
 
-<div style="text-align: center">
+<div style="text-align: center;">
 
 
 | Command     | Function           |
