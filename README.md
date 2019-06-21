@@ -8,7 +8,7 @@ Try it out and visit us at [www.schachfreunde-brand.de](https://www.schachfreund
 
 
 <div style="text-align: center;">
-     <img src="https://github.com/SFBrand1981/ChessFriend-Fire/blob/master/docs/ChessFriend-Fire_collage.png"/>
+     <img src="https://github.com/SFBrand1981/ChessFriend-Fire/blob/master/docs/ChessFriend-Fire_collage.png?v=20190621"/>
 </div>
 
 
@@ -52,7 +52,7 @@ Try it out and visit us at [www.schachfreunde-brand.de](https://www.schachfreund
 ### Ships with Stockfish 10
 
 
-<img align="left" src="https://github.com/SFBrand1981/ChessFriend-Fire/blob/master/docs/ChessFriend-Fire_engine.png" width="40%"/>
+<img align="left" src="https://github.com/SFBrand1981/ChessFriend-Fire/blob/master/docs/ChessFriend-Fire_engine.png?v=20190621" width="40%"/>
 
 By default, ChessFriend-Fire includes the binaries of Stockfish 10, one of the strongest chess engines available. Start the engine by clicking
 on the 'play' button underneath the chess board. With a right-click on the displayed engine lines, you can open the engine settings menu,
@@ -68,7 +68,7 @@ is allowed to use (default: 1).
 
 ### One-click annotations
 
-<img align="left" src="https://github.com/SFBrand1981/ChessFriend-Fire/blob/master/docs/ChessFriend-Fire_menu.png" width="40%"/>
+<img align="left" src="https://github.com/SFBrand1981/ChessFriend-Fire/blob/master/docs/ChessFriend-Fire_menu.png?v=20190621" width="40%"/>
 
 A right-click into the notation panel opens a context menu with shortcuts to commonly used numeric annotation glyphs (NAGs) which upon
 selection will be automatically inserted after the currently highlighted move.
@@ -82,7 +82,7 @@ selection will be automatically inserted after the currently highlighted move.
 ### Open your games in tabs
 
 
-<img align="left" src="https://github.com/SFBrand1981/ChessFriend-Fire/blob/master/docs/ChessFriend-Fire_tabs.png" width="40%"/>
+<img align="left" src="https://github.com/SFBrand1981/ChessFriend-Fire/blob/master/docs/ChessFriend-Fire_tabs.png?v=20190621" width="40%"/>
 
 
 ChessFriend-Fire opens all your games in tabs. It has never been easier to switch between all your favorite games!
@@ -95,7 +95,7 @@ ChessFriend-Fire opens all your games in tabs. It has never been easier to switc
 ### Fast database search
 
 
-<img align="left" src="https://github.com/SFBrand1981/ChessFriend-Fire/blob/master/docs/ChessFriend-Fire_search.png" width="40%"/>
+<img align="left" src="https://github.com/SFBrand1981/ChessFriend-Fire/blob/master/docs/ChessFriend-Fire_search.png?v=20190621" width="40%"/>
 
 
 With ChessFriend-Fires's powerful search functionality, you can browse through any database with lightning speed.
@@ -109,7 +109,7 @@ ChessFriend-Fire also allows you to tag your games with custom labels, which mak
 ### Analyse any position
 
 
-<img align="left" src="https://github.com/SFBrand1981/ChessFriend-Fire/blob/master/docs/ChessFriend-Fire_setup.png" width="40%"/>
+<img align="left" src="https://github.com/SFBrand1981/ChessFriend-Fire/blob/master/docs/ChessFriend-Fire_setup.png?v=20190621" width="40%"/>
 
 
 A click on 'Setup position' enables you to setup an arbitrary position on a chessboard and search for it in the database
@@ -124,7 +124,7 @@ or add it as the starting point of a new game. Move the pieces around with a cli
 ### LaTeX export
 
 
-<img align="left" src="https://github.com/SFBrand1981/ChessFriend-Fire/blob/master/docs/ChessFriend-Fire_latex.png" width="40%"/>
+<img align="left" src="https://github.com/SFBrand1981/ChessFriend-Fire/blob/master/docs/ChessFriend-Fire_latex.png?v=20190621" width="40%"/>
 
 
 
