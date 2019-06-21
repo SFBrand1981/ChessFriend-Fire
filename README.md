@@ -62,7 +62,7 @@ is allowed to use (default: 1).
 
 ### One-click annotations
 
-<img style="float:left;" src="https://github.com/SFBrand1981/ChessFriend-Fire/blob/master/docs/ChessFriend-Fire_menu.png" width="40%"/>
+<img align="left" src="https://github.com/SFBrand1981/ChessFriend-Fire/blob/master/docs/ChessFriend-Fire_menu.png" width="40%"/>
 
 A right-click into the notation panel opens a context menu with shortcuts to commonly used numeric annotation glyphs (NAGs) which upon
 selection will be automatically inserted after the currently highlighted move.
@@ -70,18 +70,18 @@ selection will be automatically inserted after the currently highlighted move.
 
 ### Open your games in tabs
 
-<div style="text-align: center;">
-     <img src="https://github.com/SFBrand1981/ChessFriend-Fire/blob/master/docs/ChessFriend-Fire_tabs.png" width="40%"/>
-</div>
+
+<img align="left" src="https://github.com/SFBrand1981/ChessFriend-Fire/blob/master/docs/ChessFriend-Fire_tabs.png" width="40%"/>
+
 
 ChessFriend-Fire opens all your games in tabs. It has never been easier to switch between all your favorite games!
 
 
 ### Fast database search
 
-<div style="text-align: center;">
-     <img src="https://github.com/SFBrand1981/ChessFriend-Fire/blob/master/docs/ChessFriend-Fire_search.png" width="40%"/>
-</div>
+
+<img align="left" src="https://github.com/SFBrand1981/ChessFriend-Fire/blob/master/docs/ChessFriend-Fire_search.png" width="40%"/>
+
 
 With ChessFriend-Fires's powerful search functionality, you can browse through any database with lightning speed.
 ChessFriend-Fire also allows you to tag your games with custom labels, which makes it super easy to find them later again.
@@ -89,9 +89,9 @@ ChessFriend-Fire also allows you to tag your games with custom labels, which mak
 
 ### Analyse any position
 
-<div style="text-align: center;">
-     <img src="https://github.com/SFBrand1981/ChessFriend-Fire/blob/master/docs/ChessFriend-Fire_setup.png" width="40%"/>
-</div>
+
+<img align="left" src="https://github.com/SFBrand1981/ChessFriend-Fire/blob/master/docs/ChessFriend-Fire_setup.png" width="40%"/>
+
 
 A click on 'Setup position' enables you to setup an arbitrary position on a chessboard and search for it in the database
 or add it as the starting point of a new game. Move the pieces around with a click from your mouse.
@@ -99,9 +99,9 @@ or add it as the starting point of a new game. Move the pieces around with a cli
 
 ### LaTeX export
 
-<div style="text-align: center;">
-     <img src="https://github.com/SFBrand1981/ChessFriend-Fire/blob/master/docs/ChessFriend-Fire_latex.png" width="40%"/>
-</div>
+
+<img align="left" src="https://github.com/SFBrand1981/ChessFriend-Fire/blob/master/docs/ChessFriend-Fire_latex.png" width="40%"/>
+
 
 
 ChessFriend-Fire allows you to export your game as a LaTeX-file and helps you to produce publication-ready documents
@@ -112,6 +112,13 @@ you need to have a LaTeX processor like [xelatex][xelatex] installed
 
 ### Keyboard shortcuts
 
+
+| Command     | Function           |
+|-------------|--------------------|
+| Arrow left  | Previous move      |
+| Arrow right | Next move          |
+| Space	      | Insert engine move |
+| \diagram (as text in comments) | Insert diagram in LaTeX-export |
   
 [7zip]: https://www.7-zip.org/download.html
 [nodejs]: https://nodejs.org/en/
