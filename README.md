@@ -26,19 +26,20 @@ Try it out and visit us at [www.schachfreunde-brand.de](https://www.schachfreund
       ```
 
 
-      2. On macOS, run the following in terminal:
+      2. On macOS and Linux, run the following in terminal:
 
       ```bash
       $ ./node_modules/nw/bin/nw ./src/
       ```
 
-      3. On Linux, you need to compile a recent version of [node.js][nodejs] for yourself. The following commands can be used to install
-      ChessFriend-Fire using node version 10.15.0 (tested with Ubuntu 18.04.2 LTS):
+      3. On Linux, if the above command does not work, you need to compile a recent version of [node.js][nodejs] for yourself. The following commands can be used to install
+      ChessFriend-Fire and the latest version of node using [nvm][nvm] (tested with Ubuntu 18.04.2 LTS):
 
       ```bash
-      $ sudo apt-get install nodejs
-      $ npm install
-      $ npm run linux
+      $ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash
+      $ nvm install --latest-npm
+      $ npm install nw
+      $ ./node_modules/nw/bin/nw ./src/
       ```
 
    3. When you run ChessFriend-Fire for the first time, click on the **Import** button and select the file `KingBaseLite2019-04.pgn` from the
@@ -158,6 +159,7 @@ you need to have a LaTeX processor like [xelatex][xelatex] installed
 
 [7zip]: https://www.7-zip.org/download.html
 [kingbase]: http://www.kingbase-chess.net/
+[nvm]: https://github.com/nvm-sh/nvm
 [nodejs]: https://nodejs.org/en/
 [release]: https://github.com/SFBrand1981/ChessFriend-Fire/releases
 [stockfish]: https://github.com/SFBrand1981/ChessFriend-Fire/tree/master/src/bin
