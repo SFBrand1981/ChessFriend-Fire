@@ -42,7 +42,7 @@ Try it out and visit us at [www.schachfreunde-brand.de](https://www.schachfreund
       ```
 
    3. When you run ChessFriend-Fire for the first time, click on the *Import* button and select the file `KingBaseLite2019-04.pgn`. This will import
-   about 7000 games from [kingbase][kingbase] into your database (duration: approx. 10min).
+   about 7000 games from [kingbase-chess.net][kingbase] into your database (duration: approx. 10min).
 
 ---
 
