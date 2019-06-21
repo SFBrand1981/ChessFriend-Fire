@@ -49,6 +49,7 @@ Try it out and visit us at [www.schachfreunde-brand.de](https://www.schachfreund
 
 ## Features
 
+
 ### Ships with Stockfish 10
 
 
