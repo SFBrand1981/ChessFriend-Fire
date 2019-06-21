@@ -59,13 +59,15 @@ is allowed to use (default: 1).
 <br clear="both"/>
 
 
-
 ### One-click annotations
 
 <img align="left" src="https://github.com/SFBrand1981/ChessFriend-Fire/blob/master/docs/ChessFriend-Fire_menu.png" width="40%"/>
 
 A right-click into the notation panel opens a context menu with shortcuts to commonly used numeric annotation glyphs (NAGs) which upon
 selection will be automatically inserted after the currently highlighted move.
+
+
+<br clear="both"/>
 
 
 ### Open your games in tabs
@@ -75,6 +77,9 @@ selection will be automatically inserted after the currently highlighted move.
 
 
 ChessFriend-Fire opens all your games in tabs. It has never been easier to switch between all your favorite games!
+
+
+<br clear="both"/>
 
 
 ### Fast database search
@@ -87,6 +92,8 @@ With ChessFriend-Fires's powerful search functionality, you can browse through a
 ChessFriend-Fire also allows you to tag your games with custom labels, which makes it super easy to find them later again.
 
 
+<br clear="both"/>
+
 ### Analyse any position
 
 
@@ -95,6 +102,9 @@ ChessFriend-Fire also allows you to tag your games with custom labels, which mak
 
 A click on 'Setup position' enables you to setup an arbitrary position on a chessboard and search for it in the database
 or add it as the starting point of a new game. Move the pieces around with a click from your mouse.
+
+
+<br clear="both"/>
 
 
 ### LaTeX export
@@ -109,6 +119,7 @@ in the twinkling of an eye. For example, any comment of the form `\diagram` will
 a chess diagram, without any further user action necessary. In order to convert the LaTeX file into a pdf-document,
 you need to have a LaTeX processor like [xelatex][xelatex] installed 
 
+<br clear="both"/>
 
 ### Keyboard shortcuts
 
@@ -119,7 +130,10 @@ you need to have a LaTeX processor like [xelatex][xelatex] installed
 | Arrow right | Next move          |
 | Space	      | Insert engine move |
 | \diagram (as text in comments) | Insert diagram in LaTeX-export |
-  
+
+<br clear="both"/>
+
+
 [7zip]: https://www.7-zip.org/download.html
 [nodejs]: https://nodejs.org/en/
 [release]: https://github.com/SFBrand1981/ChessFriend-Fire/releases
