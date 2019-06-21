@@ -41,6 +41,8 @@ Try it out and visit us at [www.schachfreunde-brand.de](https://www.schachfreund
       $ npm run linux
       ```
 
+   3. When you run ChessFriend-Fire for the first time, click on the *Import* button and select the file `KingBaseLite2019-04.pgn`. This will import
+   about 7000 games from [kingbase][kingbase] into your database (duration: approx. 10min).
 
 ---
 
@@ -154,6 +156,7 @@ you need to have a LaTeX processor like [xelatex][xelatex] installed
 
 
 [7zip]: https://www.7-zip.org/download.html
+[kingbase]: http://www.kingbase-chess.net/
 [nodejs]: https://nodejs.org/en/
 [release]: https://github.com/SFBrand1981/ChessFriend-Fire/releases
 [stockfish]: https://github.com/SFBrand1981/ChessFriend-Fire/tree/master/src/bin
