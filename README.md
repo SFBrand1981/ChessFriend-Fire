@@ -4,7 +4,8 @@
 
 
 Use ChessFriend-Fire to create a chess database and analyze all your games.
-Try it out and visit us at [www.schachfreunde-brand.de](https://www.schachfreunde-brand.de)!
+ChessFriend-Fire is open source and runs on any platform.
+
 
 
 <div style="text-align: center;">
@@ -129,11 +130,10 @@ or add it as the starting point of a new game. Move the pieces around with a cli
 <img align="left" src="https://github.com/SFBrand1981/ChessFriend-Fire/blob/master/docs/ChessFriend-Fire_latex.png?v=20190621" width="40%"/>
 
 
-
 ChessFriend-Fire allows you to export your game as a LaTeX-file and helps you to produce publication-ready documents
 in the twinkling of an eye. For example, any comment of the form `\diagram` will automatically be converted into
 a chess diagram, without any further user action necessary. In order to convert the LaTeX file into a pdf-document,
-you need to have a LaTeX processor like [xelatex][xelatex] installed 
+you need to have a LaTeX processor like [xelatex][xelatex] installed.
 
 <br clear="both"/>
 
@@ -157,6 +157,19 @@ you need to have a LaTeX processor like [xelatex][xelatex] installed
 <br clear="both"/>
 
 
+---
+
+### Icon
+
+<img align="left" src="https://github.com/SFBrand1981/ChessFriend-Fire/blob/master/src/icon/icon.png?v=20190621" width="40%"/>
+
+
+ChessFriend-Fire's icon shows a modified version of the coat of arms of Aachen-Brand, the district in which the chess club 
+[Schachfreunde Brand 1981 e.V.][SFBrand], birthplace of the idea for this project, is located. The name ChessFriend-Fire
+is a silly pun that exploits the multiple meanings of the word *Brand*, which has the meaning of *blaze* or *fire* in German.
+Nevertheless, if you want to help to improve the code, you are kindly invited to do so wherever you live.
+
+
 [7zip]: https://www.7-zip.org/download.html
 [kingbase]: http://www.kingbase-chess.net/
 [nvm]: https://github.com/nvm-sh/nvm
@@ -164,3 +177,4 @@ you need to have a LaTeX processor like [xelatex][xelatex] installed
 [release]: https://github.com/SFBrand1981/ChessFriend-Fire/releases
 [stockfish]: https://github.com/SFBrand1981/ChessFriend-Fire/tree/master/src/bin
 [xelatex]: https://en.wikipedia.org/wiki/XeTeX
+[SFBrand]: https://www.schachfreunde-brand.de
