@@ -63,18 +63,20 @@ module.exports = function (window) {
     var dbEntryCount = window.document.getElementById('dbEntryCount')
     var pageSize = localStorage.getItem('pageSize')
     function displayDBEntryCount() {
-	db.getQueryCount().then(function (count) {
 
-	    // if (count == 0) {
-	    // 	alert('Your database is empty!')
-	    // }
-	    
-	    var searchParams = JSON.parse(localStorage.getItem('searchParams'))
-	    var lower = (count == 0) ? 0 : searchParams.pageNum * pageSize + 1
-	    var upper = Math.min(count, (searchParams.pageNum + 1) * pageSize)
-	    
-	    dbEntryCount.innerHTML = lower + '-' + upper + ' of ' + count
-	})
+
+	var count = parseInt(localStorage.getItem('dbCount'))
+	// if (count == 0) {
+	// 	alert('Your database is empty!')
+	// }
+	
+	var searchParams = JSON.parse(localStorage.getItem('searchParams'))
+	var lower = (count == 0) ? 0 : searchParams.pageNum * pageSize + 1
+	var upper = Math.min(count, (searchParams.pageNum + 1) * pageSize)
+
+	
+	dbEntryCount.innerHTML = lower + '-' + upper + ' of ' + count
+
     }
 
 
@@ -296,30 +298,26 @@ module.exports = function (window) {
     function enablePagination () {
 
 	paginateNext.addEventListener('click', function (evt) {
-	    db.getQueryCount().then(function (count) {
-		console.log("COUNT: "+ count)
-		var searchParams = JSON.parse(localStorage.getItem('searchParams'))
-		if ((searchParams.pageNum + 1) * pageSize < count) {
-		    db.pageNext()
-		    db.displayDBEntries(dbEntries)
-		    displayDBEntryCount()
-		}
-	    })
+	    var count = parseInt(localStorage.getItem('dbCount'))
+	    var searchParams = JSON.parse(localStorage.getItem('searchParams'))
+	    if ((searchParams.pageNum + 1) * pageSize < count) {
+		db.pageNext()
+		db.displayDBEntries(dbEntries)
+		displayDBEntryCount()
+	    }
 	})
-		
+	
 	paginatePrev.addEventListener('click', function (evt) {
-	    db.getQueryCount().then(function (count) {
-		console.log("COUNT: "+ count)
-		var searchParams = JSON.parse(localStorage.getItem('searchParams'))
-		if (searchParams.pageNum - 1 >= 0) { 
-		    db.pagePrev()
-		    db.displayDBEntries(dbEntries)
-		    displayDBEntryCount()
-		}
-	    })
+	    var count = parseInt(localStorage.getItem('dbCount'))
+	    var searchParams = JSON.parse(localStorage.getItem('searchParams'))
+	    if (searchParams.pageNum - 1 >= 0) { 
+		db.pagePrev()
+		db.displayDBEntries(dbEntries)
+		displayDBEntryCount()
+	    }
 	})
     }
-
+    
 
     // search parameters
     var mainSearchInfoContainer = window.document.querySelector(".mainSearchInfoContainer")
@@ -477,6 +475,10 @@ module.exports = function (window) {
 	db.db.nodes.where({game_id: game_id}).delete()
 	    .then(() => {
 		db.db.games.delete(game_id)
+	    }).then(() => {
+		return db.db.games.count()
+	    }).then(count => {
+		return localStorage.setItem('dbCount', count)
 	    }).then(() => {
 		sb.removeGameFromSidebar(evt.detail.game_id)
 	    })	

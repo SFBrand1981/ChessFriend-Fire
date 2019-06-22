@@ -44,6 +44,10 @@ module.exports = function (window) {
 		nodes: nodes
 	    })
 	}).then(function() {
+	    return db.games.count()
+	}).then(function(count) {
+	    return localStorage.setItem('dbCount', count)
+	}).then(function() {
 	    return game_id
 	})
     }
@@ -579,7 +583,7 @@ module.exports = function (window) {
 	if (searchParams.searching) {
 	    return getSearchCount(queryFromSearchParams())
 	} else {
-	    return db.games.count()
+	    return parseInt(localStorage.getItem('dbCount'))
 	}
 	
     }

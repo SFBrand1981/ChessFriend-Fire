@@ -12,7 +12,8 @@ module.exports = function () {
 	setSetting('openGames', JSON.stringify([...new Map()]))
 	setSetting('gameHistory', JSON.stringify([]))
 	setSetting('pageSize', 20)
-
+	setSetting('dbCount', 0)
+	
 	
 	// reset on startup
 	if (!sessionStorage.getItem('initialized')) {
@@ -32,6 +33,7 @@ module.exports = function () {
 		orderBy: 'id',
 		container: 'hidden'
 	    }))
+
 	}
     }
 
