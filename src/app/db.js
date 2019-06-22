@@ -305,8 +305,9 @@ module.exports = function (window) {
 	    }
 		
 	    return getQueryCount().then(count => {
-		
-		if (count < 200) {
+
+		var maxNum = localStorage.getItem('maxNumOfItemsSortedInMemory')
+		if (count < parseInt(maxNum)) {
 		    
 		    // FAST: Sort in memory
 		    return db.games
@@ -336,7 +337,6 @@ module.exports = function (window) {
 		    return db.games
 			.where(queryFromSearchParams())
 			.primaryKeys(keys => {
-			    console.log(keys)
 			    queryKeys = new Set(keys)
 			}).then(() => {
 			    return reversed ?
@@ -583,9 +583,16 @@ module.exports = function (window) {
 	if (searchParams.searching) {
 	    return getSearchCount(queryFromSearchParams())
 	} else {
-	    return parseInt(localStorage.getItem('dbCount'))
+	    
+	    return new Promise (function (resolve, reject) {
+		var count = localStorage.getItem('dbCount')
+		if (count) {
+		    resolve(parseInt(count))
+		} else {
+		    reject('count not set')
+		}
+	    })
 	}
-	
     }
 
 

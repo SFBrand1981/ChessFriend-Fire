@@ -64,19 +64,18 @@ module.exports = function (window) {
     var pageSize = localStorage.getItem('pageSize')
     function displayDBEntryCount() {
 
+	db.getQueryCount().then(function (count) {
 
-	var count = parseInt(localStorage.getItem('dbCount'))
-	// if (count == 0) {
-	// 	alert('Your database is empty!')
-	// }
-	
-	var searchParams = JSON.parse(localStorage.getItem('searchParams'))
-	var lower = (count == 0) ? 0 : searchParams.pageNum * pageSize + 1
-	var upper = Math.min(count, (searchParams.pageNum + 1) * pageSize)
-
-	
-	dbEntryCount.innerHTML = lower + '-' + upper + ' of ' + count
-
+	    // if (count == 0) {
+	    // 	alert('Your database is empty!')
+	    // }
+	    
+	    var searchParams = JSON.parse(localStorage.getItem('searchParams'))
+	    var lower = (count == 0) ? 0 : searchParams.pageNum * pageSize + 1
+	    var upper = Math.min(count, (searchParams.pageNum + 1) * pageSize)
+  
+	    dbEntryCount.innerHTML = lower + '-' + upper + ' of ' + count
+	})
     }
 
 
@@ -298,23 +297,27 @@ module.exports = function (window) {
     function enablePagination () {
 
 	paginateNext.addEventListener('click', function (evt) {
-	    var count = parseInt(localStorage.getItem('dbCount'))
-	    var searchParams = JSON.parse(localStorage.getItem('searchParams'))
-	    if ((searchParams.pageNum + 1) * pageSize < count) {
-		db.pageNext()
-		db.displayDBEntries(dbEntries)
-		displayDBEntryCount()
-	    }
+	    db.getQueryCount().then(function (count) {
+		console.log("COUNT: "+ count)
+		var searchParams = JSON.parse(localStorage.getItem('searchParams'))
+		if ((searchParams.pageNum + 1) * pageSize < count) {
+		    db.pageNext()
+		    db.displayDBEntries(dbEntries)
+		    displayDBEntryCount()
+		}
+	    })
 	})
 	
 	paginatePrev.addEventListener('click', function (evt) {
-	    var count = parseInt(localStorage.getItem('dbCount'))
-	    var searchParams = JSON.parse(localStorage.getItem('searchParams'))
-	    if (searchParams.pageNum - 1 >= 0) { 
-		db.pagePrev()
-		db.displayDBEntries(dbEntries)
-		displayDBEntryCount()
-	    }
+	    db.getQueryCount().then(function (count) {
+		console.log("COUNT: "+ count)
+		var searchParams = JSON.parse(localStorage.getItem('searchParams'))
+		if (searchParams.pageNum - 1 >= 0) { 
+		    db.pagePrev()
+		    db.displayDBEntries(dbEntries)
+		    displayDBEntryCount()
+		}
+	    })
 	})
     }
     

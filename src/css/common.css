@@ -238,7 +238,7 @@ body {
 
 .db-entries-container {
     height: 100%;
-    overflow-y: auto;
+    overflow-y: scroll;
     background-color: var(--base2-color);
 }
 

@@ -11,9 +11,9 @@ module.exports = function () {
 	setSetting('numEngineLines', 5)
 	setSetting('openGames', JSON.stringify([...new Map()]))
 	setSetting('gameHistory', JSON.stringify([]))
-	setSetting('pageSize', 20)
+	setSetting('pageSize', 100)
 	setSetting('dbCount', 0)
-	
+	setSetting('maxNumOfItemsSortedInMemory', 5000)
 	
 	// reset on startup
 	if (!sessionStorage.getItem('initialized')) {
