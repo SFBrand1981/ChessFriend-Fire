@@ -23,7 +23,7 @@ matrix:
       - rm -rf ./node_modules
       - npm install
       - npm run osx
-      - tar --exclude=release_osx.tar.gz --exclude=./build -zcf release_osx.tar.gz .
+      - tar --exclude=release_osx.tar.gz -zcf release_osx.tar.gz .
 
 before_deploy:
   # tag this commit
