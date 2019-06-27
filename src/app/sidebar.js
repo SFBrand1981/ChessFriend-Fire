@@ -43,6 +43,7 @@ module.exports = function (window) {
 	createSidebarElement(container, "Games")
 	createSidebarElement(container, "Import")
 	createSidebarElement(container, "Setup position")
+	createSidebarElement(container, "DB init")
 
 
 	// sidebar separator
@@ -76,7 +77,12 @@ module.exports = function (window) {
 	setupBtn.addEventListener('click', function(e) {
 	    window.open('/views/search.html', '_self')
 	})
-	
+
+
+	var dbInitBtn = window.document.getElementById('DB init')
+	dbInitBtn.addEventListener('click', function(e) {
+	    window.open('/views/dbInit.html', '_self')
+	})
 
 	// event listeners
 	window.document.addEventListener('gameEditedEvt', function(evt) {

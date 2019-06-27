@@ -351,6 +351,13 @@ body {
     /* content: '\25BE'; */
 }
 
+.right-panel-container {
+    height: 100%;
+    width: 100%;
+    overflow-y: auto;
+    background-color: var(--base2-color);
+    color: var(--base7-color);
+}
 
 .fa {
     font-family: "Lato", "FontAwesome";
@@ -1172,5 +1179,31 @@ div.awesomplete {
 
 .big-table-select:hover {
     box-shadow: 0 0 8px -2px var(--base0-color);
+    color: var(--base8-color);
+}
+
+
+/* dropzone */
+
+.dropzone {
+    box-sizing: border-box;
+    border: 2px dotted var(--yellow1-color) ;
+    border-radius: 5px;
+    padding: 32px;
+    color: var(--base7-color);
+    text-align: center;
+    margin: 16px;
+}
+
+.dropzone a {
+    color: var(--base7-color);
+    text-decoration: none;
+}
+
+.dropzone:hover {
+    color: var(--base8-color);
+}
+
+.dropzone a:hover {
     color: var(--base8-color);
 }

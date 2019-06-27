@@ -3,6 +3,7 @@ module.exports = function (window) {
 
     var path = require('path')
     var os = require('os')
+    var fs = require('fs')
     var tools = require(path.join(process.cwd(), '/app/tools.js'))
     var ResizeHandler = require(path.join(process.cwd(), '/app/resize.js'))
     var DBHandler = require(path.join(process.cwd(), '/app/db.js'))
@@ -13,6 +14,7 @@ module.exports = function (window) {
     var HistoryHandler = require(path.join(process.cwd(), '/app/history.js'))
     var SearchHandler = require(path.join(process.cwd(), '/app/search.js'))
     var Awesomplete = require('awesomplete')
+    var DownloadHandler = require('downloadjs')
     
     const { fork } = require('child_process');
 
@@ -93,16 +95,25 @@ module.exports = function (window) {
     
     
     fileDialog.addEventListener("change", function (evt) {
+	displayImportModal()
+	importFileWithImportWorker(this.value)
+    })
+    
 
+    function displayImportModal() {
 	// show modal while importing
 	var modalContainer = window.document.getElementById("importModal")
 	modalContainer.style.display = "flex"
+    }
+
+
+    function importFileWithImportWorker(pgn_file) {
 
 	var importWorker = fork(path.join(process.cwd(), '/app/importWorker.js'))
 
 	importWorker.send({
 	    importWorker : {startImport : true,
-			    pgn_file : this.value}
+			    pgn_file : pgn_file}
 	})
 
 	
@@ -148,11 +159,125 @@ module.exports = function (window) {
 	    if (msg.importWorker.completedImport) {
 		sb.confirmImport()
 	    }
-		
-	})
-	
-    })
+	    
+	})	
+    }
 
+
+    function convertFileWithImportWorker(pgn_file) {
+
+	var importWorker = fork(path.join(process.cwd(), '/app/importWorker.js'))
+
+	importWorker.send({
+	    importWorker : {startImport : true,
+			    pgn_file : pgn_file}
+	})
+
+	var game_id = 1
+	
+	importWorker.on('message', (msg) => {
+
+	    // worker has read one game
+	    if (msg.importWorker.readGame) {
+		var num_games = msg.importWorker.num_games
+		var pgnData = msg.importWorker.pgnData
+
+		var nodeInfo = {}
+		nodeInfo.nodes = msg.importWorker.nodes
+		nodeInfo.game_id = game_id
+		
+		var gameInfo = {}		
+		gameInfo.star = 0
+		gameInfo.white = pgnData['White']
+		gameInfo.elow = pgnData['WhiteElo']
+		gameInfo.black = pgnData['Black']
+		gameInfo.elob = pgnData['BlackElo']
+		gameInfo.res = sh.res_enum[pgnData['Result']]
+		gameInfo.event = pgnData['Event']
+		gameInfo.site = pgnData['Site']
+		gameInfo.round = pgnData['Round']
+		gameInfo.date = pgnData['Date']
+		gameInfo.tags = []
+		gameInfo.positions = db.getPositions(nodeInfo.nodes)
+		gameInfo.id = game_id
+
+		
+		// save to file
+		var gamesfile = '/Users/weischen/Develop/ChessFriend-Fire/DB/CFF-converted-games.json'
+		var nodesfile = '/Users/weischen/Develop/ChessFriend-Fire/DB/CFF-converted-nodes.json'
+
+		fs.appendFile(gamesfile, JSON.stringify(gameInfo, null, 2) + ',', (err) => {
+				  
+		    if (err) throw err
+		    console.log("converted game " + game_id)
+		    
+		    fs.appendFile(nodesfile, JSON.stringify(nodeInfo, null, 2) + ',', (err) => {				  
+			if (err) throw err
+			game_id += 1
+		    })
+				  
+		})
+		
+
+		// resume reading
+		importWorker.send({
+		    importWorker : {resumeImport : true}
+		})
+	    }
+
+
+	    // worker has finished reading
+	    if (msg.importWorker.completedImport) {
+		console.log("worker finished")
+	    }
+	    
+	})	
+    }
+    
+
+    // init db
+    function enableDBExport() {
+
+	var exportLink = window.document.getElementById("exportLink")
+	exportLink.onclick = async () => {
+	    try {
+		const blob = await db.db.export({prettyJson: true, progressCallback})
+		DownloadHandler(blob, "ChessFriend-Fire-export.json", "application/json")
+	    } catch (error) {
+		console.error(''+error)
+	    }
+	}
+
+
+	var convertLink = window.document.getElementById("convertLink")
+	convertLink.onclick = () => {
+	    convertFileWithImportWorker('/Users/weischen/Develop/ChessFriend-Fire/KingBaseLite2019-04.pgn')
+	}
+
+
+	var importDZ = window.document.getElementById("importDZ")
+	importDZ.ondragover = event => {
+	    event.stopPropagation()
+	    event.preventDefault()
+	    event.dataTransfer.dropEffect = 'copy'
+	}
+
+	
+	importDZ.ondrop = async ev => {
+
+	    ev.stopPropagation()
+	    ev.preventDefault()
+
+	    const file = ev.dataTransfer.files[0]
+	    db.importDB(file)
+	}
+	    
+	
+	function progressCallback ({totalRows, completedRows}) {
+	    console.log(`Progress: ${completedRows} of ${totalRows} rows completed`)
+	}
+	
+    }    
 
     // display chessboard
     var boardState = new BoardStateHandler(window)
@@ -625,6 +750,7 @@ module.exports = function (window) {
     module.createSaveBtn = createSaveBtn
     module.createEngineSettingsMenu = createEngineSettingsMenu
     module.makeSettingsConfirmable = makeSettingsConfirmable
+    module.enableDBExport = enableDBExport
     
     return module
 }

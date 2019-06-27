@@ -27,13 +27,13 @@ ChessFriend-Fire is open source and runs on any platform.
       ```
 
 
-      2. On macOS and Linux, run the following in terminal:
+      2. On macOS, open the app from the build directory:
 
       ```bash
-      $ ./node_modules/nw/bin/nw ./src/
+      $ open ./build/ChessFriend-Fire/osx64/ChessFriend-Fire.app/
       ```
 
-      3. On Linux, if the above command does not work, you need to compile a recent version of [node.js][nodejs] for yourself. The following commands can be used to install
+      3. On Linux, you need to compile a recent version of [node.js][nodejs] for yourself. The following commands can be used to install
       ChessFriend-Fire and the latest version of node using [nvm][nvm] (tested with Ubuntu 18.04.2 LTS):
 
       ```bash
@@ -46,7 +46,6 @@ ChessFriend-Fire is open source and runs on any platform.
    3. When you run ChessFriend-Fire for the first time, click on the **Import** button and select the file `KingBaseLite2019-04.pgn` from the
    installation directory. This will import about 7000 games from [kingbase-chess.net][kingbase] into your database (duration: approx. 10min).
 
----
 
 
 ## Features

@@ -3,7 +3,6 @@
 var path = require('path')
 var PGNHandler = require(path.join(process.cwd(), 'src/app/pgn.js'))
 
-
 var errCount = {}
 
 function testPGNParser() {
@@ -35,8 +34,7 @@ function testPGNParser() {
 
 function runTests() {
 
-
-    testPGNParser(errCount)
+    testPGNParser(errCount)    
     console.log("TEST COMPLETED")
 
 }

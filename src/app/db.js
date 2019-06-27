@@ -10,6 +10,7 @@ module.exports = function (window) {
     var sh = new SettingsHandler()
     
     var Dexie = require('dexie')
+    var DexieImportExport = require('dexie-export-import')
     var db = new Dexie('ChessFriendFireDB')
     
     db.version(1).stores({
@@ -91,7 +92,7 @@ module.exports = function (window) {
     function getPositions(nodes) {
 	var positions = []
 	
-	for (var k in nodes) {
+	for (var k in nodes) {	    
 	    var pos = nodes[k]['FEN'].split(' ')[0]
 	    
 	    if (!(pos in positions) && pos != "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR") {
@@ -608,6 +609,29 @@ module.exports = function (window) {
     }
 
 
+    function importDB(file) {
+	console.log("import started")
+
+
+	//return db.delete().then(() => {
+	return db.import(file, {
+	    progressCallback
+	}).then(() => {
+	    console.log("Import complete")
+	    return db.games.count()
+	}).then( count => {
+	    console.log("New DB count: " + count)
+	    return localStorage.setItem('dbCount', count)
+	}).catch(function (e) {
+	    alert ("Error: " + (e.stack || e))
+	})
+    }
+
+    
+    function progressCallback ({totalRows, completedRows}) {
+	console.log(`Progress: ${completedRows} of ${totalRows} rows completed`)
+    }
+
     module.addGame = addGame
     module.importPGNsFromFile = importPGNsFromFile 
     module.displayDBEntries = displayDBEntries
@@ -620,6 +644,7 @@ module.exports = function (window) {
     module.pagePrev = pagePrev
     module.db = db
     module.indicateSearchOrder = indicateSearchOrder
+    module.importDB = importDB
     
     return module
 
