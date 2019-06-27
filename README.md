@@ -27,13 +27,13 @@ ChessFriend-Fire is open source and runs on any platform.
       ```
 
 
-      2. On macOS, open the app from the build directory:
+      2. On macOS and Linux, run the following in terminal:
 
       ```bash
-      $ open ./build/ChessFriend-Fire/osx64/ChessFriend-Fire.app/
+      $ ./node_modules/nw/bin/nw ./src/
       ```
 
-      3. On Linux, you need to compile a recent version of [node.js][nodejs] for yourself. The following commands can be used to install
+      3. On Linux, if the command above does not work, you need to compile a recent version of [node.js][nodejs] for yourself. The following commands can be used to install
       ChessFriend-Fire and the latest version of node using [nvm][nvm] (tested with Ubuntu 18.04.2 LTS):
 
       ```bash
