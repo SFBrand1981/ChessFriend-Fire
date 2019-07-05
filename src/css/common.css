@@ -132,6 +132,7 @@ body {
 .sidebarItem:hover {
     background-color: var(--base3-color);
     color: var(--base8-color);
+    cursor: pointer;
 }
 
 .sidebarItem:hover .liText {
@@ -287,6 +288,7 @@ body {
 
 .db-entries th span:hover {
     color: var(--base8-color);
+    cursor: pointer;
  }
 
 .db-entries th span:hover:after {
@@ -304,6 +306,7 @@ body {
 .db-entries tbody tr:hover {
     box-shadow: 0 0 8px -2px var(--base0-color);
     color: var(--base8-color);
+    cursor: pointer;
 }
 
 .db-entry-player {
@@ -638,6 +641,7 @@ body {
 
 .boardControlContainer div:hover {
     color: var(--base8-color);
+    cursor: pointer;
 }
 
 .boardSTM {
@@ -748,6 +752,7 @@ body {
 .btn:hover {
     box-shadow: 0 0 8px -2px var(--yellow1-color);
     color: var(--base8-color);
+    cursor: pointer;
 }
 
 .filtering {
@@ -756,14 +761,17 @@ body {
 
 #filterBtn:hover {
     color: var(--base8-color);
+    cursor: pointer;
 }
 
 #paginateNext:hover {
     color: var(--base8-color);
+    cursor: pointer;
 }
 
 #paginatePrev:hover {
     color: var(--base8-color);
+    cursor: pointer;
 }
 
 /* Engine */
@@ -889,8 +897,13 @@ body {
     color: var(--base6-color);
 }
 
+.searchInfoTable tbody > tr > td:first-child {
+    width: 18px;
+}
+
 .selectable:hover {
     color: var(--base8-color);
+    cursor: pointer;
 }
 
 .actionSelected {
@@ -919,6 +932,7 @@ body {
 .searchInfoSelect:hover {
     box-shadow: 0 0 8px -2px var(--base0-color);
     color: var(--base8-color);
+    cursor: pointer;
 }
 
 .searchInfoInput {
@@ -1206,4 +1220,36 @@ div.awesomplete {
 
 .dropzone a:hover {
     color: var(--base8-color);
+}
+
+/* DB init */
+
+.dbInitBtnContainer {
+    margin-top: 16px;
+    display: flex;
+    justify-content: center;
+}
+
+.dbInitContainer {
+    margin-left: 8px;
+    margin-right: 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    box-sizing:border-box;
+    min-height: 200px;
+}
+
+.dbInitTable {
+    border-collapse: collapse;
+    width: 100%;
+    color: var(--base6-color);
+}
+
+.dbInitTable tbody > tr > td:first-child {
+    width: 18px;
+}
+
+.dbInitTable td {
+    padding: 4px;
 }

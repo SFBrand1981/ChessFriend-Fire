@@ -613,11 +613,17 @@ module.exports = function (window) {
 	console.log("import started")
 
 
-	//return db.delete().then(() => {
-	return db.import(file, {
-	    progressCallback
+	return db.games.clear().then(() => {
+	    return db.nodes.clear()
+	}).then(() => {
+	    return db.import(file, {progressCallback})
 	}).then(() => {
 	    console.log("Import complete")
+
+	    var importCompletedEvt = new CustomEvent("importCompletedEvt", {
+	    })
+	    window.document.dispatchEvent(importCompletedEvt)
+	    
 	    return db.games.count()
 	}).then( count => {
 	    console.log("New DB count: " + count)
@@ -630,6 +636,9 @@ module.exports = function (window) {
     
     function progressCallback ({totalRows, completedRows}) {
 	console.log(`Progress: ${completedRows} of ${totalRows} rows completed`)
+	
+	var importStatusBar = window.document.getElementById('importStatusBar')
+	importStatusBar.innerHTML = 'Imported ' + parseInt(completedRows/2).toString() + ' games'
     }
 
     module.addGame = addGame
@@ -645,6 +654,7 @@ module.exports = function (window) {
     module.db = db
     module.indicateSearchOrder = indicateSearchOrder
     module.importDB = importDB
+    module.progressCallback = progressCallback
     
     return module
 

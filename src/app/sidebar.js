@@ -43,7 +43,6 @@ module.exports = function (window) {
 	createSidebarElement(container, "Games")
 	createSidebarElement(container, "Import")
 	createSidebarElement(container, "Setup position")
-	createSidebarElement(container, "DB init")
 
 
 	// sidebar separator
@@ -59,18 +58,12 @@ module.exports = function (window) {
 	gamesBtn.addEventListener('click', function(e) {
 	    window.open('/views/main.html', '_self')
 	})
-				  
-	
-	var importBtn = window.document.getElementById('Import')
-	importBtn.addEventListener('click', function(e) {
 
-	    setActiveSidebarItem('Import')
-	    
-	    var event = new CustomEvent("sidebarImportEvt", {
-	    	detail: {}
-	    })
-	    window.document.dispatchEvent(event)
-	})
+	
+	var dbImportBtn = window.document.getElementById('Import')
+	dbImportBtn.addEventListener('click', function(e) {
+	    window.open('/views/import.html', '_self')
+	})	
 
 
 	var setupBtn = window.document.getElementById('Setup position')
@@ -78,11 +71,6 @@ module.exports = function (window) {
 	    window.open('/views/search.html', '_self')
 	})
 
-
-	var dbInitBtn = window.document.getElementById('DB init')
-	dbInitBtn.addEventListener('click', function(e) {
-	    window.open('/views/dbInit.html', '_self')
-	})
 
 	// event listeners
 	window.document.addEventListener('gameEditedEvt', function(evt) {
@@ -101,6 +89,11 @@ module.exports = function (window) {
 		var sidebarItem = window.document.getElementById(game_id)
 		sidebarItem.insertAdjacentHTML('afterbegin', '*')
 	    }
+	})
+
+
+	window.document.addEventListener('importCompletedEvt', function(evt) {
+	    confirmImport()
 	})
 	
     }
@@ -147,12 +140,19 @@ module.exports = function (window) {
 	importModal.appendChild(importModalContent)	
 	window.document.body.appendChild(importModal)
 
-	var fileDialog = document.createElement('input')
-	fileDialog.style.display = 'none'
-	fileDialog.type = 'file'
-	fileDialog.accept = '.pgn'
-	fileDialog.id = 'fileDialog'
-	window.document.body.appendChild(fileDialog)
+	var importPGNDialog = document.createElement('input')
+	importPGNDialog.style.display = 'none'
+	importPGNDialog.type = 'file'
+	importPGNDialog.accept = '.pgn'
+	importPGNDialog.id = 'importPGNDialog'
+	window.document.body.appendChild(importPGNDialog)
+
+	var importJSONDialog = document.createElement('input')
+	importJSONDialog.style.display = 'none'
+	importJSONDialog.type = 'file'
+	importJSONDialog.accept = '.json'
+	importJSONDialog.id = 'importJSONDialog'
+	window.document.body.appendChild(importJSONDialog)
     }
 
     

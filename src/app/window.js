@@ -88,17 +88,25 @@ module.exports = function (window) {
     
 
     // import games from PGN file
-    var fileDialog = window.document.getElementById("fileDialog")
+
     window.document.addEventListener("sidebarImportEvt", function(evt) {
-	fileDialog.click()
+
     })
     
-    
-    fileDialog.addEventListener("change", function (evt) {
+
+    var importPGNDialog = window.document.getElementById("importPGNDialog")
+    importPGNDialog.addEventListener("change", function (evt) {
 	displayImportModal()
 	importFileWithImportWorker(this.value)
     })
-    
+
+
+    var importJSONDialog = window.document.getElementById("importJSONDialog")
+    importJSONDialog.addEventListener("change", function (evt) {
+	displayImportModal()
+	db.importDB(this.files[0])
+    })
+
 
     function displayImportModal() {
 	// show modal while importing
@@ -206,12 +214,14 @@ module.exports = function (window) {
 		var gamesfile = '/Users/weischen/Develop/ChessFriend-Fire/DB/CFF-converted-games.json'
 		var nodesfile = '/Users/weischen/Develop/ChessFriend-Fire/DB/CFF-converted-nodes.json'
 
-		fs.appendFile(gamesfile, JSON.stringify(gameInfo, null, 2) + ',', (err) => {
+		var separator = (game_id == 1) ? '' : ',' 
+		    
+		fs.appendFile(gamesfile, separator + JSON.stringify(gameInfo, null, 2), (err) => {
 				  
 		    if (err) throw err
 		    console.log("converted game " + game_id)
 		    
-		    fs.appendFile(nodesfile, JSON.stringify(nodeInfo, null, 2) + ',', (err) => {				  
+		    fs.appendFile(nodesfile, separator + JSON.stringify(nodeInfo, null, 2) , (err) => {				  
 			if (err) throw err
 			game_id += 1
 		    })
@@ -238,8 +248,71 @@ module.exports = function (window) {
     // init db
     function enableDBExport() {
 
-	var exportLink = window.document.getElementById("exportLink")
-	exportLink.onclick = async () => {
+
+	setActiveSidebarItem("Import")
+	var actionSelected = "importPGN"
+	
+	var importPGNBtn = window.document.getElementById("importPGNSelected")
+	var importJSONBtn = window.document.getElementById("importJSONSelected")
+	var exportJSONBtn = window.document.getElementById("exportJSONSelected")
+	var confirmImportBtn = window.document.getElementById("confirmImportBtn")
+
+	
+	function removeSearchSelected() {
+	    var q = window.document.querySelectorAll(".actionSelected")
+	    for (var i = 0, len = q.length; i < len; i ++) {
+		q[i].classList.remove("actionSelected")
+	    }
+
+	    var s = window.document.querySelectorAll(".selectable")
+	    for (var i = 0, len = s.length; i < len; i ++) {
+		s[i].firstElementChild.innerHTML = '<i class="fa">&#xf10c;</i>'
+	    }
+	}
+	
+
+	importPGNBtn.addEventListener('click', function(e) {
+	    removeSearchSelected()
+	    this.firstElementChild.innerHTML = '<i class="fa">&#xf192;</i>'
+	    this.classList.add('actionSelected')
+	    actionSelected = "importPGN"
+	})
+
+
+	importJSONBtn.addEventListener('click', function(e) {
+	    removeSearchSelected()
+	    this.firstElementChild.innerHTML = '<i class="fa">&#xf192;</i>'
+	    this.classList.add('actionSelected')
+	    actionSelected = "importJSON"
+	})
+
+	
+	exportJSONBtn.addEventListener('click', function(e) {
+	    removeSearchSelected()
+	    this.firstElementChild.innerHTML = '<i class="fa">&#xf192;</i>'
+	    this.classList.add('actionSelected')
+	    actionSelected = "exportJSON"
+	})
+
+	
+	confirmImportBtn.addEventListener('click', function(e) {
+
+	    switch (actionSelected) {
+	    case "importPGN":
+		importPGNDialog.click()
+		break
+	    case "importJSON":
+		importJSONDialog.click()
+		break
+	    case "exportJSON":
+		exportDB()
+		break
+	    default:
+		console.log(actionSelected)
+	    }
+	})
+
+	async function exportDB() {
 	    try {
 		const blob = await db.db.export({prettyJson: true, progressCallback})
 		DownloadHandler(blob, "ChessFriend-Fire-export.json", "application/json")
@@ -247,34 +320,17 @@ module.exports = function (window) {
 		console.error(''+error)
 	    }
 	}
-
-
-	var convertLink = window.document.getElementById("convertLink")
-	convertLink.onclick = () => {
-	    convertFileWithImportWorker('/Users/weischen/Develop/ChessFriend-Fire/KingBaseLite2019-04.pgn')
-	}
-
-
-	var importDZ = window.document.getElementById("importDZ")
-	importDZ.ondragover = event => {
-	    event.stopPropagation()
-	    event.preventDefault()
-	    event.dataTransfer.dropEffect = 'copy'
-	}
-
 	
-	importDZ.ondrop = async ev => {
 
-	    ev.stopPropagation()
-	    ev.preventDefault()
+	// var convertLink = window.document.getElementById("convertLink")
+	// convertLink.onclick = () => {
+	//     convertFileWithImportWorker('/Users/weischen/Develop/ChessFriend-Fire/DB/without_blitz.pgn')
+	// }
 
-	    const file = ev.dataTransfer.files[0]
-	    db.importDB(file)
-	}
 	    
 	
 	function progressCallback ({totalRows, completedRows}) {
-	    console.log(`Progress: ${completedRows} of ${totalRows} rows completed`)
+	    return db.progressCallback({totalRows, completedRows})
 	}
 	
     }    
