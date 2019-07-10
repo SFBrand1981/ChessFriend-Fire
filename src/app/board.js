@@ -7,7 +7,7 @@ module.exports = function () {
 	flipped : false,
 	hlSquares : [], // e.g. ['e4', 'c5']
 	FEN : "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
-	curNodeIndx : '(0)',
+	curNodeIndx : '1z',
 	nodes : {},
 	id : undefined
     }

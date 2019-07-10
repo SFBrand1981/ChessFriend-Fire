@@ -5,6 +5,7 @@ module.exports = function (window) {
     var BoardStateHandler = require(path.join(process.cwd(), '/app/boardState.js'))
     var DBHandler = require(path.join(process.cwd(), '/app/db.js'))
 
+    
     var bh = new BoardStateHandler(window)
     var db = new DBHandler(window)
     

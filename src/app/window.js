@@ -118,7 +118,7 @@ module.exports = function (window) {
     function importFileWithImportWorker(pgn_file) {
 
 	var importWorker = fork(path.join(process.cwd(), '/app/importWorker.js'))
-
+	
 	importWorker.send({
 	    importWorker : {startImport : true,
 			    pgn_file : pgn_file}

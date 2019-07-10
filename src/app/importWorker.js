@@ -48,15 +48,16 @@ var pgn
 var num_games
 
 function sendGameInfo() {
-    
+
     var pgnData = ph.parsePGNData(pgn)
     var nodes = ph.pgnMovesToNodes(pgnData['Moves'], pgnData['FEN'])
     
     process.send({
-	importWorker : {readGame : true,
-			num_games : num_games,
-			pgnData: pgnData,
-			nodes: nodes}
+	
+     	importWorker : {readGame : true,
+     			num_games : num_games,
+     			pgnData: pgnData,
+     			nodes: nodes}
     })
 }
 

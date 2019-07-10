@@ -5,6 +5,8 @@ module.exports = function () {
     var path = require('path')
     var Chess = require('chess.js').Chess
 
+    var LabelHandler = require(path.join(process.cwd(), '/app/labels.js'))
+    var lh = new LabelHandler()
 
     var HTMLIndentLevel = 5
 
@@ -145,26 +147,27 @@ module.exports = function () {
     }
 
     function pgnMovesToNodes(pgnMoves, startFEN) {
-
+	
 	var chess = new Chess()
 	var moves = pgnMoves.split(/\s/)
 
 	// init
 	var nodes = {}
-	var parentIndx = '(0)'
-	var curIndx = '(0)(0)'
+	var parentIndx = lh.rootNode()
+	var curIndx = lh.getNextMainlineIndx(lh.rootNode())
 	var branchIndx = {}
 	var branchLevel = 0
-	var commentIndx = '(0)(0)'
+	var commentIndx = lh.getNextMainlineIndx(lh.rootNode())
 
+	
 	// init root node
-	nodes['(0)'] = {}
-	nodes['(0)']['children'] = []
-	nodes['(0)']['branchLevel'] = 0
-	nodes['(0)']['FEN'] = startFEN ?
+	nodes[lh.rootNode()] = {}
+	nodes[lh.rootNode()]['children'] = []
+	nodes[lh.rootNode()]['branchLevel'] = 0
+	nodes[lh.rootNode()]['FEN'] = startFEN ?
 	    startFEN : 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'
 
-	chess.load(nodes['(0)']['FEN'])
+	chess.load(nodes[lh.rootNode()]['FEN'])
 	
 	var startsWithComment = true	
 	var i = 0
@@ -243,7 +246,7 @@ module.exports = function () {
 		
 		// prepare next iteration
 		parentIndx = curIndx
-		curIndx += '(0)' // superfluous nodes may be created, delete them later
+		curIndx = lh.getNextMainlineIndx(curIndx) // superfluous nodes may be created, delete them later
 
 		i += 1
 		continue
@@ -256,7 +259,7 @@ module.exports = function () {
 		parentIndx = nodes[branchIndx[branchLevel]]['parentIndx']
 
 		var numSiblings = nodes[parentIndx]['children'].length
-		curIndx = parentIndx + '(' + numSiblings.toString() + ')'
+		curIndx = lh.getNextSiblingIndx(parentIndx, numSiblings)
 		commentIndx = curIndx
 		i += 1
 		continue
@@ -266,7 +269,7 @@ module.exports = function () {
 	    if (moves[i] == ')') {
 		startsWithComment = true
 		parentIndx = branchIndx[branchLevel]
-		curIndx = parentIndx + '(0)'
+		curIndx = lh.getNextMainlineIndx(parentIndx)
 		commentIndx = curIndx
 		branchLevel -= 1
 		i += 1
@@ -279,7 +282,7 @@ module.exports = function () {
 	var keys = Object.keys(nodes)
 	for (var k = 0; k < keys.length; k++) {
 
-	    if (keys[k] == '(0)') {
+	    if (keys[k] == lh.rootNode()) {
 		continue
 	    }
 	    
@@ -303,7 +306,7 @@ module.exports = function () {
 	}
 
 	
-	var childIndx = parseInt(nodeIndx.match(/\((\d*)\)$/)[1])
+	var childIndx = lh.getChildIndx(nodeIndx)
 	var branchIndx = nodes[nodeIndx]['parentIndx']
 
 	
@@ -322,14 +325,14 @@ module.exports = function () {
 	    while(nodes[branchIndx]['branchLevel'] != branchLevel-1) {
 
 		
-		childIndx = parseInt(branchIndx.match(/\((\d*)\)$/)[1])
+		childIndx = lh.getChildIndx(branchIndx)
 		branchIndx = nodes[branchIndx]['parentIndx']
 		branchSAN = nodes[branchIndx]['SAN']
 	    }
 
 	    var numBranches = nodes[branchIndx]['children'].length
 
-	    if (nodes[branchIndx + '(0)(0)']) {
+	    if (nodes[lh.getNextMainlineIndx(lh.getNextMainlineIndx(branchIndx))]) {
 		// mainline continues after branch node
 		return {num: numClosed, isLast: false}
 
@@ -373,7 +376,8 @@ module.exports = function () {
 	}
 
 	var numSiblings = nodes[branchIndx]['children'].length - 1
-	var siblingIndx = parseInt(childIndx.match(/\((\d*)\)$/)[1])
+	var siblingIndx = lh.getChildIndx(childIndx)
+
 
 	return {numSiblings: numSiblings, siblingIndx: siblingIndx}
     }
@@ -395,8 +399,8 @@ module.exports = function () {
 
 	
 	// root node
-	if (nodeIndx === '(0)') {
-	    rv += '<div class="notation branchLevel0"><span id="(0)"></span>'
+	if (nodeIndx === lh.rootNode()) {
+	    rv += '<div class="notation branchLevel0"><span id="' + lh.rootNode() + '"></span>'
 	}
 
 	// continuation after comment
@@ -443,7 +447,7 @@ module.exports = function () {
 	    displayMvNr = true
 	}
 
-	if (nodeIndx !== '(0)' && sideToMove === 'b') {
+	if (nodeIndx !== lh.rootNode() && sideToMove === 'b') {
 	    displayMvNr = true
 	}
 
@@ -451,7 +455,7 @@ module.exports = function () {
 	// move number
 	rv += '<span id="mvNr' + nodeIndx + '">'
 	
-	if (displayMvNr === true || nodeIndx === '(0)(0)') {
+	if (displayMvNr === true || nodeIndx === lh.getNextMainlineIndx(lh.rootNode())) {
 	    
 	    if (sideToMove === 'b') {
 		rv += mvNr + '.'
@@ -589,7 +593,7 @@ module.exports = function () {
 	    }
 
 	    
-	    var mainlineIndx = indx + '(0)'
+	    var mainlineIndx = lh.getNextMainlineIndx(indx)
 
 	    if (nodes[mainlineIndx] != undefined && !seenNodes.includes(mainlineIndx)) {
 		formatFunc(mainlineIndx)
@@ -599,7 +603,7 @@ module.exports = function () {
 
 	    var i = 1
 	    while (true) {
-		var childIndx = indx + '(' + i.toString() + ')'
+		var childIndx = lh.getNextSiblingIndx(indx, i)
 		if (nodes[childIndx] != undefined) {
 		    parseNode(childIndx)
 		} else {
@@ -616,7 +620,7 @@ module.exports = function () {
 	}
 	
 	// start with root node
-	parseNode('(0)')
+	parseNode(lh.rootNode())
 	
     }
     
@@ -699,14 +703,14 @@ module.exports = function () {
 	if (startBold) {
 	    rv += '{\\bf '
 	} else {
-	    if (nodeIndx == '(0)(0)') {
+	    if (nodeIndx == lh.getNextMainlineIndx(lh.rootNode())) {
 		rv += '{\\bf '
 	    }
 	}
 	
 
 	// move number
-	if (displayMvNr === true || nodeIndx === '(0)(0)') {
+	if (displayMvNr === true || nodeIndx === lh.getNextMainlineIndx(lh.rootNode())) {
 	    rv += mvDesc
 	}
 

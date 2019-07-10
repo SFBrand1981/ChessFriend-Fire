@@ -15,6 +15,10 @@ module.exports = function (window) {
 
     var SettingsHandler = require(path.join(process.cwd(), '/app/settings.js'))
     var sh = new SettingsHandler()
+
+    var LabelHandler = require(path.join(process.cwd(), '/app/labels.js'))
+    var lh = new LabelHandler()
+
     
     function triggerGameEditedEvent(game_id) {
 	var gameEditedEvent = new CustomEvent("gameEditedEvt", {
@@ -37,12 +41,12 @@ module.exports = function (window) {
 	    displayNotation()
 	    
 	    // display board
-	    currentBoard.FEN = nodes['(0)'].FEN
+	    currentBoard.FEN = nodes[lh.rootNode()].FEN
 	    displayFEN(currentBoard.FEN, false)
 
 	    // broadcast initial position
 	    var boardInitializedEvent = new CustomEvent("boardInitializedEvt", {
-		detail: { FEN : nodes['(0)'].FEN }
+		detail: { FEN : nodes[lh.rootNode()].FEN }
 	    })
 	    window.document.dispatchEvent(boardInitializedEvent)
 
@@ -107,7 +111,7 @@ module.exports = function (window) {
 	// make container selectable
 	PGNContainer.addEventListener('click', function (evt) {
 	    if (evt.target.classList.contains('notation')) {
-		currentBoard = selectMove('(0)')
+		currentBoard = selectMove(lh.rootNode())
 		sessionStorage.setItem(currentBoard.id, JSON.stringify(currentBoard))
 	    }
 	})
@@ -443,7 +447,7 @@ module.exports = function (window) {
 	}
 
 	// scroll into view
-	if (nodeIndx != '(0)' && !tools.isScrolledIntoView(selectedMove)) {
+	if (nodeIndx != lh.rootNode() && !tools.isScrolledIntoView(selectedMove)) {
 	    selectedMove.scrollIntoView({block: 'center'})
 	}
 
@@ -491,7 +495,7 @@ module.exports = function (window) {
 
     
     function insertMove(board, sq_start, sq_stop) {
-
+	
 	var newBoard = bh.copyBoard(board)
 	newBoard.hlSquares[0] = sq_start
 	newBoard.hlSquares[1] = sq_stop
@@ -540,9 +544,10 @@ module.exports = function (window) {
 	    }
 	}
 
+
 	// insert new move
 	var curNode = currentBoard.nodes[currentBoard.curNodeIndx]
-	var newNodeIndx = newBoard.curNodeIndx + '(' + children.length + ')'
+	var newNodeIndx = lh.getNextSiblingIndx(newBoard.curNodeIndx, children.length)
 	newBoard.hlSquares = []
 	newBoard.FEN = fen
 	newBoard.curNodeIndx = newNodeIndx
@@ -560,6 +565,7 @@ module.exports = function (window) {
 	    newBoard.nodes[newNodeIndx]['branchLevel'] = curNode['branchLevel'] + 1
 	}
 
+	
 	clearHighlightedSquares()
 	displayNotation()
 	selectMove(newNodeIndx)
@@ -1069,9 +1075,9 @@ module.exports = function (window) {
 
     function nextMove() {
 	// select next move from child nodes
-	var childNode = currentBoard.nodes[currentBoard.curNodeIndx]['children'].sort()[0]
-	if(childNode) {
-	    currentBoard = selectMove(childNode)
+	var nextNode = lh.getNextMainlineIndx(currentBoard.curNodeIndx)
+	if(currentBoard.nodes[nextNode]) {
+	    currentBoard = selectMove(nextNode)
 	    sessionStorage.setItem(currentBoard.id, JSON.stringify(currentBoard))
 	}
     }
@@ -1125,39 +1131,17 @@ module.exports = function (window) {
     }
 
 
-    function getBranchNode(selectedNode) {
-
-	var branchNode = selectedNode
-	var branchIndx = branchNode.match(/\((\d*)\)$/)[1]
-
-	while (branchIndx == "0") {
-	    branchNode = branchNode.replace(/\(\d*\)$/, '')
-	    
-	    // branchNode is already mainline
-	    if (branchNode == "") {
-		return
-	    }
-	    
-	    branchIndx = branchNode.match(/\((\d*)\)$/)[1]
-	}
-
-	return branchNode.replace(/\(\d*\)$/, '(0)')
-
-    }
-
-
-    function getSplitIndx(branchNode, selectedNode) {
-	var splitIndx = 0
-	for (var i = 0; i < branchNode.split(")(").length; i++) {
-	    if (branchNode.split(")(")[i] !== selectedNode.split(")(")[i]) {
-		splitIndx = i
-		break
-	    }
+    function getSplitIndx(nodeIndx, branchNode) {
+	
+	var splitIndx = nodeIndx
+	
+	while (nodes[splitIndx]['parentIndx'] != branchNode) {
+	    splitIndx = nodes[splitIndx]['parentIndx']
 	}
 	
 	return splitIndx
     }
-
+    
     
     function escapeRegExp(string) {
 	return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
@@ -1167,98 +1151,70 @@ module.exports = function (window) {
     function promoteVariation(board) {
 
 	var selectedNode = board.curNodeIndx	
-	var branchNode = getBranchNode(selectedNode)
-	
-	var splitIndx = getSplitIndx(branchNode, selectedNode)
-	var replStr = selectedNode.split(")(").slice(0, splitIndx + 1).join(")(")
-	if (!replStr.endsWith(')')) {
-	    replStr += ')'
+	var branchNode = lh.getBranchNode(selectedNode)
+	var newCurIndx 
+
+	var splitIndx = selectedNode
+	while (board.nodes[splitIndx]['parentIndx'] != board.nodes[branchNode]['parentIndx']) {
+	    splitIndx = board.nodes[splitIndx]['parentIndx']
 	}
+	
+
+	function addOtherNodes(nodeIndx) {
+	    if (nodeIndx != branchNode && nodeIndx != splitIndx) {
+		newNodes[nodeIndx] = board.nodes[nodeIndx]
+
+		var children = board.nodes[nodeIndx]['children']
+		for (var i = 0, len = children.length; i < len; i++) {
+		    addOtherNodes(children[i])
+		}
+	    }
+	}
+
 
 	var newNodes = {}
-	var newCurNodeIndx = '(0)'
-	var branchLevelDelta = board.nodes[replStr]['branchLevel']
-	    - board.nodes[branchNode]['branchLevel']
-	
-	// swap nodes:	
-	for (key in board.nodes) {
+	addOtherNodes(lh.rootNode())
 
-	    if (key.startsWith(branchNode)) {
-		// branchNode => replStr
-		var re = new RegExp('^' + escapeRegExp(branchNode))
-		var newKey = key.replace(re, replStr)
-		newNodes[newKey] = board.nodes[key]
-		
-	    } else if (key.startsWith(replStr)) {
-		// replStr => branchNode
-		var re = new RegExp('^' + escapeRegExp(replStr))
-		var newKey = key.replace(re, branchNode)
-		newNodes[newKey] = board.nodes[key]
 
-		if (key == selectedNode) {
-		    newCurNodeIndx = newKey
-		}
+	function renameNode(oldIndx, newIndx, newParentIndx, branchLevelDelta) {
 
-	    } else {
-		newNodes[key] = board.nodes[key]
+	    newNodes[newIndx] = board.nodes[oldIndx]
+	    newNodes[newIndx]['branchLevel'] += branchLevelDelta
+	    newNodes[newIndx]['parentIndx'] = newParentIndx
+
+	    if (oldIndx == selectedNode) {
+		newCurIndx = newIndx
 	    }
-
-	}
-
-
-	for (key in newNodes) {
-
-	    if (key.startsWith(branchNode)) {
-		// branchNode => replStr
-		var re = new RegExp('^' + escapeRegExp(branchNode))
-		var newKey = key.replace(re, replStr)
-		newNodes[key]['branchLevel'] = board.nodes[newKey]['branchLevel'] - branchLevelDelta
-		
-	    } else if (key.startsWith(replStr)) {
-		// replStr => branchNode
-		var re = new RegExp('^' + escapeRegExp(replStr))
-		var newKey = key.replace(re, branchNode)
-		newNodes[key]['branchLevel'] = board.nodes[newKey]['branchLevel'] + branchLevelDelta
-	    }
-
 	    
-	    var children = newNodes[key]['children']
+	    var mainlineContinuation = lh.getNextMainlineIndx(oldIndx)	  
+	    var children = board.nodes[oldIndx]['children']
 	    var newChildren = []
+	    
 	    for (var i = 0, len = children.length; i < len; i++) {
-
-		if (children[i].startsWith(branchNode)) {
-		    var re = new RegExp('^' + escapeRegExp(branchNode))
-		    newChildren.push(children[i].replace(re, replStr))
-		    
-		} else if (children[i].startsWith(replStr)) {
-		    var re = new RegExp('^' + escapeRegExp(replStr))
-		    newChildren.push(children[i].replace(re, branchNode))
-
-		} else {
-		    newChildren.push(children[i])
-		}
 		
-	    }
-	    newNodes[key]['children'] = newChildren
-
-	    if (newNodes[key]['parentIndx']) {
-		if (newNodes[key]['parentIndx'].startsWith(branchNode)) {
-	    	    var re = new RegExp('^' + escapeRegExp(branchNode))
-	    	    newNodes[key]['parentIndx'] = newNodes[key]['parentIndx'].replace(re, replStr)
-		    
-		} else if (newNodes[key]['parentIndx'].startsWith(replStr)) {
-	    	    var re = new RegExp('^' + escapeRegExp(replStr))
-	    	    newNodes[key]['parentIndx'] = newNodes[key]['parentIndx'].replace(re, branchNode)
-		    
+		if (children[i] == mainlineContinuation) {
+		    newChildren.push(lh.getNextMainlineIndx(newIndx))
+		    renameNode(mainlineContinuation, lh.getNextMainlineIndx(newIndx), newIndx, branchLevelDelta)
+		} else {
+		    var newChildIndx = newIndx + lh.getChildIndx(children[i]) + 'n'
+		    newChildren.push(newChildIndx)
+		    renameNode(children[i], newChildIndx, newIndx, branchLevelDelta)
 		}
 	    }
+
+	    newNodes[newIndx]['children'] = newChildren
 	    
 	}
+
+
+	renameNode(branchNode, splitIndx, board.nodes[branchNode]['parentIndx'], +1)
+	renameNode(splitIndx, branchNode, board.nodes[branchNode]['parentIndx'], -1)
+
 
 	var newBoard = bh.copyBoard(board)
 	newBoard.nodes = newNodes
-	newBoard.curNodeIndx = newCurNodeIndx
-	
+	newBoard.curNodeIndx = newCurIndx
+
 	return newBoard
     }
     
@@ -1283,82 +1239,69 @@ module.exports = function (window) {
 
 	var selectedNode = board.curNodeIndx
 	
-	if (selectedNode === '(0)') {
+	if (selectedNode === lh.rootNode()) {
 	    return
 	}
 
+	
+	function addOtherNodes(nodeIndx) {
+	    if (nodeIndx != selectedNode) {
+		newNodes[nodeIndx] = board.nodes[nodeIndx]
+		
+		var children = board.nodes[nodeIndx]['children']
+		for (var i = 0, len = children.length; i < len; i++) {
+		    addOtherNodes(children[i])
+		}
+	    }
+	}
+
+
+	var newNodes = {}
+	addOtherNodes(lh.rootNode())
+
+
 	// remove node from its parent
 	var parentIndx = board.nodes[selectedNode]['parentIndx']
-	var childrenOfParent = board.nodes[parentIndx]['children']
-	var childIndx = childrenOfParent.indexOf(selectedNode)
-	if (childIndx > -1) {
-	    childrenOfParent.splice(childIndx, 1)
+	var siblings = board.nodes[parentIndx]['children']
+	var newSiblings = []
+	
+	for (var i = 0, len = siblings.length - 1; i < len; i++) {
+	    newSiblings.push(lh.getNextSiblingIndx(parentIndx, i))
+	}
+	newNodes[parentIndx]['children'] = newSiblings
+	
+
+	// rename siblings
+	for (var i = lh.getChildIndx(selectedNode) + 1, len = siblings.length; i < len; i++) {
+
+	    var branchLevelDelta = (i == 1) ? -1 : 0
+	    renameSibling(lh.getNextSiblingIndx(parentIndx, i),
+			  lh.getNextSiblingIndx(parentIndx, i-1),
+			  branchLevelDelta,
+			  parentIndx)
 	}
 	
-	var newNodes = {}
-	for (key in board.nodes) {
-	    if (key.startsWith(selectedNode)) {
-		continue
-	    } else {
-		newNodes[key] = board.nodes[key]
+
+	function renameSibling(oldIndx, newIndx, branchLevelDelta, parentIndx) {
+
+	    delete newNodes[oldIndx]
+	    newNodes[newIndx] = board.nodes[oldIndx]
+	    newNodes[newIndx]['parentIndx'] = parentIndx
+	    newNodes[newIndx]['branchLevel'] += branchLevelDelta
+
+	    var children = board.nodes[oldIndx]['children']
+	    var newChildren = []
+	    
+	    for (var i = 0, len = children.length; i < len; i++) {
+		var newChildIndx = lh.getNextSiblingIndx(newIndx, i)
+		newChildren.push(newChildIndx)
+		renameSibling(children[i], newChildIndx, branchLevelDelta, newIndx)
 	    }
+
+	    newNodes[newIndx]['children'] = newChildren
+	    
 	}
 
-	// adjust indices
-	var adjustIndx = parseInt(selectedNode.match(/\((\d*)\)$/)[1])
-	var adjustKey = parentIndx + '(' + (1+adjustIndx).toString() + ')'
-	var replKey = parentIndx + '(' + adjustIndx.toString() + ')'
-	
-	while(board.nodes[adjustKey]) {
-
-	    // replace all occurences of adjustKey with replKey
-	    for (key in newNodes) {
-
-		// replace adjustKey in children of newNodes
-		var children = newNodes[key]['children']
-		for (var i = 0, len = children.length; i < len; i++) {
-		    if (children[i].startsWith(adjustKey)) {
-			var re = new RegExp('^' + escapeRegExp(adjustKey))
-			children[i] = children[i].replace(re, replKey)
-		    }
-		}
-
-		// replace adjustKey in parents of newNodes
-		if (newNodes[key]['parentIndx'] && key.startsWith(adjustKey)) {
-	    	    var re = new RegExp('^' + escapeRegExp(adjustKey))
-	    	    newNodes[key]['parentIndx'] = newNodes[key]['parentIndx'].replace(re, replKey)
-		}
-
-	    }
-
-	    for (key in newNodes) {
-		// replace adjustKey in keys 
-		if (key.startsWith(adjustKey)) {
-		    var re = new RegExp('^' + escapeRegExp(adjustKey))
-		    var newKey = key.replace(re, replKey)
-		    newNodes[newKey] = newNodes[key]
-		    delete newNodes[key]
-		}
-		
-	    }
-	    
-	    
-	    // when stripping main line, promote first child to new main line
-	    if (adjustIndx == 0) {
-		for (key in newNodes) {
-		    if (key.startsWith(replKey)) {
-			newNodes[key].branchLevel -= 1
-		    }
-		}
-	    }
-	    
-	    
-	    adjustIndx += 1
-	    adjustKey = parentIndx + '(' + (1+adjustIndx).toString() + ')'
-	    replKey = parentIndx + '(' + adjustIndx.toString() + ')'
-	}
-	
-	
 	
 	var newBoard = bh.copyBoard(board)
 	newBoard.nodes = newNodes
@@ -1394,7 +1337,7 @@ module.exports = function (window) {
 	newComment.classList.add(type)
 
 	// startComment of first node is comment
-	if (currentBoard.curNodeIndx == '(0)') {
+	if (currentBoard.curNodeIndx == lh.rootNode()) {
 	    type = 'comment'
 	}
 

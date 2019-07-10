@@ -623,6 +623,7 @@ body {
 .selectableMove:hover {
     color: var(--base1-color);
     background-color: var(--base8-color);
+    cursor: pointer;
 }
 
 .boardControlContainer {
