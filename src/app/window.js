@@ -124,6 +124,8 @@ module.exports = function (window) {
 			    pgn_file : pgn_file}
 	})
 
+	var starttime = Date.now()
+	console.log(starttime)
 	
 	importWorker.on('message', (msg) => {
 
@@ -165,6 +167,7 @@ module.exports = function (window) {
 
 	    // worker has finished reading
 	    if (msg.importWorker.completedImport) {
+		console.log("Duration: " + (Date.now()-starttime).toString())
 		sb.confirmImport()
 	    }
 	    
@@ -172,84 +175,11 @@ module.exports = function (window) {
     }
 
 
-    function convertFileWithImportWorker(pgn_file) {
-
-	var importWorker = fork(path.join(process.cwd(), '/app/importWorker.js'))
-
-	importWorker.send({
-	    importWorker : {startImport : true,
-			    pgn_file : pgn_file}
-	})
-
-	var game_id = 1
-	
-	importWorker.on('message', (msg) => {
-
-	    // worker has read one game
-	    if (msg.importWorker.readGame) {
-		var num_games = msg.importWorker.num_games
-		var pgnData = msg.importWorker.pgnData
-
-		var nodeInfo = {}
-		nodeInfo.nodes = msg.importWorker.nodes
-		nodeInfo.game_id = game_id
-		
-		var gameInfo = {}		
-		gameInfo.star = 0
-		gameInfo.white = pgnData['White']
-		gameInfo.elow = pgnData['WhiteElo']
-		gameInfo.black = pgnData['Black']
-		gameInfo.elob = pgnData['BlackElo']
-		gameInfo.res = sh.res_enum[pgnData['Result']]
-		gameInfo.event = pgnData['Event']
-		gameInfo.site = pgnData['Site']
-		gameInfo.round = pgnData['Round']
-		gameInfo.date = pgnData['Date']
-		gameInfo.tags = []
-		gameInfo.positions = db.getPositions(nodeInfo.nodes)
-		gameInfo.id = game_id
-
-		
-		// save to file
-		var gamesfile = '/Users/weischen/Develop/ChessFriend-Fire/DB/CFF-converted-games.json'
-		var nodesfile = '/Users/weischen/Develop/ChessFriend-Fire/DB/CFF-converted-nodes.json'
-
-		var separator = (game_id == 1) ? '' : ',' 
-		    
-		fs.appendFile(gamesfile, separator + JSON.stringify(gameInfo, null, 2), (err) => {
-				  
-		    if (err) throw err
-		    console.log("converted game " + game_id)
-		    
-		    fs.appendFile(nodesfile, separator + JSON.stringify(nodeInfo, null, 2) , (err) => {				  
-			if (err) throw err
-			game_id += 1
-		    })
-				  
-		})
-		
-
-		// resume reading
-		importWorker.send({
-		    importWorker : {resumeImport : true}
-		})
-	    }
-
-
-	    // worker has finished reading
-	    if (msg.importWorker.completedImport) {
-		console.log("worker finished")
-	    }
-	    
-	})	
-    }
-    
-
     // init db
     function enableDBExport() {
 
 
-	setActiveSidebarItem("Import")
+	setActiveSidebarItem("Database")
 	var actionSelected = "importPGN"
 	
 	var importPGNBtn = window.document.getElementById("importPGNSelected")
@@ -305,6 +235,7 @@ module.exports = function (window) {
 		importJSONDialog.click()
 		break
 	    case "exportJSON":
+		displayImportModal()
 		exportDB()
 		break
 	    default:
@@ -315,22 +246,24 @@ module.exports = function (window) {
 	async function exportDB() {
 	    try {
 		const blob = await db.db.export({prettyJson: true, progressCallback})
+
 		DownloadHandler(blob, "ChessFriend-Fire-export.json", "application/json")
+		
+		var importCompletedEvt = new CustomEvent("importCompletedEvt", {
+		})
+		window.document.dispatchEvent(importCompletedEvt)
+		
 	    } catch (error) {
 		console.error(''+error)
 	    }
 	}
-	
-
-	// var convertLink = window.document.getElementById("convertLink")
-	// convertLink.onclick = () => {
-	//     convertFileWithImportWorker('/Users/weischen/Develop/ChessFriend-Fire/DB/without_blitz.pgn')
-	// }
-
-	    
+		    
 	
 	function progressCallback ({totalRows, completedRows}) {
-	    return db.progressCallback({totalRows, completedRows})
+	    console.log(`Progress: ${completedRows} of ${totalRows} rows completed`)
+	    
+	    var importStatusBar = window.document.getElementById('importStatusBar')
+	    importStatusBar.innerHTML = 'Exported ' + parseInt(completedRows/2).toString() + ' games'
 	}
 	
     }    

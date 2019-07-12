@@ -641,6 +641,7 @@ module.exports = function (window) {
 	importStatusBar.innerHTML = 'Imported ' + parseInt(completedRows/2).toString() + ' games'
     }
 
+
     module.addGame = addGame
     module.importPGNsFromFile = importPGNsFromFile 
     module.displayDBEntries = displayDBEntries

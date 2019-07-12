@@ -4,7 +4,7 @@
   "main": "views/main.html",
   "scripts": {
     "start": "nw src/",
-    "test": "node tests/test.js",
+    "test": "cd src && node ../tests/test.js",
     "prod": "nwbuild --macIcns src/icon/icon.icns --flavor sdk --platforms osx64 src/",
     "osx": "nwbuild --macIcns src/icon/icon.icns --flavor normal --platforms osx64 src/",
     "win": "nwbuild --winIco src/icon/icon.ico --flavor normal --platforms win64 src/",

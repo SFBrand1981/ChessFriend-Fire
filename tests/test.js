@@ -4,7 +4,6 @@ var path = require('path')
 var PGNHandler = require(path.join(process.cwd(), 'app/pgn.js'))
 var LabelHandler = require(path.join(process.cwd(), 'app/labels.js'))
 
-
 var errCount = {}
 
 function testPGNParser() {
@@ -77,6 +76,7 @@ function runTests() {
 
     testPGNParser(errCount)
     testLabelHandler()
+    
     console.log("TEST COMPLETED")
     console.log("Errors:")
     console.log(errCount)

@@ -41,7 +41,7 @@ module.exports = function (window) {
     function createSidebar(container) {
 
 	createSidebarElement(container, "Games")
-	createSidebarElement(container, "Import")
+	createSidebarElement(container, "Database")
 	createSidebarElement(container, "Setup position")
 
 
@@ -60,7 +60,7 @@ module.exports = function (window) {
 	})
 
 	
-	var dbImportBtn = window.document.getElementById('Import')
+	var dbImportBtn = window.document.getElementById('Database')
 	dbImportBtn.addEventListener('click', function(e) {
 	    window.open('/views/import.html', '_self')
 	})	
@@ -122,7 +122,7 @@ module.exports = function (window) {
 	
 	var importStatusBar = document.createElement('div')
 	importStatusBar.id = 'importStatusBar'
-	importStatusBar.innerHTML = 'Importing'
+	importStatusBar.innerHTML = 'Processing'
 	
 	var importConfirm = document.createElement('span')
 	importConfirm.id = 'importConfirm'
