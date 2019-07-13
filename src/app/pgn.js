@@ -146,156 +146,236 @@ module.exports = function () {
 	
     }
 
+    // function pgnMovesToNodes(pgnMoves, startFEN) {
+	
+    // 	var chess = new Chess()
+    // 	var moves = pgnMoves.split(/\s/)
+
+    // 	// init
+    // 	var nodes = {}
+    // 	var parentIndx = lh.rootNode()
+    // 	var curIndx = lh.getNextMainlineIndx(lh.rootNode())
+    // 	var branchIndx = {}
+    // 	var branchLevel = 0
+    // 	var commentIndx = lh.getNextMainlineIndx(lh.rootNode())
+
+	
+    // 	// init root node
+    // 	nodes[lh.rootNode()] = {}
+    // 	nodes[lh.rootNode()]['children'] = []
+    // 	nodes[lh.rootNode()]['branchLevel'] = 0
+    // 	nodes[lh.rootNode()]['FEN'] = startFEN ?
+    // 	    startFEN : 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'
+
+    // 	chess.load(nodes[lh.rootNode()]['FEN'])
+	
+    // 	var i = 0
+
+    // 	// iterate over data
+    // 	len = moves.length
+    // 	while (i < len) {
+
+    // 	    if (nodes[curIndx] == undefined) {
+    // 		nodes[curIndx] = {}
+    // 		nodes[curIndx]['children'] = []
+    // 	    }
+
+    // 	    nodes[curIndx]['parentIndx'] = parentIndx
+    // 	    nodes[curIndx]['branchLevel'] = branchLevel
+	    
+
+    // 	    // SAN
+    // 	    nodes[parentIndx]['children'].push(curIndx)
+    // 	    branchIndx[branchLevel+1] = curIndx
+    // 	    nodes[curIndx]['SAN'] = ''
+    // 	    commentIndx = curIndx
+	    
+    // 	    // calculate FEN
+    // 	    //chess.load(nodes[parentIndx]['FEN'])
+    // 	    // chess.move(moves[i])
+    // 	    nodes[curIndx]['FEN'] = moves[i]
+	    
+    // 	    // prepare next iteration
+    // 	    parentIndx = curIndx
+    // 	    curIndx = lh.getNextMainlineIndx(curIndx) // superfluous nodes may be created, delete them later
+
+    // 	    i += 1
+
+    // 	}
+
+
+    // 	// delete superfluous nodes
+    // 	var keys = Object.keys(nodes)
+    // 	for (var k = 0; k < keys.length; k++) {
+
+    // 	    if (keys[k] == lh.rootNode()) {
+    // 		continue
+    // 	    }
+	    
+    // 	    var n = nodes[keys[k]]
+    // 	    if (n['SAN'] == undefined) {
+    // 		delete nodes[keys[k]]
+    // 	    }
+    // 	}
+
+	
+    // 	return nodes
+	
+    // }
+
+    
     function pgnMovesToNodes(pgnMoves, startFEN) {
 	
-	var chess = new Chess()
-	var moves = pgnMoves.split(/\s/)
+    	var chess = new Chess()
+    	var moves = pgnMoves.split(/\s/)
 
-	// init
-	var nodes = {}
-	var parentIndx = lh.rootNode()
-	var curIndx = lh.getNextMainlineIndx(lh.rootNode())
-	var branchIndx = {}
-	var branchLevel = 0
-	var commentIndx = lh.getNextMainlineIndx(lh.rootNode())
+    	// init
+    	var nodes = {}
+    	var parentIndx = lh.rootNode()
+    	var curIndx = lh.getNextMainlineIndx(lh.rootNode())
+    	var branchIndx = {}
+    	var branchLevel = 0
+    	var commentIndx = lh.getNextMainlineIndx(lh.rootNode())
 
 	
-	// init root node
-	nodes[lh.rootNode()] = {}
-	nodes[lh.rootNode()]['children'] = []
-	nodes[lh.rootNode()]['branchLevel'] = 0
-	nodes[lh.rootNode()]['FEN'] = startFEN ?
-	    startFEN : 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'
+    	// init root node
+    	nodes[lh.rootNode()] = {}
+    	nodes[lh.rootNode()]['children'] = []
+    	nodes[lh.rootNode()]['branchLevel'] = 0
+    	nodes[lh.rootNode()]['FEN'] = startFEN ?
+    	    startFEN : 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'
 
-	chess.load(nodes[lh.rootNode()]['FEN'])
+    	chess.load(nodes[lh.rootNode()]['FEN'])
 	
-	var startsWithComment = true	
-	var i = 0
+    	var startsWithComment = true	
+    	var i = 0
 
-	// iterate over data
-	len = moves.length
-	while (i < len) {
 
-	    if (nodes[curIndx] == undefined) {
-		nodes[curIndx] = {}
-		nodes[curIndx]['children'] = []
-	    }
+    	// iterate over data
+    	len = moves.length
+    	while (i < len) {
 
-	    nodes[curIndx]['parentIndx'] = parentIndx
-	    nodes[curIndx]['branchLevel'] = branchLevel
+    	    if (nodes[curIndx] == undefined) {
+    		nodes[curIndx] = {}
+    		nodes[curIndx]['children'] = []
+    	    }
+
+    	    nodes[curIndx]['parentIndx'] = parentIndx
+    	    nodes[curIndx]['branchLevel'] = branchLevel
 	    
-	    // end of game
-	    if (moves[i] === '*' ||
-		moves[i] === '1-0' ||
-		moves[i] === '0-1' ||
-		moves[i] === "1/2-1/2") {
-		startsWithComment = false
-		i += 1
-		continue
-	    }
+    	    // end of game
+    	    if (moves[i] === '*' ||
+    		moves[i] === '1-0' ||
+    		moves[i] === '0-1' ||
+    		moves[i] === "1/2-1/2") {
+    		startsWithComment = false
+    		i += 1
+    		continue
+    	    }
 
-	    // NAGs
-	    if (/^\$/.test(moves[i])) {
-		startsWithComment = false
-		nodes[commentIndx]['NAG'] = moves[i]
-		i += 1
-		continue
-	    }
+    	    // NAGs
+    	    if (/^\$/.test(moves[i])) {
+    		startsWithComment = false
+    		nodes[commentIndx]['NAG'] = moves[i]
+    		i += 1
+    		continue
+    	    }
 
-	    // move nr or move description
-	    if ( /^[1-9]/.test(moves[i]) || /^\.+$/.test(moves[i]) ) {
-		startsWithComment = false
-		i += 1
-		continue
-	    }
+    	    // move nr or move description
+    	    if ( /^[1-9]/.test(moves[i]) || /^\.+$/.test(moves[i]) ) {
+    		startsWithComment = false
+    		i += 1
+    		continue
+    	    }
 
-	    // comment
-	    if (moves[i] == '{') {
+    	    // comment
+    	    if (moves[i] == '{') {
 
-		i += 1
-		var comment = ''
-		while(moves[i] !== '}') {
-		    comment += ' ' + moves[i]
-		    i += 1
-		}
+    		i += 1
+    		var comment = ''
+    		while(moves[i] !== '}') {
+    		    comment += ' ' + moves[i]
+    		    i += 1
+    		}
 
-		if(startsWithComment == true) {
-		    nodes[commentIndx]['startComment'] = comment.trim()
-		} else {
-		    nodes[commentIndx]['comment'] = comment.trim()
-		}
+    		if(startsWithComment == true) {
+    		    nodes[commentIndx]['startComment'] = comment.trim()
+    		} else {
+    		    nodes[commentIndx]['comment'] = comment.trim()
+    		}
 
-		startsWithComment = false
-		i += 1
-		continue
-	    }
+    		startsWithComment = false
+    		i += 1
+    		continue
+    	    }
 
-	    // SAN
-	    if ('abcdefghRBNQKO0'.indexOf(moves[i][0]) !== -1) {
+    	    // SAN
+    	    if ('abcdefghRBNQKO0'.indexOf(moves[i][0]) !== -1) {
 
-		startsWithComment = false
-		nodes[parentIndx]['children'].push(curIndx)
-		branchIndx[branchLevel+1] = curIndx
-		nodes[curIndx]['SAN'] = moves[i]
-		commentIndx = curIndx
+    		startsWithComment = false
+    		nodes[parentIndx]['children'].push(curIndx)
+    		branchIndx[branchLevel+1] = curIndx
+    		nodes[curIndx]['SAN'] = moves[i]
+    		commentIndx = curIndx
 		
-		// calculate FEN
-		chess.load(nodes[parentIndx]['FEN'])
-		chess.move(moves[i])
-		nodes[curIndx]['FEN'] = chess.fen()
+    		// calculate FEN
+    		chess.load(nodes[parentIndx]['FEN'])
+    		chess.move(moves[i])
+    		nodes[curIndx]['FEN'] = chess.fen()
 		
-		// prepare next iteration
-		parentIndx = curIndx
-		curIndx = lh.getNextMainlineIndx(curIndx) // superfluous nodes may be created, delete them later
+    		// prepare next iteration
+    		parentIndx = curIndx
+    		curIndx = lh.getNextMainlineIndx(curIndx) // superfluous nodes may be created, delete them later
 
-		i += 1
-		continue
-	    }
+    	 	i += 1
+    	 	continue
+    	    }
 
-	    // start of variation
-	    if (moves[i] == '(') {
-		startsWithComment = true
-		branchLevel += 1
-		parentIndx = nodes[branchIndx[branchLevel]]['parentIndx']
+    	    // start of variation
+    	    if (moves[i] == '(') {
+    		startsWithComment = true
+    		branchLevel += 1
+    		parentIndx = nodes[branchIndx[branchLevel]]['parentIndx']
 
-		var numSiblings = nodes[parentIndx]['children'].length
-		curIndx = lh.getNextSiblingIndx(parentIndx, numSiblings)
-		commentIndx = curIndx
-		i += 1
-		continue
-	    }
+    		var numSiblings = nodes[parentIndx]['children'].length
+    		curIndx = lh.getNextSiblingIndx(parentIndx, numSiblings)
+    		commentIndx = curIndx
+    		i += 1
+    		continue
+    	    }
 
-	    // end of variation
-	    if (moves[i] == ')') {
-		startsWithComment = true
-		parentIndx = branchIndx[branchLevel]
-		curIndx = lh.getNextMainlineIndx(parentIndx)
-		commentIndx = curIndx
-		branchLevel -= 1
-		i += 1
-		continue
-	    }
-	}
+    	    // end of variation
+    	    if (moves[i] == ')') {
+    		startsWithComment = true
+    		parentIndx = branchIndx[branchLevel]
+    		curIndx = lh.getNextMainlineIndx(parentIndx)
+    		commentIndx = curIndx
+    		branchLevel -= 1
+    		i += 1
+    		continue
+    	    }
+    	}
 
 
-	// delete superfluous nodes
-	var keys = Object.keys(nodes)
-	for (var k = 0; k < keys.length; k++) {
+    	// delete superfluous nodes
+    	var keys = Object.keys(nodes)
+    	for (var k = 0; k < keys.length; k++) {
 
-	    if (keys[k] == lh.rootNode()) {
-		continue
-	    }
+    	    if (keys[k] == lh.rootNode()) {
+    		continue
+    	    }
 	    
-	    var n = nodes[keys[k]]
-	    if (n['SAN'] == undefined) {
-		delete nodes[keys[k]]
-	    }
-	}
+    	    var n = nodes[keys[k]]
+    	    if (n['SAN'] == undefined) {
+    		delete nodes[keys[k]]
+    	    }
+    	}
 
 	
-	return nodes
+    	return nodes
 	
     }
+
 
 
     function numOfClosedParenthesesAfterNode(nodes, nodeIndx) {

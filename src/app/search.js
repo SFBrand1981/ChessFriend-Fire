@@ -5,6 +5,8 @@ module.exports = function (window) {
     var BoardStateHandler = require(path.join(process.cwd(), '/app/boardState.js'))
     var DBHandler = require(path.join(process.cwd(), '/app/db.js'))
 
+    var LabelHandler = require(path.join(process.cwd(), '/app/labels.js'))
+    var lh = new LabelHandler()
     
     var bh = new BoardStateHandler(window)
     var db = new DBHandler(window)
@@ -144,10 +146,10 @@ module.exports = function (window) {
 		    gameInfo.tags = []
 		    
 		    var nodes = {}
-		    nodes['(0)'] = {}
-		    nodes['(0)']['FEN'] = valid.FEN
-		    nodes['(0)']['branchLevel'] = 0
-		    nodes['(0)']['children'] = []
+		    nodes[lh.rootNode()] = {}
+		    nodes[lh.rootNode()]['FEN'] = valid.FEN
+		    nodes[lh.rootNode()]['branchLevel'] = 0
+		    nodes[lh.rootNode()]['children'] = []
 		    
 		    
 		    // save to DB
