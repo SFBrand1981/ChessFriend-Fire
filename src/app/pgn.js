@@ -146,83 +146,6 @@ module.exports = function () {
 	
     }
 
-    // function pgnMovesToNodes(pgnMoves, startFEN) {
-	
-    // 	var chess = new Chess()
-    // 	var moves = pgnMoves.split(/\s/)
-
-    // 	// init
-    // 	var nodes = {}
-    // 	var parentIndx = lh.rootNode()
-    // 	var curIndx = lh.getNextMainlineIndx(lh.rootNode())
-    // 	var branchIndx = {}
-    // 	var branchLevel = 0
-    // 	var commentIndx = lh.getNextMainlineIndx(lh.rootNode())
-
-	
-    // 	// init root node
-    // 	nodes[lh.rootNode()] = {}
-    // 	nodes[lh.rootNode()]['children'] = []
-    // 	nodes[lh.rootNode()]['branchLevel'] = 0
-    // 	nodes[lh.rootNode()]['FEN'] = startFEN ?
-    // 	    startFEN : 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'
-
-    // 	chess.load(nodes[lh.rootNode()]['FEN'])
-	
-    // 	var i = 0
-
-    // 	// iterate over data
-    // 	len = moves.length
-    // 	while (i < len) {
-
-    // 	    if (nodes[curIndx] == undefined) {
-    // 		nodes[curIndx] = {}
-    // 		nodes[curIndx]['children'] = []
-    // 	    }
-
-    // 	    nodes[curIndx]['parentIndx'] = parentIndx
-    // 	    nodes[curIndx]['branchLevel'] = branchLevel
-	    
-
-    // 	    // SAN
-    // 	    nodes[parentIndx]['children'].push(curIndx)
-    // 	    branchIndx[branchLevel+1] = curIndx
-    // 	    nodes[curIndx]['SAN'] = ''
-    // 	    commentIndx = curIndx
-	    
-    // 	    // calculate FEN
-    // 	    //chess.load(nodes[parentIndx]['FEN'])
-    // 	    // chess.move(moves[i])
-    // 	    nodes[curIndx]['FEN'] = moves[i]
-	    
-    // 	    // prepare next iteration
-    // 	    parentIndx = curIndx
-    // 	    curIndx = lh.getNextMainlineIndx(curIndx) // superfluous nodes may be created, delete them later
-
-    // 	    i += 1
-
-    // 	}
-
-
-    // 	// delete superfluous nodes
-    // 	var keys = Object.keys(nodes)
-    // 	for (var k = 0; k < keys.length; k++) {
-
-    // 	    if (keys[k] == lh.rootNode()) {
-    // 		continue
-    // 	    }
-	    
-    // 	    var n = nodes[keys[k]]
-    // 	    if (n['SAN'] == undefined) {
-    // 		delete nodes[keys[k]]
-    // 	    }
-    // 	}
-
-	
-    // 	return nodes
-	
-    // }
-
     
     function pgnMovesToNodes(pgnMoves, startFEN) {
 	
@@ -375,7 +298,6 @@ module.exports = function () {
     	return nodes
 	
     }
-
 
 
     function numOfClosedParenthesesAfterNode(nodes, nodeIndx) {

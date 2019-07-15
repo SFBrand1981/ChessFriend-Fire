@@ -157,6 +157,10 @@ module.exports = function (window) {
 	    values = entry
 	}
 
+	// elow and elob are not displayed, store them for later reference
+	gameInfo.elow = values['elow']
+	gameInfo.elob = values['elob']
+
 	for (var i = 0; i < 8; i++) {
 	    
 	    var tr = window.document.createElement('tr')
@@ -1463,6 +1467,15 @@ module.exports = function (window) {
 	window.document.body.appendChild(deletionModal)
     }
 
+    function duplicateGame() {
+	
+	var gameDuplicatedEvent = new CustomEvent("gameDuplicatedEvt", {
+	    detail: { gameInfo : currentBoard.gameInfo,
+		      nodes: currentBoard.nodes }
+	})
+	window.document.dispatchEvent(gameDuplicatedEvent)
+	    
+    }
     
     function deleteGame() {
 	createDeletionModal()
@@ -1502,6 +1515,7 @@ module.exports = function (window) {
     module.stripVariationHandler = stripVariationHandler
     module.insertComment = insertComment
     module.insertNAGHandler = insertNAGHandler
+    module.duplicateGame = duplicateGame
     module.deleteGame = deleteGame
     module.createSaveBtn = createSaveBtn
     module.insertEngineMove = insertEngineMove

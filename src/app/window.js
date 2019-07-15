@@ -126,7 +126,7 @@ module.exports = function (window) {
 
 	var starttime = Date.now()
 	console.log(starttime)
-	
+	    
 	importWorker.on('message', (msg) => {
 
 	    // worker has read one game
@@ -171,7 +171,8 @@ module.exports = function (window) {
 		sb.confirmImport()
 	    }
 	    
-	})	
+	})
+
     }
 
 
@@ -546,6 +547,14 @@ module.exports = function (window) {
 
 	menu.append(new nw.MenuItem({ type: 'separator' }))
 
+
+	menu.append(new nw.MenuItem({
+	    label: 'Duplicate game',
+	    click: function(){
+		boardState.duplicateGame()
+	    }
+	}))
+	
 	menu.append(new nw.MenuItem({
 	    label: 'Delete game',
 	    click: function(){
@@ -583,6 +592,30 @@ module.exports = function (window) {
 
     }
 
+    // duplicate game
+    window.document.addEventListener("gameDuplicatedEvt", function(evt) {
+
+	var gameInfo = evt.detail.gameInfo
+	var nodes = evt.detail.nodes
+
+	db.addGame(gameInfo, nodes).then( (id) => {
+	    
+	    var game_id = id.toString()
+	    var title = gameInfo.white + ' - ' + gameInfo.black
+	    
+	    var loadEntryEvt = new CustomEvent("loadEntryEvt", {
+		detail : { game_id : game_id,
+			   title: title }
+	    })
+
+	    alert("Game has been duplicated!")
+	    window.document.dispatchEvent(loadEntryEvt)
+	    
+	}).catch(function(e) {
+	    alert(e.error)
+	})
+	
+    })
 
     // delete game
     window.document.addEventListener("gameDeletedEvt", function(evt) {
