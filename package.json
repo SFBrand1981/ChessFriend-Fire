@@ -20,8 +20,9 @@
     "event-stream": "^4.0.1",
     "font-awesome": "^4.7.0",
     "indexeddbshim": "^4.1.0",
-    "node": "^11.13.0",
-    "nw": "^0.37.4",
+    "lodash": "^4.17.14",
+    "node": "^12.6.0",
+    "nw": "^0.39.2",
     "nw-builder": "^3.5.7"
   },
   "repository": {

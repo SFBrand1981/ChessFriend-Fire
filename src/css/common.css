@@ -443,7 +443,6 @@ body {
     border-left: 8px solid var(--base2-color);
     border-right: 1px solid var(--base0-color);
     background-color: var(--base2-color);
-    padding-right: 7px;
 }
 
 .board {
@@ -628,7 +627,6 @@ body {
 }
 
 .boardControlContainer {
-    width: 100%;
     display: flex;
     padding: 8px;
     justify-content: center;
@@ -966,6 +964,7 @@ body {
 
 .pieceContainer {
     margin: auto;
+    margin-right: 8px;
     padding-left: 2px;
     padding-right: 2px;
     display: flex;

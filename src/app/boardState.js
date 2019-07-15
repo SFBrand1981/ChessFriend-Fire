@@ -803,7 +803,7 @@ module.exports = function (window) {
 	
 	if (x.length != 0) {     
             for (var i = 0, len = x.length; i < len; i++) {
-		x[i].style.width = parseInt(pB)+'px'
+		x[i].style.width = parseInt(pB) -1 +'px'
 
 		if (x[i].classList.contains('coord')) {
 		    // do not resize file description
