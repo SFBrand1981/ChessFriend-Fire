@@ -89,18 +89,8 @@ module.exports = function (window) {
     }
 
 
-    function getPositions(nodes) {
-	var positions = []
-	
-	for (var k in nodes) {	    
-	    var pos = nodes[k]['FEN'].split(' ')[0]
-	    
-	    if (!(pos in positions) && pos != "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR") {
-		positions.push(pos)
-	    }
-	}
-	
-	return positions
+    function getPositions(nodes) {	
+	return ph.getPositions(nodes)
     }
 
 

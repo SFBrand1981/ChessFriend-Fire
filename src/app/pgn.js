@@ -300,6 +300,102 @@ module.exports = function () {
     }
 
 
+    function extractedPGNMovesToNodes(pgnMoves, startFEN) {
+	
+    	var moves = pgnMoves.split(/\s/)
+
+    	// init
+    	var nodes = {}
+    	var parentIndx = lh.rootNode()
+    	var curIndx = lh.getNextMainlineIndx(lh.rootNode())
+    	var branchIndx = {}
+    	var branchLevel = 0
+    	var commentIndx = lh.getNextMainlineIndx(lh.rootNode())
+
+	
+    	// init root node
+    	nodes[lh.rootNode()] = {}
+    	nodes[lh.rootNode()]['children'] = []
+    	nodes[lh.rootNode()]['branchLevel'] = 0
+    	nodes[lh.rootNode()]['FEN'] = startFEN ?
+    	    startFEN : 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'
+	
+    	var i = 0
+
+
+    	// iterate over data
+    	len = moves.length
+    	while (i < len) {
+
+    	    if (nodes[curIndx] == undefined) {
+    		nodes[curIndx] = {}
+    		nodes[curIndx]['children'] = []
+    	    }
+
+    	    nodes[curIndx]['parentIndx'] = parentIndx
+    	    nodes[curIndx]['branchLevel'] = branchLevel
+	    
+    	    // end of game
+    	    if (moves[i] === '*' ||
+    		moves[i] === '1-0' ||
+    		moves[i] === '0-1' ||
+    		moves[i] === "1/2-1/2") {
+    		i += 1
+    		continue
+    	    }
+	    
+
+    	    // move nr or move description
+    	    if ( /^[1-9]/.test(moves[i]) || /^\.+$/.test(moves[i]) ) {
+    		i += 1
+    		continue
+    	    }
+
+    	    // FEN from comment
+    	    if (moves[i] == '{') {
+
+    		i += 1
+    		var FEN = ''
+    		while(moves[i] !== '}') {
+    		    FEN += ' ' + moves[i]
+    		    i += 1
+    		}
+
+    		nodes[commentIndx]['FEN'] = FEN.trim()
+    		i += 1
+    		continue
+    	    }
+
+    	    // SAN
+    	    if ('abcdefghRBNQKO0'.indexOf(moves[i][0]) !== -1) {
+
+    		nodes[parentIndx]['children'].push(curIndx)
+    		branchIndx[branchLevel+1] = curIndx
+    		nodes[curIndx]['SAN'] = moves[i]
+    		commentIndx = curIndx
+		
+		
+    		// prepare next iteration
+    		parentIndx = curIndx
+    		curIndx = lh.getNextMainlineIndx(curIndx) 
+
+    	 	i += 1
+    	 	continue
+    	    }
+
+    	}
+
+
+    	// delete superfluous nodes
+    	if (nodes[curIndx] != lh.rootNode() && nodes[curIndx]['SAN'] == undefined) {
+    	    delete nodes[curIndx]
+    	} 
+	
+    	return nodes
+	
+    }
+
+
     function numOfClosedParenthesesAfterNode(nodes, nodeIndx) {
 
 	if (nodes[nodeIndx]['children'].length > 0) {
@@ -792,14 +888,31 @@ module.exports = function () {
 	return rv
     }
 
+
+    function getPositions(nodes) {
+	var positions = []
+	
+	for (var k in nodes) {	    
+	    var pos = nodes[k]['FEN'].split(' ')[0]
+	    
+	    if (!(pos in positions) && pos != "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR") {
+		positions.push(pos)
+	    }
+	}
+	
+	return positions
+    }
+
     
     // Module exports
     module.readGamesFromFile = readGamesFromFile
     module.parsePGNData = parsePGNData
     module.pgnMovesToNodes = pgnMovesToNodes
+    module.extractedPGNMovesToNodes = extractedPGNMovesToNodes
     module.nodesToHTML = nodesToHTML
     module.traverseNodes = traverseNodes
     module.exportGameAsTex = exportGameAsTex
+    module.getPositions = getPositions
     
     return module
 }

@@ -124,8 +124,6 @@ module.exports = function (window) {
 			    pgn_file : pgn_file}
 	})
 
-	var starttime = Date.now()
-	console.log(starttime)
 	    
 	importWorker.on('message', (msg) => {
 
@@ -167,7 +165,6 @@ module.exports = function (window) {
 
 	    // worker has finished reading
 	    if (msg.importWorker.completedImport) {
-		console.log("Duration: " + (Date.now()-starttime).toString())
 		sb.confirmImport()
 	    }
 	    
