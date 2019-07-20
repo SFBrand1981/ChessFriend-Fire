@@ -31,7 +31,7 @@ module.exports = function (window) {
     function initNodes(game_id, nodes) {
 
 	var stored = sessionStorage.getItem(game_id)
-
+	
 	if (!stored) {
 
 	    // pass nodes to current board
@@ -89,7 +89,7 @@ module.exports = function (window) {
 
 	var container = window.document.getElementById('notationContainer')
 	var notation = ''
-	
+
 	ph.traverseNodes(currentBoard.nodes, function(nodeIndx) {
 	    notation += ph.nodesToHTML(currentBoard.nodes, nodeIndx)
 	})
@@ -185,13 +185,9 @@ module.exports = function (window) {
 		break
 	    case 2:
 		desc.innerHTML = 'Date:'
+		input.value = values['date']
 		input.id = "date_input"
 		gameInfo.date = values['date']
-		if(entry.date == "") {
-		    input.placeholder = "YYYY.DD.MM"
-		} else {
-		    input.value = values['date']
-		}
 		break
 	    case 3:
 		desc.innerHTML = 'Round:'
@@ -250,11 +246,21 @@ module.exports = function (window) {
 	    tr.appendChild(inputContainer)
 	    infoTable.appendChild(tr)
 
-	    input.addEventListener('change', function (evt) {
 
+	    input.addEventListener('keydown', function (evt) {
+		// disable other keyboard eventlisteners for the moment
+		window.document.removeEventListener('keydown', window.document.listenForArrowKeys, false)
+		window.document.removeEventListener('keyup', window.document.listenForSpace, false)
+	    })
+
+	    input.addEventListener('blur', function (evt) {
+		enableKeyboard()
+	    })
+
+	    input.addEventListener('change', function (evt) {
 		currentBoard = editGameInfo(currentBoard)
 		sessionStorage.setItem(currentBoard.id, JSON.stringify(currentBoard))
-		
+
 		triggerGameEditedEvent(currentBoard.id)		
 	    })
 	}
@@ -1498,6 +1504,15 @@ module.exports = function (window) {
 	ph.exportGameAsTex(templateValues)
 	
     }
+
+
+    function exportGameAsPGN(filename) {
+	var pgnData = {}
+	pgnData.filename = filename
+	pgnData.nodes = currentBoard.nodes
+	pgnData.gameInfo = currentBoard.gameInfo
+	ph.exportGameAsPGN(pgnData)	
+    }
     
     module.createMoveIndicator = createMoveIndicator
     module.createBoardControls = createBoardControls
@@ -1520,6 +1535,7 @@ module.exports = function (window) {
     module.createSaveBtn = createSaveBtn
     module.insertEngineMove = insertEngineMove
     module.exportGameAsTex = exportGameAsTex
+    module.exportGameAsPGN = exportGameAsPGN
     
     return module
 }

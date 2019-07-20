@@ -59,6 +59,57 @@ module.exports = function () {
 	})
     }
 
+    function exportGameAsPGN(pgnData) {
+	
+	// read LaTeX template
+	var filepath = path.join(pgnData.filename)
+	pgn_stream = fs.createWriteStream(filepath, {flags:'w'})
+	
+	var gameInfo = pgnData.gameInfo
+	console.log(gameInfo)
+
+	var startFEN = pgnData.nodes[lh.rootNode()]['FEN']
+	var res
+	switch (gameInfo.res) {
+	case '1':
+	    res = '1-0'
+	    break
+	case '2':
+	    res = '1/2-1/2'
+	    break
+	case '3':
+	    res = '0-1'
+	    break
+	case '4':
+	    res = '*'
+	    break
+	}
+
+	pgn_stream.write('[Event "' + gameInfo.event + '"]\n')
+	pgn_stream.write('[Site "' + gameInfo.site + '"]\n')
+	pgn_stream.write('[Date "' + gameInfo.date + '"]\n')
+	pgn_stream.write('[Round "' + gameInfo.round + '"]\n')
+	pgn_stream.write('[White "' + gameInfo.white + '"]\n')
+	pgn_stream.write('[Black "' + gameInfo.black + '"]\n')
+	pgn_stream.write('[Result "' + res + '"]\n')
+	pgn_stream.write('[WhiteElo "' + gameInfo.elow + '"]\n')
+	pgn_stream.write('[BlackElo "' + gameInfo.elob + '"]\n')
+	if (startFEN != 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1') {
+	    pgn_stream.write('[FEN "' + startFEN + '"]\n')
+	} 
+	pgn_stream.write('\n')
+
+	var pgn = ''
+	traverseNodes(pgnData.nodes, function(nodeIndx) {
+	    pgn += nodesToPGN(pgnData.nodes, nodeIndx)
+	})
+	pgn += ' ' + res + '\n'
+	pgn_stream.write(pgn)
+	
+	pgn_stream.end()
+    }
+    
+
     function parsePGNData(pgn) {
 
 	var pgnData = {}
@@ -792,7 +843,7 @@ module.exports = function () {
 	    startBold = (branchLevel == 0) ? true : false
 	}
 
-	if (nodeIndx !== '(0)' && sideToMove === 'b') {
+	if (nodeIndx !== lh.rootNode() && sideToMove === 'b') {
 	    displayMvNr = true
 	}
 
@@ -838,10 +889,6 @@ module.exports = function () {
 	    
 	}
 
-	// diagrams
-	if (nodes[nodeIndx]['comment'] != undefined) {
-
-	}
 	
 	// comments
 	if (nodes[nodeIndx]['comment'] != undefined) {
@@ -889,6 +936,104 @@ module.exports = function () {
     }
 
 
+    function nodesToPGN(nodes, nodeIndx) {
+
+	var parentIndx = nodes[nodeIndx]['parentIndx']
+	var grandParent = nodes[parentIndx] ?
+	    nodes[parentIndx]['parentIndx'] : undefined
+
+	var children = nodes[nodeIndx]['children']
+	var branchLevel = nodes[nodeIndx]['branchLevel']
+	var FEN = nodes[nodeIndx]['FEN']
+	var mvNr = FEN.split(' ')[5]
+	var sideToMove = FEN.split(' ')[1]
+	var mvDesc = (sideToMove === 'b') ? mvNr + '.' : parseInt(mvNr)-1 + '...'
+	var displayMvNr = false
+	var numSiblings = numOfSiblingBranches(nodes, nodeIndx)
+
+	var rv = ''
+
+
+	// continuation after comment
+	if (nodes[parentIndx] &&
+	    nodes[parentIndx]['comment'] != undefined) {
+
+	    displayMvNr = true
+	}
+	
+	// beginning of variation
+	if (nodes[parentIndx] &&
+	    nodes[parentIndx]['branchLevel'] !== nodes[nodeIndx]['branchLevel']) {
+	    
+	    rv += '('	    
+	    displayMvNr = true
+	}
+
+	// mainline continuation after variation
+	if (nodes[parentIndx] && nodes[grandParent] &&
+	    nodes[grandParent]['branchLevel'] === nodes[nodeIndx]['branchLevel'] &&
+	    nodes[grandParent]['children'].length > 1) {
+
+	    displayMvNr = true
+	    startBold = (branchLevel == 0) ? true : false
+	}
+
+	if (nodes[nodeIndx]['startComment'] != undefined) {
+
+	    rv += ' {' + nodes[nodeIndx]['startComment'] + '} '
+	    displayMvNr = true
+	}
+
+	if (nodeIndx !== lh.rootNode() && sideToMove === 'b') {
+	    displayMvNr = true
+	}
+
+	
+	// move number
+	if (displayMvNr === true || nodeIndx === lh.getNextMainlineIndx(lh.rootNode())) {
+	    rv += mvDesc
+	}
+
+	
+	if (nodes[nodeIndx]['SAN'] != undefined) {
+
+	    var spacing = (children.length == 0) ? '' : ' '
+	    
+	    var NAG = nodes[nodeIndx]['NAG']
+	    if (NAG) {
+		rv += nodes[nodeIndx]['SAN'] + NAG + spacing
+	    } else {
+		rv += nodes[nodeIndx]['SAN'] + spacing
+	    }
+	    
+	}
+
+	
+	// comments
+	if (nodes[nodeIndx]['comment'] != undefined) {
+	    
+	    rv += ' {' + nodes[nodeIndx]['comment'] + '} '
+	}
+
+	
+	// end of variation
+	if (children.length === 0) {
+	    
+	    if (branchLevel != 0) {
+		var numClosed = numOfClosedParenthesesAfterNode(nodes, nodeIndx)
+		for (var i = 0; i < numClosed.num; i++) {
+		    rv += ')'
+		}
+		rv += ' '
+	    } else {
+		// end of game
+	    }
+	}
+
+	return rv
+    }
+
+
     function getPositions(nodes) {
 	var positions = []
 	
@@ -912,6 +1057,7 @@ module.exports = function () {
     module.nodesToHTML = nodesToHTML
     module.traverseNodes = traverseNodes
     module.exportGameAsTex = exportGameAsTex
+    module.exportGameAsPGN = exportGameAsPGN
     module.getPositions = getPositions
     
     return module

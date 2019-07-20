@@ -7,12 +7,15 @@ var PGNHandler = require(path.join(process.cwd(), 'app/pgn.js'))
 var LabelHandler = require(path.join(process.cwd(), 'app/labels.js'))
 var SettingsHandler = require(path.join(process.cwd(), '/app/settings.js'))
 
+
+var ph = new PGNHandler()
+var sh = new SettingsHandler()
+
 var errCount = {}
 
 function testPGNParser() {
 
     console.log("testPGNParser")
-    var ph = new PGNHandler()
     
     var pgn_file = path.join(process.cwd(), '../tests/test6.pgn')
     console.log("Reading pgn from file " + pgn_file + '\n')
@@ -43,18 +46,30 @@ function testPGNExtractParser() {
     var starttime = Date.now()
     console.log(starttime)
     
-    var ph = new PGNHandler()
-    var sh = new SettingsHandler()
     
     var pgn_file = path.join(process.cwd(), '../DB/with_fens.pgn')
     console.log("Reading pgn from file " + pgn_file + '\n')
 
-    var games_stream = fs.createWriteStream("../DB/appendG.pgn", {flags:'a'})
-    var nodes_stream = fs.createWriteStream("../DB/appendN.pgn", {flags:'a'})
+
+    var games_stream
+    var nodes_stream
+
+    function openOutputStreams(name) {
+	games_stream = fs.createWriteStream("../DB/append_" + name + "_G.pgn", {flags:'a'})
+	nodes_stream = fs.createWriteStream("../DB/append_" + name + "_N.pgn", {flags:'a'})
+    }
+
+    function closeOutputStreams() {
+	games_stream.end()
+	nodes_stream.end()
+    }
 
 
+    var num_files = 1
     var num_games = 0
     var pgn = ''
+
+    openOutputStreams(num_files.toString())
 
     var readstream = fs.createReadStream(pgn_file)
 	.pipe(es.split())
@@ -87,8 +102,7 @@ function testPGNExtractParser() {
 
 	    //finish
 	    processGameInfo()
-	    games_stream.end()
-	    nodes_stream.end()
+	    closeOutputStreams()
 	    console.log("Duration: " + (Date.now()-starttime).toString())
 	    
 	}))
@@ -99,16 +113,17 @@ function testPGNExtractParser() {
 
 	console.log("Current game: " + num_games)
 
-	if (num_games > 50000) {
-	    // avoid too much memory consumption
-	    readstream.end()
-	    return
+	if (num_games != 1 && (num_games-1) % 10000 == 0) {
+	    
+	    closeOutputStreams()
+	    num_files += 1
+	    openOutputStreams(num_files.toString())
 	}
 	
 	var pgnData = ph.parsePGNData(pgn)
 	var game_id = num_games
 	var nodes = ph.extractedPGNMovesToNodes(pgnData['Moves'], pgnData['FEN'])
-	
+		
 	var gameInfo = {}		
 	gameInfo.star = 0
 	gameInfo.white = pgnData['White']

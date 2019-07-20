@@ -15,6 +15,7 @@ module.exports = function (window) {
     var SearchHandler = require(path.join(process.cwd(), '/app/search.js'))
     var Awesomplete = require('awesomplete')
     var DownloadHandler = require('downloadjs')
+    var PGNHandler = require(path.join(process.cwd(), 'app/pgn.js'))
     
     const { fork } = require('child_process');
 
@@ -88,7 +89,6 @@ module.exports = function (window) {
     
 
     // import games from PGN file
-
     window.document.addEventListener("sidebarImportEvt", function(evt) {
 
     })
@@ -104,7 +104,32 @@ module.exports = function (window) {
     var importJSONDialog = window.document.getElementById("importJSONDialog")
     importJSONDialog.addEventListener("change", function (evt) {
 	displayImportModal()
-	db.importDB(this.files[0])
+
+
+	var count = 0
+	var files = this.files
+	
+	function importSomething() {
+	    return new Promise (function (resolve, reject) {
+
+		return db.importDB(files[count], files.length).then( () => {
+		    count += 1
+
+		    if (count == files.length) {
+			var importCompletedEvt = new CustomEvent("importCompletedEvt", {
+			})
+			window.document.dispatchEvent(importCompletedEvt)
+
+			resolve ("all imported")
+		    } else {
+			return importSomething()
+		    }
+		})
+	    })
+	}
+
+	importSomething()
+	
     })
 
 
@@ -241,6 +266,7 @@ module.exports = function (window) {
 	    }
 	})
 
+	
 	async function exportDB() {
 	    try {
 		const blob = await db.db.export({prettyJson: true, progressCallback})
@@ -263,6 +289,7 @@ module.exports = function (window) {
 	    var importStatusBar = window.document.getElementById('importStatusBar')
 	    importStatusBar.innerHTML = 'Exported ' + parseInt(completedRows/2).toString() + ' games'
 	}
+
 	
     }    
 
@@ -314,21 +341,46 @@ module.exports = function (window) {
     })
 
     // display notation
+    var ph = new PGNHandler()
     function displayNotation() {
 
 	// load game from DB
 	var game_id = tools.getParams(window.location.href).id
 	
 	db.db.nodes.get({game_id: parseInt(game_id)}, function (entry) {
+
+	    var gameNodes = {} 
+	    if (entry == undefined) {
+		// reread nodes from disk
+		var pgn_file = path.join(process.cwd(), '../database/game_' + game_id + '.pgn')
+		console.log("Reading pgn from file " + pgn_file)
+		
+		ph.readGamesFromFile(pgn_file, function(pgn) {
+
+		    var pgnData = ph.parsePGNData(pgn.pgn)
+		    gameNodes = ph.pgnMovesToNodes(pgnData['Moves'], pgnData['FEN'])
+		})
+	    } else {
+		gameNodes = entry.nodes
+	    }
 	    
 	    // initialize board state
-	    boardState.initNodes(game_id, entry.nodes)
+	    boardState.initNodes(game_id, gameNodes)
 
 	    // enable keyboard navigation
 	    boardState.enableKeyboard()
 
 	    // set active in sidebar
 	    sb.setActiveSidebarItem(game_id)
+
+	    // add nodes to DB for later reference
+	    if (entry == undefined) {
+		console.log("Adding new")
+		return db.db.nodes.add({
+		    game_id: parseInt(game_id),
+		    nodes: gameNodes
+		})
+	    }
 	    
 	}).catch(function (e) {
 	    alert ("Error: " + (e.stack || e))
@@ -410,7 +462,6 @@ module.exports = function (window) {
 
 	paginateNext.addEventListener('click', function (evt) {
 	    db.getQueryCount().then(function (count) {
-		console.log("COUNT: "+ count)
 		var searchParams = JSON.parse(localStorage.getItem('searchParams'))
 		if ((searchParams.pageNum + 1) * pageSize < count) {
 		    db.pageNext()
@@ -422,7 +473,6 @@ module.exports = function (window) {
 	
 	paginatePrev.addEventListener('click', function (evt) {
 	    db.getQueryCount().then(function (count) {
-		console.log("COUNT: "+ count)
 		var searchParams = JSON.parse(localStorage.getItem('searchParams'))
 		if (searchParams.pageNum - 1 >= 0) { 
 		    db.pagePrev()
@@ -453,31 +503,33 @@ module.exports = function (window) {
 	var white = window.document.getElementById('searchparam_white')
 	var black = window.document.getElementById('searchparam_black')
 	var event = window.document.getElementById('searchparam_event')
-	var tags = window.document.getElementById('searchparam_tags')
+	//var tags = window.document.getElementById('searchparam_tags')
 	var ahWhite = new Awesomplete(white)
 	var ahBlack = new Awesomplete(black)
 	var ahEvent = new Awesomplete(event)
-	var ahTags = new Awesomplete(tags)
-	
-	db.db.games.orderBy('white').uniqueKeys(function (keys) {
-	    ahWhite.list = keys
-	    ahWhite.filter = Awesomplete.FILTER_STARTSWITH
-	})
+	//var ahTags = new Awesomplete(tags)
 
-	db.db.games.orderBy('black').uniqueKeys(function (keys) {
-	    ahBlack.list = keys
-	    ahBlack.filter = Awesomplete.FILTER_STARTSWITH
-	})
+	console.log("enableAwesomplete")
+	// db.db.games.orderBy('white').uniqueKeys(function (keys) {
+	//     ahWhite.list = keys
+	//     ahWhite.filter = Awesomplete.FILTER_STARTSWITH
+	//     console.log("awesomplete white done")
+	// })
 
-	db.db.games.orderBy('event').uniqueKeys(function (keys) {
-	    ahEvent.list = keys
-	    ahEvent.filter = Awesomplete.FILTER_CONTAINS
-	})
+	// db.db.games.orderBy('black').uniqueKeys(function (keys) {
+	//     ahBlack.list = keys
+	//     ahBlack.filter = Awesomplete.FILTER_STARTSWITH
+	// })
 
-	db.db.games.orderBy('tags').uniqueKeys(function (keys) {
-	    ahTags.list = keys
-	    ahTags.filter = Awesomplete.FILTER_CONTAINS
-	})
+	// db.db.games.orderBy('event').uniqueKeys(function (keys) {
+	//     ahEvent.list = keys
+	//     ahEvent.filter = Awesomplete.FILTER_CONTAINS
+	// })
+
+	// db.db.games.orderBy('tags').uniqueKeys(function (keys) {
+	//     ahTags.list = keys
+	//     ahTags.filter = Awesomplete.FILTER_CONTAINS
+	// })
 
     }
 
@@ -491,6 +543,7 @@ module.exports = function (window) {
 	    }
 	}))
 
+	
 	menu.append(new nw.MenuItem({
 	    label: 'Strip variation to end',
 	    click: function(){
@@ -499,16 +552,10 @@ module.exports = function (window) {
 	}))
 
 
-	menu.append(new nw.MenuItem({
-	    label: 'Delete annotation glyph',
-	    click: function(){
-		console.log('delete annotation glyph')
-	    }
-	}))
-
 	menu.append(new nw.MenuItem({ type: 'separator' }))
 
 	var submenu = new nw.Menu();
+	submenu.append(new nw.MenuItem({ label: '[None]', click: function(){boardState.insertNAGHandler('')} }))
 	submenu.append(new nw.MenuItem({ label: '!', click: function(){boardState.insertNAGHandler('$1')} }))
 	submenu.append(new nw.MenuItem({ label: '?', click: function(){boardState.insertNAGHandler('$2')} }))
 	submenu.append(new nw.MenuItem({ label: '!?', click: function(){boardState.insertNAGHandler('$5')} }))
@@ -559,6 +606,8 @@ module.exports = function (window) {
 	    }
 	}))
 
+	menu.append(new nw.MenuItem({ type: 'separator' }))
+	
 	menu.append(new nw.MenuItem({
 	    label: 'Export to LaTeX',
 	    click: function(){
@@ -577,6 +626,26 @@ module.exports = function (window) {
 		
 	    }
 	}))
+
+	menu.append(new nw.MenuItem({
+	    label: 'Export to PGN',
+	    click: function(){
+
+		var exportDialog = document.createElement('input')
+		exportDialog.style.display = 'none'
+		exportDialog.type = 'file'
+		exportDialog.id = 'exportDialog'
+		exportDialog.accept = '.pgn'
+		exportDialog.nwsaveas = "ChessFriend-Fire_Export.pgn"
+		window.document.body.appendChild(exportDialog)
+		exportDialog.click()
+		exportDialog.addEventListener("change", function (evt) {
+		    boardState.exportGameAsPGN(this.value)
+		})
+		
+	    }
+	}))
+	
 	
 	// Hooks for the "contextmenu" event
 	notationContainer.addEventListener('contextmenu', function(ev) {
@@ -631,6 +700,13 @@ module.exports = function (window) {
 	    })	
     })
 
+
+    // remove nodes
+    window.document.addEventListener("removeNodesEvt", function (evt) {
+
+	var game_id = parseInt(evt.detail.game_id)
+	db.db.nodes.where({game_id: game_id}).delete()
+    })
 
     function setActiveSidebarItem(item) {
 	sb.setActiveSidebarItem(item)

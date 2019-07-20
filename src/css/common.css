@@ -778,7 +778,6 @@ body {
 
 .engineOut {
     margin-top: 16px;
-    margin-left: 14px;
     flex-grow: 1;
     display: flex;
     flex-direction: column;
@@ -818,6 +817,7 @@ body {
 .engineLines {
     height: 100%;
     overflow-y: auto;
+    padding-right: 8px;
 }
 
 .engineLine {

@@ -1,4 +1,15 @@
 // database
+
+var Dexie = require('dexie')
+var DexieImportExport = require('dexie-export-import')
+var db = new Dexie('ChessFriendFireDB')
+
+db.version(1).stores({
+    games: "++id, star, white, elow, black, elob, event, date, *positions",
+    nodes: "game_id"
+})
+
+
 module.exports = function (window) {
 
     // dependencies
@@ -9,15 +20,7 @@ module.exports = function (window) {
     var SettingsHandler = require(path.join(process.cwd(), '/app/settings.js'))
     var sh = new SettingsHandler()
     
-    var Dexie = require('dexie')
-    var DexieImportExport = require('dexie-export-import')
-    var db = new Dexie('ChessFriendFireDB')
     
-    db.version(1).stores({
-	games: "++id, star, white, elow, black, elob, res, event, date, *tags, *positions",
-	nodes: "game_id"
-    })
-
     var searchParams = JSON.parse(localStorage.getItem('searchParams'))
 
 
@@ -39,11 +42,37 @@ module.exports = function (window) {
 	    tags: [],
 	    positions: getPositions(nodes)
 	}).then(function(id) {
+
 	    game_id = id
-	    return db.nodes.add({
-		game_id: id,
-		nodes: nodes
-	    })
+	    var pgnData = {}
+	    pgnData.filename = path.join(process.cwd(), '../database/game_' + game_id + '.pgn')
+	    pgnData.nodes = nodes
+	    pgnData.gameInfo = gameInfo
+	    ph.exportGameAsPGN(pgnData)	
+
+	    return 1
+
+	    // return db.nodes.add({
+	    // 	game_id: id,
+	    // 	nodes: nodes
+	    // })
+	// }).then(function() {
+	//     return db.meta.get({ key: 'players' })
+	// }).then(function(players) {
+	    
+	//     if (players == undefined) {
+	// 	players = {}
+	// 	players.players = new Set()
+	//     }
+
+	//     players.players.add(gameInfo.white)
+	//     players.players.add(gameInfo.black)
+		
+	//     return db.meta.put({
+	// 	key: 'players',
+	// 	players: players.players
+	//     })
+
 	}).then(function() {
 	    return db.games.count()
 	}).then(function(count) {
@@ -58,7 +87,6 @@ module.exports = function (window) {
 
 	return db.transaction("rw", db.games, db.nodes, function() {
 
-	    var ph = new PGNHandler()
 	    ph.readGamesFromFile(fh, function(pgn) {
 		var pgnData = ph.parsePGNData(pgn)
 		var nodes = ph.pgnMovesToNodes(pgnData['Moves'], pgnData['FEN'])
@@ -603,19 +631,17 @@ module.exports = function (window) {
 	console.log("import started")
 
 
-	return db.games.clear().then(() => {
-	    return db.nodes.clear()
-	}).then(() => {
-	    return db.import(file, {progressCallback})
-	}).then(() => {
-	    console.log("Import complete")
-
-	    var importCompletedEvt = new CustomEvent("importCompletedEvt", {
-	    })
-	    window.document.dispatchEvent(importCompletedEvt)
+	// return db.games.clear().then(() => {
+	//     return db.nodes.clear()
+	// }).then(() => {
 	    
+	return db.import(file, {progressCallback}).then(() => {
 	    return db.games.count()
 	}).then( count => {
+
+	    var importStatusBar = window.document.getElementById('importStatusBar')
+	    importStatusBar.innerHTML = 'Imported ' + count + ' games'
+	    
 	    console.log("New DB count: " + count)
 	    return localStorage.setItem('dbCount', count)
 	}).catch(function (e) {
@@ -626,9 +652,6 @@ module.exports = function (window) {
     
     function progressCallback ({totalRows, completedRows}) {
 	console.log(`Progress: ${completedRows} of ${totalRows} rows completed`)
-	
-	var importStatusBar = window.document.getElementById('importStatusBar')
-	importStatusBar.innerHTML = 'Imported ' + parseInt(completedRows/2).toString() + ' games'
     }
 
 

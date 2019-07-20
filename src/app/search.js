@@ -4,7 +4,8 @@ module.exports = function (window) {
     var path = require('path')
     var BoardStateHandler = require(path.join(process.cwd(), '/app/boardState.js'))
     var DBHandler = require(path.join(process.cwd(), '/app/db.js'))
-
+    var tools = require(path.join(process.cwd(), '/app/tools.js'))
+    
     var LabelHandler = require(path.join(process.cwd(), '/app/labels.js'))
     var lh = new LabelHandler()
     
@@ -46,6 +47,7 @@ module.exports = function (window) {
 	addNewSelected.innerHTML = "&#xf10c;"
 	searchSelected.parentNode.parentNode.classList.add("actionSelected")
 
+	
 	function selectSearch() {
 	    if (!(searchSelected.classList.contains("actionSelected"))) {
 		searchSelected.innerHTML = "&#xf192;"
@@ -86,7 +88,6 @@ module.exports = function (window) {
 	
 	var searchBtn = document.createElement('div')
 	searchBtn.classList.add('btn')
-	searchBtn.tabIndex = 0;
 	searchBtn.innerHTML = 'Ok'
 
 	var searchBtnContainer = window.document.querySelector(".searchBtnContainer")
@@ -135,14 +136,14 @@ module.exports = function (window) {
 		    var gameInfo = {}		
 		    gameInfo.star = 0
 		    gameInfo.white = '{White}'
-		    gameInfo.elow = ''
+		    gameInfo.elow = '?'
 		    gameInfo.black = '{Black}'
-		    gameInfo.elob = ''
+		    gameInfo.elob = '?'
 		    gameInfo.res = '4' // res_enum
 		    gameInfo.event = '{Event}'
 		    gameInfo.site = '{Site}'
 		    gameInfo.round = '{Round}'
-		    gameInfo.date = ''
+		    gameInfo.date = tools.formatDate(new Date())
 		    gameInfo.tags = []
 		    
 		    var nodes = {}

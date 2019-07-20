@@ -150,6 +150,7 @@ module.exports = function (window) {
 	var importJSONDialog = document.createElement('input')
 	importJSONDialog.style.display = 'none'
 	importJSONDialog.type = 'file'
+	importJSONDialog.multiple = true
 	importJSONDialog.accept = '.json'
 	importJSONDialog.id = 'importJSONDialog'
 	window.document.body.appendChild(importJSONDialog)
@@ -257,6 +258,13 @@ module.exports = function (window) {
 	
 	// load last game from history
 	loadLastGameFromHistory(game_id)
+
+
+	// remove game from nodes to free up memory
+	var removeNodesEvt = new CustomEvent("removeNodesEvt", {
+	    detail: { game_id : game_id }
+	})
+	window.document.dispatchEvent(removeNodesEvt)
 
     }
 
