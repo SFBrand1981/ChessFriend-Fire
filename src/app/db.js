@@ -74,8 +74,12 @@ module.exports = function (window) {
 	//     })
 
 	}).then(function() {
+	    console.log("Start counting")
+	    console.log(Date.now())
 	    return db.games.count()
 	}).then(function(count) {
+	    console.log("Finished counting")
+	    console.log(Date.now())
 	    return localStorage.setItem('dbCount', count)
 	}).then(function() {
 	    return game_id

@@ -446,7 +446,7 @@ module.exports = function () {
     }
 
 
-    function numOfClosedParenthesesAfterNode(nodes, nodeIndx) {
+    function numOfClosedParenthesesAfterNode(nodes, nodeIndx, indentLevel) {
 
 	if (nodes[nodeIndx]['children'].length > 0) {
 	    // node is not end node
@@ -486,14 +486,14 @@ module.exports = function () {
 
 		
 	    } else {
-		if (numBranches == childIndx + 1 && branchLevel > HTMLIndentLevel) {
+		if (numBranches == childIndx + 1 && branchLevel > indentLevel) {
 		    // node ends previous branch.
 		    numClosed += 1
 		    branchLevel -= 1
 		    return testLastChild()
-		} else if (branchLevel == HTMLIndentLevel &&
+		} else if (branchLevel == indentLevel &&
 			   numBranches == childIndx + 1) {
-		    
+
 		    return {num: numClosed, isLast: true}
 		    
 		} else {
@@ -640,7 +640,7 @@ module.exports = function () {
 	if (children.length === 0) {
 	    
 	    if (branchLevel >= HTMLIndentLevel) {
-		var numClosed = numOfClosedParenthesesAfterNode(nodes, nodeIndx)
+		var numClosed = numOfClosedParenthesesAfterNode(nodes, nodeIndx, HTMLIndentLevel)
 		for (var i = 0; i < numClosed.num; i++) {
 		    rv += '<span class="closeParen">)</span>'
 		}
@@ -912,7 +912,7 @@ module.exports = function () {
 	if (children.length === 0) {
 	    
 	    if (branchLevel >= HTMLIndentLevel) {
-		var numClosed = numOfClosedParenthesesAfterNode(nodes, nodeIndx)
+		var numClosed = numOfClosedParenthesesAfterNode(nodes, nodeIndx, HTMLIndentLevel)
 		for (var i = 0; i < numClosed.num; i++) {
 		    rv += ')'
 		}
@@ -948,7 +948,6 @@ module.exports = function () {
 	var sideToMove = FEN.split(' ')[1]
 	var mvDesc = (sideToMove === 'b') ? mvNr + '.' : parseInt(mvNr)-1 + '...'
 	var displayMvNr = false
-	var numSiblings = numOfSiblingBranches(nodes, nodeIndx)
 
 	var rv = ''
 
@@ -1019,11 +1018,13 @@ module.exports = function () {
 	if (children.length === 0) {
 	    
 	    if (branchLevel != 0) {
-		var numClosed = numOfClosedParenthesesAfterNode(nodes, nodeIndx)
+		var numClosed = numOfClosedParenthesesAfterNode(nodes, nodeIndx, 0)
+
 		for (var i = 0; i < numClosed.num; i++) {
 		    rv += ')'
 		}
 		rv += ' '
+
 	    } else {
 		// end of game
 	    }
@@ -1066,6 +1067,7 @@ module.exports = function () {
     module.pgnMovesToNodes = pgnMovesToNodes
     module.extractedPGNMovesToNodes = extractedPGNMovesToNodes
     module.nodesToHTML = nodesToHTML
+    module.nodesToPGN = nodesToPGN
     module.traverseNodes = traverseNodes
     module.exportGameAsTex = exportGameAsTex
     module.exportGameAsPGN = exportGameAsPGN

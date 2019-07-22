@@ -17,7 +17,7 @@ function testPGNParser() {
 
     console.log("testPGNParser")
     
-    var pgn_file = path.join(process.cwd(), '../tests/test6.pgn')
+    var pgn_file = path.join(process.cwd(), '../tests/test7.pgn')
     console.log("Reading pgn from file " + pgn_file + '\n')
     
     ph.readGamesFromFile(pgn_file, function(pgn) {
@@ -29,11 +29,12 @@ function testPGNParser() {
 
 	var rv = ''
 	ph.traverseNodes(nodes, function(nodeIndx) {
-	    rv += ph.nodesToHTML(nodes, nodeIndx)
+	    //rv += ph.nodesToHTML(nodes, nodeIndx)
+	    rv += ph.nodesToPGN(nodes, nodeIndx)
 	})
 
-	console.log(nodes)
-	//console.log(rv)
+	//console.log(nodes)
+	console.log(rv)
     })
 
 }
@@ -80,7 +81,7 @@ function testLabelHandler() {
 
 function runTests() {
 
-    // testPGNParser(errCount)
+    testPGNParser(errCount)
     // testLabelHandler()
     
     console.log("TEST COMPLETED")
