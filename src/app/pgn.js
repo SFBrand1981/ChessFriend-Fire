@@ -66,7 +66,6 @@ module.exports = function () {
 	pgn_stream = fs.createWriteStream(filepath, {flags:'w'})
 	
 	var gameInfo = pgnData.gameInfo
-	console.log(gameInfo)
 
 	var startFEN = pgnData.nodes[lh.rootNode()]['FEN']
 	var res
@@ -1048,6 +1047,18 @@ module.exports = function () {
 	return positions
     }
 
+
+    function pathFromNumber(game_id) {
+
+	var millions = Math.floor(game_id/1000000) * 1000000
+	var tenThousands = Math.floor( (game_id - millions)/10000) * 10000
+	var hundrets = Math.floor( (game_id - millions - tenThousands)/100) * 100
+	var remainder = game_id % 100
+
+	var rv = millions + '/' + tenThousands + '/' + hundrets + '/game_' + game_id + '.pgn'
+	
+	return rv
+    }
     
     // Module exports
     module.readGamesFromFile = readGamesFromFile
@@ -1059,6 +1070,7 @@ module.exports = function () {
     module.exportGameAsTex = exportGameAsTex
     module.exportGameAsPGN = exportGameAsPGN
     module.getPositions = getPositions
+    module.pathFromNumber = pathFromNumber
     
     return module
 }

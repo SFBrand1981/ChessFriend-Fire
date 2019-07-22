@@ -45,7 +45,7 @@ module.exports = function (window) {
 
 	    game_id = id
 	    var pgnData = {}
-	    pgnData.filename = path.join(process.cwd(), '../database/game_' + game_id + '.pgn')
+	    pgnData.filename = path.join(process.cwd(), '../database/' + ph.pathFromNumber(game_id))
 	    pgnData.nodes = nodes
 	    pgnData.gameInfo = gameInfo
 	    ph.exportGameAsPGN(pgnData)	

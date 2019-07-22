@@ -147,13 +147,13 @@ module.exports = function (window) {
 	importPGNDialog.id = 'importPGNDialog'
 	window.document.body.appendChild(importPGNDialog)
 
-	var importJSONDialog = document.createElement('input')
-	importJSONDialog.style.display = 'none'
-	importJSONDialog.type = 'file'
-	importJSONDialog.multiple = true
-	importJSONDialog.accept = '.json'
-	importJSONDialog.id = 'importJSONDialog'
-	window.document.body.appendChild(importJSONDialog)
+	var importDBDialog = document.createElement('input')
+	importDBDialog.style.display = 'none'
+	importDBDialog.type = 'file'
+	importDBDialog.multiple = true
+	importDBDialog.accept = '.cffdb'
+	importDBDialog.id = 'importDBDialog'
+	window.document.body.appendChild(importDBDialog)
     }
 
     

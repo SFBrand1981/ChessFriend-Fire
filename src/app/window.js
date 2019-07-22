@@ -101,35 +101,10 @@ module.exports = function (window) {
     })
 
 
-    var importJSONDialog = window.document.getElementById("importJSONDialog")
-    importJSONDialog.addEventListener("change", function (evt) {
+    var importDBDialog = window.document.getElementById("importDBDialog")
+    importDBDialog.addEventListener("change", function (evt) {
 	displayImportModal()
-
-
-	var count = 0
-	var files = this.files
-	
-	function importSomething() {
-	    return new Promise (function (resolve, reject) {
-
-		return db.importDB(files[count], files.length).then( () => {
-		    count += 1
-
-		    if (count == files.length) {
-			var importCompletedEvt = new CustomEvent("importCompletedEvt", {
-			})
-			window.document.dispatchEvent(importCompletedEvt)
-
-			resolve ("all imported")
-		    } else {
-			return importSomething()
-		    }
-		})
-	    })
-	}
-
-	importSomething()
-	
+	importDBWithImportWorker(this.value)
     })
 
 
@@ -145,7 +120,7 @@ module.exports = function (window) {
 	var importWorker = fork(path.join(process.cwd(), '/app/importWorker.js'))
 	
 	importWorker.send({
-	    importWorker : {startImport : true,
+	    importWorker : {startPGNImport : true,
 			    pgn_file : pgn_file}
 	})
 
@@ -198,6 +173,118 @@ module.exports = function (window) {
     }
 
 
+    function importDBWithImportWorker(pgn_file) {
+
+	var starttime = Date.now()
+	console.log(starttime)
+
+	var importWorker = fork(path.join(process.cwd(), '/app/importWorker.js'))
+	
+	importWorker.send({
+	    importWorker : {startDBImport : true,
+			    pgn_file : pgn_file}
+	})
+
+	var bulkSize = 5000
+	var gamesToAdd = []
+	var nodesToAdd = []
+	var lastId = 0
+
+	var importStatusBar = window.document.getElementById('importStatusBar')
+	
+	function savePGNs(gameArray, nodeArray) {
+
+	    return db.db.games.bulkAdd(gameArray).then(function (id) {
+
+		lastId = id
+		console.log("lastId: " + lastId)
+		for (var i = 0, len = gameArray.length; i < len; i++) {
+		    var game_id = id - len + i + 1
+		    var pgnData = {}
+		    pgnData.filename = path.join(process.cwd(), '../database/' + ph.pathFromNumber(game_id))
+		    pgnData.nodes = nodeArray[i]
+		    pgnData.gameInfo = gameArray[i]
+		    ph.exportGameAsPGN(pgnData)	
+		}
+		
+	    }).catch(function (e) {
+		alert ("Error: " + (e.stack || e))
+	    })
+	}
+
+	
+	importWorker.on('message', (msg) => {
+
+	    // worker has read one game
+	    if (msg.importWorker.readGame) {
+
+		var num_games = msg.importWorker.num_games
+		var pgnData = msg.importWorker.pgnData
+		var nodes = msg.importWorker.nodes
+		
+		importStatusBar.innerHTML = 'Imported ' + 1000 * parseInt(num_games/1000) + ' games'
+		
+		var gameInfo = {}		
+		gameInfo.star = 0
+		gameInfo.white = pgnData['White']
+		gameInfo.elow = pgnData['WhiteElo']
+		gameInfo.black = pgnData['Black']
+		gameInfo.elob = pgnData['BlackElo']
+		gameInfo.res = sh.res_enum[pgnData['Result']]
+		gameInfo.event = pgnData['Event']
+		gameInfo.site = pgnData['Site']
+		gameInfo.round = pgnData['Round']
+		gameInfo.date = pgnData['Date']
+		gameInfo.tags = []
+		gameInfo.positions = db.getPositions(nodes)
+
+		gamesToAdd.push(gameInfo)
+		nodesToAdd.push(nodes)
+
+
+		if (num_games % bulkSize == 0) {
+
+		    // save to DB
+		    console.log("Saving to DB " + num_games)
+		    savePGNs(gamesToAdd, nodesToAdd)
+
+		    // reset
+		    gamesToAdd = []
+		    nodesToAdd = []
+		    
+		}	
+		
+		// resume reading
+		importWorker.send({
+		    importWorker : {resumeImport : true}
+		})
+		
+	    }
+
+
+	    // worker has finished reading
+	    if (msg.importWorker.completedImport) {
+
+		var num_games = msg.importWorker.num_games
+		importStatusBar.innerHTML = 'Imported ' + num_games.toString() + ' games'
+
+		// save remaining games
+		savePGNs(gamesToAdd, nodesToAdd).then(function () {    
+		    return db.db.games.count()
+		}).then(function (count) {
+		    return localStorage.setItem('dbCount', count)
+		}).then(function () {
+		    sb.confirmImport()
+		    console.log("Duration: " + (Date.now()-starttime).toString())
+		})
+		
+	    }
+	    
+	})
+
+    }
+
+
     // init db
     function enableDBExport() {
 
@@ -206,8 +293,8 @@ module.exports = function (window) {
 	var actionSelected = "importPGN"
 	
 	var importPGNBtn = window.document.getElementById("importPGNSelected")
-	var importJSONBtn = window.document.getElementById("importJSONSelected")
-	var exportJSONBtn = window.document.getElementById("exportJSONSelected")
+	var importDBBtn = window.document.getElementById("importDBSelected")
+	// var exportJSONBtn = window.document.getElementById("exportJSONSelected")
 	var confirmImportBtn = window.document.getElementById("confirmImportBtn")
 
 	
@@ -232,20 +319,20 @@ module.exports = function (window) {
 	})
 
 
-	importJSONBtn.addEventListener('click', function(e) {
+	importDBBtn.addEventListener('click', function(e) {
 	    removeSearchSelected()
 	    this.firstElementChild.innerHTML = '<i class="fa">&#xf192;</i>'
 	    this.classList.add('actionSelected')
-	    actionSelected = "importJSON"
+	    actionSelected = "importDB"
 	})
 
 	
-	exportJSONBtn.addEventListener('click', function(e) {
-	    removeSearchSelected()
-	    this.firstElementChild.innerHTML = '<i class="fa">&#xf192;</i>'
-	    this.classList.add('actionSelected')
-	    actionSelected = "exportJSON"
-	})
+	// exportJSONBtn.addEventListener('click', function(e) {
+	//     removeSearchSelected()
+	//     this.firstElementChild.innerHTML = '<i class="fa">&#xf192;</i>'
+	//     this.classList.add('actionSelected')
+	//     actionSelected = "exportJSON"
+	// })
 
 	
 	confirmImportBtn.addEventListener('click', function(e) {
@@ -254,8 +341,8 @@ module.exports = function (window) {
 	    case "importPGN":
 		importPGNDialog.click()
 		break
-	    case "importJSON":
-		importJSONDialog.click()
+	    case "importDB":
+		importDBDialog.click()
 		break
 	    case "exportJSON":
 		displayImportModal()
@@ -352,7 +439,7 @@ module.exports = function (window) {
 	    var gameNodes = {} 
 	    if (entry == undefined) {
 		// reread nodes from disk
-		var pgn_file = path.join(process.cwd(), '../database/game_' + game_id + '.pgn')
+		var pgn_file = path.join(process.cwd(), '../database/' + ph.pathFromNumber(game_id))
 		console.log("Reading pgn from file " + pgn_file)
 		
 		ph.readGamesFromFile(pgn_file, function(pgn) {

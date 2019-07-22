@@ -39,121 +39,6 @@ function testPGNParser() {
 }
 
 
-function testPGNExtractParser() {
-
-    console.log("testPGNExtractParser")
-
-    var starttime = Date.now()
-    console.log(starttime)
-    
-    
-    var pgn_file = path.join(process.cwd(), '../DB/with_fens.pgn')
-    console.log("Reading pgn from file " + pgn_file + '\n')
-
-
-    var games_stream
-    var nodes_stream
-
-    function openOutputStreams(name) {
-	games_stream = fs.createWriteStream("../DB/append_" + name + "_G.pgn", {flags:'a'})
-	nodes_stream = fs.createWriteStream("../DB/append_" + name + "_N.pgn", {flags:'a'})
-    }
-
-    function closeOutputStreams() {
-	games_stream.end()
-	nodes_stream.end()
-    }
-
-
-    var num_files = 1
-    var num_games = 0
-    var pgn = ''
-
-    openOutputStreams(num_files.toString())
-
-    var readstream = fs.createReadStream(pgn_file)
-	.pipe(es.split())
-	.pipe(es.mapSync(function(line){
-
-	    // pause the readstream
-	    readstream.pause();
-	    
-	    // process line here and call s.resume() when rdy		
-	    if (/(\[Event\s.*\])/.test(line)) {
-
-		if (num_games !== 0) {
-		    processGameInfo()
-		    num_games += 1
-		    pgn = ' ' + line
-		} else {
-		    num_games += 1
-		    pgn += line
-		    readstream.resume()
-		}
-	    } else {
-		// continue reading
-		pgn += ' ' + line 
-		readstream.resume()
-	    }
-	    
-	}).on('error', function(err){
-	    console.log('Error while reading file.', err);
-	}).on('end', function(){
-
-	    //finish
-	    processGameInfo()
-	    closeOutputStreams()
-	    console.log("Duration: " + (Date.now()-starttime).toString())
-	    
-	}))
-
-    
-    
-    function processGameInfo() {
-
-	console.log("Current game: " + num_games)
-
-	if (num_games != 1 && (num_games-1) % 10000 == 0) {
-	    
-	    closeOutputStreams()
-	    num_files += 1
-	    openOutputStreams(num_files.toString())
-	}
-	
-	var pgnData = ph.parsePGNData(pgn)
-	var game_id = num_games
-	var nodes = ph.extractedPGNMovesToNodes(pgnData['Moves'], pgnData['FEN'])
-		
-	var gameInfo = {}		
-	gameInfo.star = 0
-	gameInfo.white = pgnData['White']
-	gameInfo.elow = pgnData['WhiteElo']
-	gameInfo.black = pgnData['Black']
-	gameInfo.elob = pgnData['BlackElo']
-	gameInfo.res = sh.res_enum[pgnData['Result']]
-	gameInfo.event = pgnData['Event']
-	gameInfo.site = pgnData['Site']
-	gameInfo.round = pgnData['Round']
-	gameInfo.date = pgnData['Date']
-	gameInfo.tags = []
-	gameInfo.positions = ph.getPositions(nodes)
-	gameInfo.id = game_id
-
-	var prefix = (game_id == 1) ? '' : ",\n"
-	games_stream.write(prefix + JSON.stringify(gameInfo))
-	
-	var nodeInfo = {}
-	nodeInfo.game_id = game_id
-	nodeInfo.nodes = nodes
-	nodes_stream.write(prefix + JSON.stringify(nodeInfo))
-
-	readstream.resume()
-
-    }
-    
-}
-
-
 function testLabelHandler() {
     console.log("testLabelHandler\n")
     var lh = new LabelHandler()
@@ -195,7 +80,6 @@ function testLabelHandler() {
 
 function runTests() {
 
-    testPGNExtractParser(errCount)
     // testPGNParser(errCount)
     // testLabelHandler()
     

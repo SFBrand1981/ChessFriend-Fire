@@ -47,7 +47,7 @@ var readstream
 var pgn
 var num_games
 
-function sendGameInfo() {
+function parseNodesFromGameInfo() {
 
     var pgnData = ph.parsePGNData(pgn)
     var nodes = ph.pgnMovesToNodes(pgnData['Moves'], pgnData['FEN'])
@@ -61,9 +61,24 @@ function sendGameInfo() {
     })
 }
 
+
+function extractNodesFromPGN() {
+    
+    var pgnData = ph.parsePGNData(pgn)
+    var nodes = ph.extractedPGNMovesToNodes(pgnData['Moves'], pgnData['FEN'])
+    
+    process.send({
+	
+     	importWorker : {readGame : true,
+     			num_games : num_games,
+     			pgnData: pgnData,
+     			nodes: nodes}
+    })
+}
+
 process.on('message', (msg) => {
 
-    if (msg.importWorker.startImport) {
+    function readGamesFromStream(callback) {
 
 	num_games = 0
 	pgn = ''
@@ -79,7 +94,7 @@ process.on('message', (msg) => {
 		if (/(\[Event\s.*\])/.test(line)) {
 
 		    if (num_games !== 0) {
-			sendGameInfo()
+			callback()
 			num_games += 1
 			pgn = ' ' + line
 		    } else {
@@ -97,15 +112,25 @@ process.on('message', (msg) => {
 		console.log('Error while reading file.', err);
 	    }).on('end', function(){
 
-		sendGameInfo()
+		callback()
 
 		// finish
 		process.send({
-		    importWorker : {completedImport : true}
+		    importWorker : {completedImport : true,
+				    num_games : num_games }
 		})
 
 	    }))
+    }
 
+
+    
+    if (msg.importWorker.startPGNImport) {
+	readGamesFromStream(parseNodesFromGameInfo)
+    }
+
+    if (msg.importWorker.startDBImport) {
+	readGamesFromStream(extractNodesFromPGN)
     }
 
     if (msg.importWorker.resumeImport) {
