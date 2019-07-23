@@ -6,7 +6,9 @@ var db = new Dexie('ChessFriendFireDB')
 
 db.version(1).stores({
     games: "++id, star, white, elow, black, elob, event, date, *positions",
-    nodes: "game_id"
+    nodes: "game_id",
+    players: "&name",
+    events: "&name"
 })
 
 
@@ -51,42 +53,32 @@ module.exports = function (window) {
 	    ph.exportGameAsPGN(pgnData)	
 
 	    return 1
-
-	    // return db.nodes.add({
-	    // 	game_id: id,
-	    // 	nodes: nodes
-	    // })
-	// }).then(function() {
-	//     return db.meta.get({ key: 'players' })
-	// }).then(function(players) {
-	    
-	//     if (players == undefined) {
-	// 	players = {}
-	// 	players.players = new Set()
-	//     }
-
-	//     players.players.add(gameInfo.white)
-	//     players.players.add(gameInfo.black)
-		
-	//     return db.meta.put({
-	// 	key: 'players',
-	// 	players: players.players
-	//     })
+	}).then(function() {
+	    return db.players.put({
+		name: gameInfo.white.toLowerCase(),
+		fullName: gameInfo.white
+	    })
 
 	}).then(function() {
-	    console.log("Start counting")
-	    console.log(Date.now())
-	    return db.games.count()
-	}).then(function(count) {
-	    console.log("Finished counting")
-	    console.log(Date.now())
-	    return localStorage.setItem('dbCount', count)
+	    return db.players.put({
+		name: gameInfo.black.toLowerCase(),
+		fullName: gameInfo.black
+	    })
+	    
+	}).then(function() {
+	    return db.events.put({
+		name: gameInfo.event.toLowerCase(),
+		fullName: gameInfo.event
+	    })
+	}).then(function() {
+	    var count = parseInt(localStorage.getItem('dbCount'))
+	    return localStorage.setItem('dbCount', count + 1)
 	}).then(function() {
 	    return game_id
 	})
     }
-    
-    
+
+						        
     function importPGNsFromFile(fh) {
 
 	return db.transaction("rw", db.games, db.nodes, function() {

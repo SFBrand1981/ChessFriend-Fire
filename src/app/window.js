@@ -188,11 +188,12 @@ module.exports = function (window) {
 	var bulkSize = 5000
 	var gamesToAdd = []
 	var nodesToAdd = []
+	var namesToAdd = []
 	var lastId = 0
 
 	var importStatusBar = window.document.getElementById('importStatusBar')
 	
-	function savePGNs(gameArray, nodeArray) {
+	function savePGNs(gameArray, nodeArray, nameArray) {
 
 	    return db.db.games.bulkAdd(gameArray).then(function (id) {
 
@@ -206,7 +207,9 @@ module.exports = function (window) {
 		    pgnData.gameInfo = gameArray[i]
 		    ph.exportGameAsPGN(pgnData)	
 		}
-		
+
+	    }).then(function() {
+		return db.db.players.bulkPut(nameArray)
 	    }).catch(function (e) {
 		alert ("Error: " + (e.stack || e))
 	    })
@@ -240,17 +243,19 @@ module.exports = function (window) {
 
 		gamesToAdd.push(gameInfo)
 		nodesToAdd.push(nodes)
-
+		namesToAdd.push({ name: pgnData['White'].toLowerCase(), fullName: pgnData['White'] })
+		namesToAdd.push({ name: pgnData['Black'].toLowerCase(), fullName: pgnData['Black'] })
 
 		if (num_games % bulkSize == 0) {
 
 		    // save to DB
 		    console.log("Saving to DB " + num_games)
-		    savePGNs(gamesToAdd, nodesToAdd)
+		    savePGNs(gamesToAdd, nodesToAdd, namesToAdd)
 
 		    // reset
 		    gamesToAdd = []
 		    nodesToAdd = []
+		    namesToAdd = []
 		    
 		}	
 		
@@ -269,7 +274,7 @@ module.exports = function (window) {
 		importStatusBar.innerHTML = 'Imported ' + num_games.toString() + ' games'
 
 		// save remaining games
-		savePGNs(gamesToAdd, nodesToAdd).then(function () {    
+		savePGNs(gamesToAdd, nodesToAdd, namesToAdd).then(function () {    
 		    return db.db.games.count()
 		}).then(function (count) {
 		    return localStorage.setItem('dbCount', count)
@@ -596,22 +601,40 @@ module.exports = function (window) {
 	var ahEvent = new Awesomplete(event)
 	//var ahTags = new Awesomplete(tags)
 
-	console.log("enableAwesomplete")
-	// db.db.games.orderBy('white').uniqueKeys(function (keys) {
-	//     ahWhite.list = keys
-	//     ahWhite.filter = Awesomplete.FILTER_STARTSWITH
-	//     console.log("awesomplete white done")
-	// })
+	function getListFromInput(aw, inp) {
+	    return db.db.players.where('name')
+		.startsWith(inp)
+		.limit(5)
+		.toArray().then(function(arr) {
+		   
+		    aw.list = arr.map( a => a.fullName)
+		    aw.evaluate()
+		})
+	}
 
-	// db.db.games.orderBy('black').uniqueKeys(function (keys) {
-	//     ahBlack.list = keys
-	//     ahBlack.filter = Awesomplete.FILTER_STARTSWITH
-	// })
+	
+	white.addEventListener('input', function() {
+	    var val = this.value.toLowerCase()
+	    getListFromInput(ahWhite, val)
+	})
 
-	// db.db.games.orderBy('event').uniqueKeys(function (keys) {
-	//     ahEvent.list = keys
-	//     ahEvent.filter = Awesomplete.FILTER_CONTAINS
-	// })
+	black.addEventListener('input', function() {
+	    var val = this.value.toLowerCase()
+	    getListFromInput(ahBlack, val)
+	})
+
+	event.addEventListener('input', function() {
+	    var val = this.value.toLowerCase()
+	    return db.db.events.where('name')
+		.startsWith(val)
+		.limit(5)
+		.toArray().then(function(arr) {
+		    
+		    ahEvent.list = arr.map( a => a.fullName)
+		    ahEvent.evaluate()
+		})
+	})
+	
 
 	// db.db.games.orderBy('tags').uniqueKeys(function (keys) {
 	//     ahTags.list = keys
@@ -779,9 +802,8 @@ module.exports = function (window) {
 	    .then(() => {
 		db.db.games.delete(game_id)
 	    }).then(() => {
-		return db.db.games.count()
-	    }).then(count => {
-		return localStorage.setItem('dbCount', count)
+		var count = parseInt(localStorage.getItem('dbCount'))
+		return localStorage.setItem('dbCount', count - 1)
 	    }).then(() => {
 		sb.removeGameFromSidebar(evt.detail.game_id)
 	    })	
