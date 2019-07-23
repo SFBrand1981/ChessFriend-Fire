@@ -524,6 +524,54 @@ module.exports = function (window) {
 	    alert ("Error: " + (e.stack || e))
 	})
     })
+
+
+    // kiosk mode
+    var kioskMode = false
+    window.document.addEventListener('kioskModeEvt', function(evt) {
+
+	if (!kioskMode) {
+	    notationContainer.style.display = 'none'
+	    boardContainer.style.width = '100%'
+	    boardContainer.style.maxWidth = '100%'
+	    
+	    
+	    var engineLines = window.document.querySelector('.engineOut')
+	    engineLines.style.display = 'none'
+
+	    var boardControlContainer = window.document.getElementById("boardControlContainer")
+	    boardControlContainer.style.marginBottom = "24px"
+
+	    boardState.resizeSquares()
+
+	    var controlStart = window.document.getElementById("controlStart")
+	    controlStart.style.display = 'none'
+
+	    var saveBtn = window.document.getElementById("saveBtn")
+	    saveBtn.style.display = 'none'
+
+	    var kioskBtn = window.document.getElementById("kioskBtn")
+	    kioskBtn.innerHTML = '<i class="fa">&#xf2d2;</i>'
+
+
+	    var tooltip = document.createElement('span')
+	    tooltip.innerHTML = 'restore windows'
+	    tooltip.classList.add('tooltip')
+	    tooltip.id = 'kioskTooltip'
+	    kioskBtn.appendChild(tooltip)
+	    
+	    kioskMode = true
+
+	} else {
+
+	    var activeSidebarItem = window.document.querySelector('.activeSidebarItem')
+	    activeSidebarItem.click()
+
+	}
+	    
+	
+    })
+
     
     // engine handling
     var eh = new EngineHandler(window)
@@ -826,6 +874,11 @@ module.exports = function (window) {
 	boardState.createSaveBtn()
     }
 
+    
+    function createKioskBtn() {
+	boardState.createKioskBtn()
+    }
+
 
     // insert engine move
     window.document.addEventListener("insertEngineMoveEvt", function (evt) {
@@ -952,6 +1005,7 @@ module.exports = function (window) {
     module.createContextMenu = createContextMenu
     module.setActiveSidebarItem = setActiveSidebarItem
     module.createSaveBtn = createSaveBtn
+    module.createKioskBtn = createKioskBtn
     module.createEngineSettingsMenu = createEngineSettingsMenu
     module.makeSettingsConfirmable = makeSettingsConfirmable
     module.enableDBExport = enableDBExport

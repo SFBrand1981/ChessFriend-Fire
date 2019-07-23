@@ -32,6 +32,7 @@
   --blue-color:   #408CCF;
   --magenta-color:#FF2E6C;
   --red-color:    #FF0000;
+  --fire-color:   #B22222;
   --yellow1-color:#F9BE35;
   --yellow2-color:#E09A2F;
   --orange-color: #b36200;
@@ -491,6 +492,24 @@ body {
 
 .highlightedSquare {
     background-color: var(--magenta-color);
+}
+
+.altColoredSquare {
+    background-color: var(--red-color);
+}
+
+.altColoredBorder {
+    box-shadow:inset 0px 0px 0px 4px var(--fire-color);
+    background-color: var(--red-color);
+}
+
+.coloredSquare {
+    background-color: var(--green5-color);
+}
+
+.coloredBorder {
+    box-shadow:inset 0px 0px 0px 4px var(--green4-color);
+    background-color: var(--green5-color);
 }
 
 .highlightedSAN {

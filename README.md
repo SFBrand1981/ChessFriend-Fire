@@ -43,8 +43,8 @@ ChessFriend-Fire is open source and runs on any platform.
       $ ./node_modules/nw/bin/nw ./src/
       ```
 
-   3. When you run ChessFriend-Fire for the first time, click on the **Import** button and select the file `KingBaseLite2019-04.pgn` from the
-   installation directory. This will import about 7000 games from [kingbase-chess.net][kingbase] into your database (duration: approx. 10min).
+   3. When you run ChessFriend-Fire for the first time, click on the **Database** button and choose to import the ChessFriend-Fire database `chessfriend-fire-database.tar.gz` from the
+   installation directory. This will import about 1 050 000 games from [kingbase-chess.net][kingbase] into your database.
 
 
 
@@ -66,7 +66,6 @@ is allowed to use (default: 1).
 
 <br clear="both"/>
 
----
 
 ### One-click annotations
 
@@ -78,7 +77,6 @@ selection will be automatically inserted after the currently highlighted move.
 
 <br clear="both"/>
 
----
 
 
 ### Open your games in tabs
@@ -92,7 +90,6 @@ ChessFriend-Fire opens all your games in tabs. It has never been easier to switc
 
 <br clear="both"/>
 
----
 
 ### Fast database search
 
@@ -106,7 +103,6 @@ ChessFriend-Fire also allows you to tag your games with custom labels, which mak
 
 <br clear="both"/>
 
----
 
 ### Analyse any position
 
@@ -120,7 +116,6 @@ or add it as the starting point of a new game. Move the pieces around with a cli
 
 <br clear="both"/>
 
----
 
 
 ### LaTeX export
@@ -136,7 +131,6 @@ you need to have a LaTeX processor like [xelatex][xelatex] installed.
 
 <br clear="both"/>
 
----
 
 ### Keyboard shortcuts
 
@@ -156,7 +150,6 @@ you need to have a LaTeX processor like [xelatex][xelatex] installed.
 <br clear="both"/>
 
 
----
 
 ### Icon
 

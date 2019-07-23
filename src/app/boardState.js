@@ -122,7 +122,7 @@ module.exports = function (window) {
     function createSaveBtn() {
 	var saveBtn = window.document.createElement('div')
 	saveBtn.innerHTML = '<i class="fa">&#xf0c7;</i>'
-
+	saveBtn.id = 'saveBtn'
 
 	var tooltip = document.createElement('span')
 	tooltip.innerHTML = 'save'
@@ -137,6 +137,29 @@ module.exports = function (window) {
 	})
 	var container = window.document.getElementById('boardControlContainer')
 	container.insertBefore(saveBtn, container.firstChild)
+    }
+
+
+    function createKioskBtn() {
+	var kioskBtn = window.document.createElement('div')
+	kioskBtn.innerHTML = '<i class="fa">&#xf2d0;</i>'
+	kioskBtn.id = 'kioskBtn'
+	
+	
+	var tooltip = document.createElement('span')
+	tooltip.innerHTML = 'presentation mode'
+	tooltip.classList.add('tooltip')
+	tooltip.id = 'kioskTooltip'
+	kioskBtn.appendChild(tooltip)
+	
+	kioskBtn.addEventListener('click', function (evt) {
+	    var kioskModeEvent = new CustomEvent("kioskModeEvt", {
+		detail: {}
+	    })
+	    window.document.dispatchEvent(kioskModeEvent)
+	})
+	var container = window.document.getElementById('boardControlContainer')
+	container.insertBefore(kioskBtn, container.firstChild)
     }
 
     
@@ -354,7 +377,7 @@ module.exports = function (window) {
 	
 	// reapply highlights
         for (i = 0; i < newBoard['hlSquares'].length; i++) {
-            highlightSquareByCoord(newBoard['hlSquares'][i]);
+            performOnSquareByCoord(newBoard.flipped, newBoard['hlSquares'][i], highlightSquareById)
         }
 
 
@@ -365,6 +388,47 @@ module.exports = function (window) {
     }
 
 
+    function colorSquareById(shift, sq_id) {
+
+	if (window.document.getElementById(sq_id).classList.contains('coloredSquare') ||
+	    window.document.getElementById(sq_id).classList.contains('altColoredSquare') ) {
+
+	    window.document.getElementById(sq_id)
+		.classList.remove('coloredSquare')
+	    
+	    window.document.getElementById(sq_id).parentElement
+		.classList.remove('coloredBorder')
+	    
+	    window.document.getElementById(sq_id)
+		.classList.remove('altColoredSquare')
+	    
+	    window.document.getElementById(sq_id).parentElement
+		.classList.remove('altColoredBorder')
+
+
+	} else {
+	
+	    if (shift) {
+	
+		window.document.getElementById(sq_id)
+		    .classList.add('altColoredSquare')
+		
+		window.document.getElementById(sq_id).parentElement
+		    .classList.add('altColoredBorder')
+
+	    } else {
+		
+		window.document.getElementById(sq_id)
+		    .classList.add('coloredSquare')
+		
+		window.document.getElementById(sq_id).parentElement
+		    .classList.add('coloredBorder')
+	    }
+	    
+	}
+    }
+    
+
     function highlightSquareById(sq_id) {
 
 	if (window.document.getElementById(sq_id).parentElement
@@ -374,24 +438,37 @@ module.exports = function (window) {
 		.classList.remove('highlightedSquare')
 	    
 	} else {
+
+	    window.document.getElementById(sq_id)
+		.classList.remove('coloredSquare')
+	    
+	    window.document.getElementById(sq_id).parentElement
+		.classList.remove('coloredBorder')
+
+	    window.document.getElementById(sq_id)
+		.classList.remove('altColoredSquare')
+	    
+	    window.document.getElementById(sq_id).parentElement
+		.classList.remove('altColoredBorder')
+	    
             window.document.getElementById(sq_id).parentElement
 		.classList.add('highlightedSquare')
 	}
     }
 
 
-    function highlightSquareByCoord(coord) {
+    function performOnSquareByCoord(flipped, coord, callback) {
 
 	var col = 'abcdefgh'.indexOf(coord[0])
 	var row = coord[1]
 
-	if (currentBoard.flipped) {
+	if (flipped) {
             var n = 64 - (row -1)*8 - col
-            highlightSquareById('sq'+ n.toString())
+            callback('sq'+ n.toString())
 	    
 	} else {
             var n = (row -1)*8 + col +1
-            highlightSquareById('sq'+ n.toString())
+            callback('sq'+ n.toString())
 	}
     }
 
@@ -414,13 +491,20 @@ module.exports = function (window) {
     function makeBoardClickable() {
 	var x = window.document.getElementsByClassName("innerSquare")
 	for (var i = 0; i < x.length; i++) {
-
+	    
 	    // include hook for deletion of event listener
 	    x[i].addEventListener("click", x[i].fn = function (evt) {
 		currentBoard = clickBoard(currentBoard, this.id)
 		sessionStorage.setItem(currentBoard.id, JSON.stringify(currentBoard))
 	    }, false)
+
+	    x[i].addEventListener("contextmenu", x[i].rc = function (evt) {
+		evt.preventDefault()		
+		colorSquareById(evt.shiftKey, this.id)
+	    }, false)
+	    
 	}
+	
     }
 
 
@@ -824,10 +908,19 @@ module.exports = function (window) {
 
 
     function clearHighlightedSquares() {
-	var x = window.document.getElementsByClassName("highlightedSquare")
-	while (x.length > 0) {
-	    x[0].classList.remove("highlightedSquare");
-	}
+
+	var qs = ".highlightedSquare,"
+	qs += ".coloredSquare,.coloredBorder,"
+	qs += ".altColoredSquare,.altColoredBorder"
+	
+	var x = window.document.querySelectorAll(qs)
+	x.forEach(function(sq) {
+	    sq.classList.remove("highlightedSquare")
+	    sq.classList.remove("coloredSquare")
+	    sq.classList.remove("coloredBorder")
+	    sq.classList.remove("altColoredSquare")
+	    sq.classList.remove("altColoredBorder")
+	})
     }
     
     
@@ -1533,9 +1626,11 @@ module.exports = function (window) {
     module.duplicateGame = duplicateGame
     module.deleteGame = deleteGame
     module.createSaveBtn = createSaveBtn
+    module.createKioskBtn = createKioskBtn
     module.insertEngineMove = insertEngineMove
     module.exportGameAsTex = exportGameAsTex
     module.exportGameAsPGN = exportGameAsPGN
+    module.resizeSquares = resizeSquares
     
     return module
 }
