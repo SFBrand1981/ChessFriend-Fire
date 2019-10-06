@@ -1,0 +1,76 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>ChessFriend-Fire - Game</title>
+    <link rel="stylesheet" href="../css/common.css">
+  </head>
+
+  
+  <body>
+
+   
+    <div id="container">
+
+ 
+      <div id="left_panel">
+	<div class="sidebar">
+	  <!-- sidebar -->
+	  <ul id="sidebarItems"></ul>
+	  <!-- open games -->
+	  <ul id="openGames"></ul>
+	</div>
+      </div>
+	
+     
+      <div id="right_panel">
+
+	<div class="container">
+	  
+	  <div id="drag">
+	    &nbsp;
+	    <!-- resize -->
+	  </div>
+
+	  <div class="gameContainer">
+	  
+	    <div class="boardContainer" id="boardContainer"></div>
+
+	    <div class="notationContainer" id="notationContainer">
+	      <!-- notation -->
+	    </div>
+
+	  </div>
+	    
+	</div> <!-- container class -->
+	
+      </div> <!-- right panel -->
+    </div> <!-- container -->
+   
+
+  </body>
+</html>
+
+<script>
+  
+  // load dependencies
+  var path = require('path')
+  var WindowHandler = require(path.join(process.cwd(), '/app/window.js'))
+  
+  var win = new WindowHandler(window)
+  win.createMoveIndicator()
+  win.createChessboard()
+  win.createBoardControls()
+  win.displayNotation()
+  win.displayGameInfo()
+  win.createEngineControls()
+  win.createKioskBtn()
+  win.createSaveBtn()
+
+  var contextMenu = new nw.Menu();
+  win.createContextMenu(contextMenu)
+
+  var engineSettingsMenu = new nw.Menu();
+  win.createEngineSettingsMenu(engineSettingsMenu)
+  
+</script>

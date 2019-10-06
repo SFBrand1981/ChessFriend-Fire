@@ -1,0 +1,136 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>ChessFriend-Fire - Database</title>
+    <link rel="stylesheet" href="../css/common.css">
+    <link rel="stylesheet" href="../css/awesomplete.css" />
+  </head>  
+  <body>
+
+   
+    <div id="container">
+
+      
+      <div id="left_panel">
+	<div class="sidebar">
+	  <!-- sidebar -->
+	  <ul id="sidebarItems"></ul>
+	  <!-- open games -->
+	  <ul id="openGames"></ul>
+	</div>
+      </div>
+
+
+      <div id="right_panel">
+
+	<div class="container">
+
+	  <div id="drag">
+	    &nbsp;
+	    <!-- resize -->
+	  </div>
+
+
+	  <div class="db-entries-container">
+	    
+	    <div class="stickyOnTop">
+	      <div class="mainDesc">
+		<div class="mainDescCenter">
+
+		  <div class="mainDescCenterDiv">
+		    <div id="paginatePrev" class="mainDescCenterItem">
+		      <i class="fa" style="font-weight: bold;">&#xf104;</i>
+		    </div>
+
+		    <div id="dbEntryCount" class="mainDescCenterItem"></div>
+		  
+		    <div id="paginateNext" class="mainDescCenterItem">
+		      <i class="fa" style="font-weight: bold;">&#xf105;</i>
+		    </div>
+		  </div>
+		  
+		</div>
+		<div class="mainDescRight"><i class="fa" id="filterBtn">&#xf002;</i></div>
+	      </div>
+
+	      <div class="mainSearchInfoContainer hidden">
+		<table class="searchInfoTable">
+		  <tr>
+		    <td>FEN:</td>
+		    <td><input class="searchInfoInput" id="searchparam_FEN"></td>
+		  </tr>
+		  <tr>
+		    <td>White:</td>
+		    <td><input class="searchInfoInput" id="searchparam_white"></td>
+		  </tr>
+		  <tr>
+		    <td>Black:</td>
+		    <td><input class="searchInfoInput" id="searchparam_black"></td>
+		  </tr>
+		  <tr>
+		    <td>Event:</td>
+		    <td><input class="searchInfoInput" id="searchparam_event"></td>
+		  </tr>
+		  <tr>
+		    <td>Tag:</td>
+		    <td><input class="searchInfoInput" id="searchparam_tags"></td>
+		  </tr>
+		</table>
+	      </div>
+
+	      
+	      <!-- Table header -->
+	      <table class="db-entries">
+		<thead>
+		  <tr>
+		    <th class="db-entry-star"><span id="searchorder_star"><i class="fa">&#xf006;</i></th>
+		    <th class="db-entry-player"><span id="searchorder_white">White</span></th>
+		    <th class="db-entry-dwz"><span id="searchorder_elow">Elo W</span></th>
+		    <th class="db-entry-player"><span id="searchorder_black">Black</span></th>
+		    <th class="db-entry-dwz"><span id="searchorder_elob">Elo B</span></th>
+		    <th class="db-entry-res"><span id="searchorder_res">Result</span></th>
+		    <th class="db-entry-event"><span id="searchorder_event">Event</span></th>
+		    <th class="db-entry-date"><span id="searchorder_date">Date</span></th>
+		  </tr>
+		</thead>
+	      </table>
+	    </div>
+
+
+	    <table class="db-entries">
+	      <tbody id="db-entries">
+		<!-- DB Entries -->
+	      </tbody>
+	    </table>
+
+	    
+	    <!-- <div class="stickyOnBottom"> -->
+	    <!-- </div> -->
+
+	  </div> <!-- db-entries-container -->
+	</div> <!-- container class -->
+	
+      </div> <!-- right panel -->
+    </div> <!-- container -->
+    
+    
+  </body>
+</html>
+
+<script>
+  
+  // load dependencies
+  var path = require('path')
+  var WindowHandler = require(path.join(process.cwd(), '/app/window.js'))
+
+  var win = new WindowHandler(window)
+  win.displayDBEntries()
+  win.displayDBEntryCount()
+  win.displaySearchparams()
+  win.enableFilterBtn()
+  win.enablePagination()
+  win.enableAwesomplete()
+  win.setActiveSidebarItem("Games")
+  
+</script>

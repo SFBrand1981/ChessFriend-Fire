@@ -1,0 +1,10 @@
+﻿[Event "?"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "?"]
+[White "Player A"]
+[Black "Player B"]
+[Result "1/2-1/2"]
+[Custom "Extra header"]
+
+1. a3 a6 2. b3 -- { null move black } 3. c3 c6 4. -- { null move white } b6 *  

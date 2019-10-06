@@ -1,0 +1,100 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>ChessFriend-Fire - Setup position</title>
+    <link rel="stylesheet" href="../css/common.css">
+  </head>
+
+  
+  <body>
+
+   
+    <div id="container">
+
+      
+      <div id="left_panel">
+	<div class="sidebar">
+	  <!-- sidebar -->
+	  <ul id="sidebarItems"></ul>
+	  <!-- open games -->
+	  <ul id="openGames"></ul>
+	</div>
+      </div>
+      
+      
+      <div id="right_panel">
+	<div class="container">
+	  
+	  <div id="drag">
+	    &nbsp;
+	    <!-- resize -->
+	  </div>
+
+	  <div class="gameContainer">
+	    
+	    <div class="boardContainer" id="boardContainer"></div>
+	    <div class="notationContainer" id="notationContainer">
+
+	      <!-- notation -->
+	      <div class="searchInfoContainer">
+		<table class="searchInfoTable">
+		  <tr class="selectable">
+		    <td><i class="fa" id="searchSelected"></i></td>
+		    <td colspan="2" id="searchSelectedLabel">Search position</td>
+		  </tr>
+		  <tr class="selectable">
+		    <td><i class="fa" id="addNewSelected"></i></td>
+		    <td colspan="2" id="addNewSelectedLabel">New game from position</td>
+		  </tr>
+		  <tr>
+		    <td></td>
+		    <td>FEN:</td>
+		    <td><input id="FEN_inp" type="text" class="searchInfoInput"></td>
+		  </tr>
+		  <tr>
+		    <td></td>
+		    <td>Side to move:</td>
+		    <td>
+		      <select name="stm" id="stm_inp" class="searchInfoSelect">
+			<option value="w">White</option>
+			<option value="b">Black</option>
+		      </select>
+		    </td>
+		  </tr>
+		  <tr>
+		    <td></td>
+		    <td>Move &#8470;:</td>
+		    <td><input id="mvNr_inp" type="number" min="1" value="1" class="searchInfoInput"></td>
+		  </tr>
+		</table>
+		<!-- search btns -->
+		<div class="searchBtnContainer"></div>
+	      </div> <!-- searchInfoContainer -->
+	      
+	      
+	    </div> <!-- notationContainer -->
+	  </div> <!-- gameContainer -->
+	  
+	</div> <!-- container class -->
+      </div> <!-- right panel -->
+    </div> <!-- container -->
+   
+
+  </body>
+</html>
+
+<script>
+  
+  // load dependencies
+  var path = require('path')
+  var WindowHandler = require(path.join(process.cwd(), '/app/window.js'))
+ 
+  var win = new WindowHandler(window)
+  win.createChessboard()
+  win.displayFEN()
+  win.createBoardControls()
+  win.createSearchControls()
+  win.setActiveSidebarItem("Setup position")
+  
+</script>
