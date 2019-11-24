@@ -1,0 +1,43 @@
+[Event "?"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "?"]
+[White "Lc495"]
+[Black "Laser 1.5"]
+[Result "1-0"]
+
+{CavalierFou : Lc495 wins against Laser 1.5 in blitz 5'+10"}1.d4 d5 2.c4 c6 3.cxd5
+(3.Nf3 Nf6 4.Nc3 e6 5.e3)
+3...cxd5 4.Nc3 Nf6 5.Bf4 Nc6 6.e3 Bf5 7.Qb3 Na5
+(7...Qb6 8.Qxb6 axb6 9.a3 Nb4
+(9...e6 10.Rc1 Be7 11.Nf3 {⩲ White has small edge})
+10.Rd1 Nc6 11.Nf3 {± White has big advantage})
+8.Qa4+ Bd7
+(8...Nc6 9.Nf3 Qb6 10.Bb5 e6 11.Ne5 Rc8 12.Rc1 Be7 13.Nxc6 bxc6 14.Ba6 Rd8 15.Nd1 Qb4+ 16.Qxb4 Bxb4+ 17.Ke2 Kd7 18.Bb7 Ke7 19.Rxc6 {± White has big advantage})
+9.Qc2 Rc8 10.Nf3 e6 11.Bd3 Be7 12.O-O Nh5
+(12...O-O 13.Ne5 Nc4 14.h3 Nxe5 15.Bxe5 a6 16.Bxf6 Bxf6 17.Bxh7+ Kh8 18.Bd3 g6 19.Qd2 {⩲ White has small edge})
+13.Be5 h6
+(13...f6 14.Bxh7 fxe5 15.Nxe5 {+− White has a decisive advantage} Bf6 16.Bg6+ Ke7 17.Nf7 Qf8 18.Nxh8 Qxh8 19.Qe2 {± White has big advantage})
+14.Qe2 O-O 15.g4 Nf6 16.g5 hxg5 17.Nxg5 g6 18.Kh1 Nc4 19.Rg1 Be8
+(19...Nxe5 20.dxe5 Ne4 21.Ngxe4 dxe4 22.Bxe4 Bc6 23.Rad1 {± White has big advantage})
+20.Bxc4
+(20.Qf3 Nxe5 21.dxe5 Ne4 22.Ngxe4 dxe4 23.Bxe4 Qc7 {= Even position})
+20...Rxc4 21.Qf3 Kg7
+(21...b5 22.Qh3 Nh5 23.Qxh5 gxh5 24.Nxf7+ Kxf7
+(24...Bg5 25.Nxd8 {± White has big advantage})
+25.Rg7#)
+22.Ne2 Rh8 23.Nf4 Rc6 24.Rg3 Qc8 25.Nd3 Rc4 26.Rag1 b6 27.Rh3 Rxh3
+(27...b5 28.Rxh8 Kxh8 29.Bxf6+ {± White has big advantage})
+28.Nxh3 Qd8 29.Ng5 Kg8 30.Qh3 Qc8
+(30...b5 31.Qh6 b4 32.Nf4 a5 33.Nh5 gxh5
+(33...Nxh5 34.Qh8#)
+34.Nh3+ Ng4 35.Qg7#)
+31.Qf3 Qd8 32.Nf4 Qd7 33.b3 Rc2 34.Nxg6
+(34.Nxf7 Bxf7
+(34...Kxf7 35.Nxg6 Rc1 36.Nh8+ Kf8 37.Rxc1 Bh5 38.Qf4 Qd8 39.Rc7 Qe8 40.Bxf6 {± White has big advantage})
+35.Nxg6 Bxg6 36.Rxg6+ Kf7 37.Rxf6+ Ke8 38.Qh5+ Kd8 39.Rf7 Qe8 40.Qh7 Rc1+ 41.Kg2 Rc8 42.Qg7 Kd7 43.Bf6 Qg8 44.Rxe7+ {± White has big advantage})
+34...fxg6 35.Bxf6 Bxf6 36.Qxf6 e5
+(36...Rxa2 37.Rg3 a5 38.Rf3 Ra1+
+(38...Qd6 39.Rh3 Ra1+ 40.Kg2 a4 41.Rh8#)
+39.Kg2 Qg7 40.Qxe6+ Kh8 41.Qxe8+ Qg8 42.Qe5+ Qg7 43.Rf8#)
+37.dxe5 Qf5 38.Qxf5 gxf5 39.Kg2 a5 40.Ne6 Rxa2 41.Kf3+ Kh7 42.Rg7+ Kh8 43.Re7 Bb5 44.Nd4 Bd3 45.e6 Be4+ 46.Kf4 Rxf2+ 47.Ke5 Bf3 48.Rb7 Bh5 49.Rxb6 Rxh2 50.e7 Kh7 51.Nxf5 Be8 52.Rb8 Bf7 53.Kf6 Bh5 54.Rb7 Kh8 55.Rd7 Rg2 56.Rxd5 Kh7 57.Nh4 Rf2+ 58.Rf5 Rxf5+ 59.Nxf5 Bg6 {game ended here} 60.Nd6 Kh6 61.Nf7+ Bxf7 62.Kxf7 Kg5 63.e8=Q 1-0 

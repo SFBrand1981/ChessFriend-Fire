@@ -1,0 +1,12 @@
+[Event "?"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "?"]
+[White "NN"]
+[Black "Black to Move"]
+[Result "*"]
+[WhiteElo ""]
+[BlackElo ""]
+[FEN "2r2rk1/pp2ppbp/3p2p1/1qp4n/3PP2P/2P1BQP1/PP3P2/R3RNK1 b - - 0 16"]
+
+ {This is a test!} 16...Qxb2  {comment after Qxb2}  {comment before Rec1} 17.Rec1 (17.Reb1)  *

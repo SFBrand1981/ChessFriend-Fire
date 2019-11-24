@@ -1,0 +1,11 @@
+﻿[Event "?"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "?"]
+[White "NN"]
+[Black "Black to Move"]
+[Result "*"]
+[FEN "2r2rk1/pp2ppbp/3p2p1/1qp4n/3PP2P/2P1BQP1/PP3P2/R3RNK1 b - - 0 16"]
+
+{Can Black take the pawn on b2?} *
+
