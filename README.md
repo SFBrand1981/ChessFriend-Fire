@@ -67,14 +67,6 @@ ChessFriend-Fire is open source and runs on any platform.
 
 
 
-## One-click annotations
-
-<img align="left" src="https://github.com/SFBrand1981/ChessFriend-Fire/blob/master/docs/ChessFriend-Fire_menu.png?v=20190725" width="40%"/>
-
-A right-click into the notation panel opens a context menu with shortcuts to commonly used numeric annotation glyphs (NAGs) which upon
-selection will be automatically inserted after the currently highlighted move.
-
-
 <br clear="both"/>
 
 
