@@ -1,38 +1,33 @@
 {
-  "name": "ChessFriend-Fire",
-  "version": "2.0.0",
-  "main": "views/main.html",
-  "scripts": {
-    "start": "nw src/",
-    "test": "cd src && node ../tests/test.js",
-    "prod": "nwbuild --macIcns src/icon/icon.icns --flavor sdk --platforms osx64 src/",
-    "osx": "nwbuild --macIcns src/icon/icon.icns --flavor normal --platforms osx64 src/",
-    "win": "nwbuild --winIco src/icon/icon.ico --flavor normal --platforms win64 src/",
-    "linux": "nwbuild --flavor normal --platforms linux64 src/"
-  },
-  "license": "MIT",
-  "dependencies": {
-    "awesomplete": "^1.1.4",
-    "chess.js": "^0.10.2",
-    "dexie": "^2.0.4",
-    "dexie-export-import": "^1.0.0-beta.12",
-    "downloadjs": "^1.4.7",
-    "event-stream": "^4.0.1",
-    "font-awesome": "^4.7.0",
-    "indexeddbshim": "^4.1.0",
-    "lodash": "^4.17.14",
-    "make-dir": "^3.0.0",
-    "node": "^12.6.0",
-    "nw": "^0.39.3",
-    "nw-builder": "^3.5.7"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/SFBrand1981/ChessFriend-Fire.git"
-  },
-  "author": "",
-  "bugs": {
-    "url": "https://github.com/SFBrand1981/ChessFriend-Fire/issues"
-  },
-  "homepage": "https://github.com/SFBrand1981/ChessFriend-Fire#readme"
+    "name": "ChessFriend-Fire",
+    "version": "3.0.0",
+    "description": "A package to work with chess",
+    "scripts": {
+        "start": "nw src/",
+        "test": "cd src && node ./tests/test.js",
+        "dev": "nwbuild --macIcns src/icon/icon.icns --flavor sdk --platforms osx64 src/",
+        "osx": "nwbuild --macIcns src/icon/icon.icns --flavor normal --platforms osx64 src/",
+        "win": "nwbuild --winIco src/icon/icon.ico --flavor normal --platforms win64 src/",
+        "linux": "nwbuild --flavor normal --platforms linux64 src/"
+    },
+    "license": "MIT",
+    "dependencies": {
+        "awesomplete": "^1.1.4",
+        "chess.js": "^0.10.2",
+        "dexie": "^3.0.0-rc.1",
+        "event-stream": "^4.0.1",
+        "font-awesome": "^4.7.0",
+        "make-dir": "^3.0.0",
+        "node": "^12.6.0",
+        "nw": "^0.39.3",
+        "nw-builder": "^3.5.7"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/SFBrand1981/ChessFriend-Fire.git"
+    },
+    "bugs": {
+        "url": "https://github.com/SFBrand1981/ChessFriend-Fire/issues"
+    },
+    "homepage": "https://github.com/SFBrand1981/ChessFriend-Fire#readme"
 }

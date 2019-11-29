@@ -1,7 +1,6 @@
 // database
 
 var Dexie = require('dexie')
-var DexieImportExport = require('dexie-export-import')
 var db = new Dexie('ChessFriendFireDB')
 
 db.version(1).stores({
@@ -13,666 +12,412 @@ db.version(1).stores({
 })
 
 
-module.exports = function (window) {
+module.exports = function () {
 
-    // dependencies
+
     var path = require('path')
+    var tools = require(path.join(process.cwd(), '/app/tools.js'))
+    
     var PGNHandler = require(path.join(process.cwd(), '/app/pgn.js'))
     var ph = new PGNHandler()
 
-    var SettingsHandler = require(path.join(process.cwd(), '/app/settings.js'))
-    var sh = new SettingsHandler()
+
+    searchParams = {orderBy: 'id',
+                    limit: undefined,
+                    awesompleteLimit: undefined,
+                    pageNum: 0,
+                    totalCount: undefined,
+                    queryCount: undefined,
+                    searching: false,
+                    displaySearchBar: false,
+                    fen: "",
+                    white: "",
+                    black: "",
+                    event: "",
+                    tags: [""]
+                   }
+
+    module.searchParams = searchParams
+
+
+    module.resetSearchParams = function() {
+        console.log("db.resetSearchParams")
+        searchParams.fen = ""
+        searchParams.white = ""
+        searchParams.black = ""
+        searchParams.event = ""
+        searchParams.tags = [""]
+    }
     
     
-    var searchParams = JSON.parse(localStorage.getItem('searchParams'))
+    module.getSearchLimits = function() {
 
+        var sp = module.searchParams
+        var num = sp.searching ? sp.queryCount : sp.totalCount
+        var low = sp.pageNum * sp.limit + 1
 
-    function addGame(gameInfo, nodes) {
+        var high = (sp.pageNum + 1) * sp.limit
+        if (num) { 
+            high = Math.min(num, high)
+        }
 
-	var game_id
-	
-	return db.games.add({
-	    star: gameInfo.star,
-	    white: gameInfo.white,
-	    elow: gameInfo.elow,
-	    black: gameInfo.black,
-	    elob: gameInfo.elob,
-	    res: gameInfo.res,
-	    event: gameInfo.event,
-	    site: gameInfo.site,
-	    round: gameInfo.round,
-	    date: gameInfo.date,
-	    tags: [],
-	    positions: getPositions(nodes)
-	}).then(function(id) {
-	    return ph.createPathFromNumber(id)
-	}).then(function(id) {
-	    game_id = id
-	    var pgnData = {}
-	    pgnData.filename = ph.pathFromNumber(game_id)
-	    pgnData.nodes = nodes
-	    pgnData.gameInfo = gameInfo
-	    ph.exportGameAsPGN(pgnData)	
-
-	    return 1
-	}).then(function() {
-	    return db.players.put({
-		name: gameInfo.white.toLowerCase(),
-		fullName: gameInfo.white
-	    })
-
-	}).then(function() {
-	    return db.players.put({
-		name: gameInfo.black.toLowerCase(),
-		fullName: gameInfo.black
-	    })
-	    
-	}).then(function() {
-	    return db.events.put({
-		name: gameInfo.event.toLowerCase(),
-		fullName: gameInfo.event
-	    })
-	}).then(function() {
-	    var count = parseInt(localStorage.getItem('dbCount'))
-	    return localStorage.setItem('dbCount', count + 1)
-	}).then(function() {
-	    return game_id
-	})
-    }
-
-						        
-    function importPGNsFromFile(fh) {
-
-	return db.transaction("rw", db.games, db.nodes, function() {
-
-	    ph.readGamesFromFile(fh, function(pgn) {
-		var pgnData = ph.parsePGNData(pgn)
-		var nodes = ph.pgnMovesToNodes(pgnData['Moves'], pgnData['FEN'])
-
-		var gameInfo = {}		
-		gameInfo.star = 0
-		gameInfo.white = pgnData['White']
-		gameInfo.elow = pgnData['WhiteElo']
-		gameInfo.black = pgnData['Black']
-		gameInfo.elob = pgnData['BlackElo']
-		gameInfo.res = sh.res_enum[pgnData['Result']]
-		gameInfo.event = pgnData['Event']
-		gameInfo.site = pgnData['Site']
-		gameInfo.round = pgnData['Round']
-		gameInfo.date = pgnData['Date']
-		gameInfo.tags = []
-		
-		addGame(gameInfo, nodes)  
-		    .catch(function (e) {
-			alert ("Error: " + (e.stack || e))
-		    })
-	    })
-	    
-	}).catch(function (error) {
-	    alert ("Error: " + (e.stack || e))
-	})
-
+        if (num == 0) {
+            return [0, 0, 0]
+        } else {
+            return [low, high, num]
+        }
     }
 
 
-    function getPositions(nodes) {	
-	return ph.getPositions(nodes)
+    module.initSearchParams = function() {
+
+        searchParams.limit = parseInt(localStorage.getItem('pageSize'))
+        searchParams.awesompleteLimit =
+            parseInt(localStorage.getItem('numAwesompleteSuggestions'))
+
+        searchParams.totalCount = parseInt(localStorage.getItem('totalCount'))
+
+        console.log("set searchParams.limit", searchParams.limit)
+        console.log("set searchParams.awesompleteLimit", searchParams.awesompleteLimit)
+        console.log("set searchParams.totalCount", searchParams.totalCount)
+
+        
+        if (!searchParams.totalCount) {
+
+            console.log("Counting games in database")
+            return db.games.count().then( count => {
+                searchParams.totalCount = count
+                localStorage.setItem('totalCount', count)
+                return count
+            })
+            
+        } else {
+            
+            return new Promise (function(resolve, reject) {
+                resolve(searchParams.totalCount)
+            })
+        }
     }
 
 
-    var updateSearchParamsEvt = new CustomEvent("updateSearchParamsEvt", {
-	details: 'updated'
-    })
+    module.queryDBEntries = function() {
 
+        var limit = parseInt(searchParams.limit)
+        var offset = parseInt(searchParams.pageNum * limit)
 
-    function indicateSearchOrder(order) {
-	var searchField = window.document.getElementById("searchorder_" + order)
-	searchField.classList.add("searchordered")
-    }
+        
+        if (searchParams.searching) {
 
-    
-    function updateSearchParams(param, value) {
-
-	// indicate search order
-	var searchFields = window.document.getElementsByClassName("searchordered")
-	for (var i = 0, len = searchFields.length; i < len; i++) {
-	    searchFields[i].classList.remove("searchordered")
-	}
-
-	if (param == "orderBy") {
-	    if (searchParams.orderBy == value) {
-		// reset
-		searchParams.orderBy = 'id'
-	    } else {
-		// change
-		searchParams.orderBy = value
-		indicateSearchOrder(value)
+            var query = {}
+            
+            if (searchParams.fen) {
+	        query.positions = searchParams.fen
 	    }
-	} else {
-	    searchParams[param] = value
-	}
-	
-	searchParams.searching = true
-	searchParams.pageNum = 0
-
-	if (!searchParams.FEN &&
-	    !searchParams.white &&
-	    !searchParams.black &&
-	    !searchParams.event &&
-	    !searchParams.tags) {
-
-	    // default
-	    searchParams.searching = false
-	}
-
-
-	localStorage.setItem('searchParams', JSON.stringify(searchParams))
-	var dbEntries = window.document.getElementById('db-entries')
-	displayDBEntries(dbEntries)
-	window.dispatchEvent(updateSearchParamsEvt)
-    }
-
-
-    function resetSearchparams(btn, container) {
-
-	if (searchParams.container == 'visible') {
-	
-	    // reset
-	    var defaultParams = {
-		pageNum: 0,
-		orderBy: 'id',
-		container: 'hidden'
+	    if (searchParams.white) {
+	        query.white = searchParams.white
 	    }
-	    btn.classList.remove('filtering')
-	    searchParams = defaultParams
-	    localStorage.setItem('searchParams', JSON.stringify(defaultParams))
-	    window.open('/views/main.html', '_self')
-
-	} else {
-	    searchParams.container = 'visible'
-	    localStorage.setItem('searchParams', JSON.stringify(searchParams))
-	    container.classList.remove('hidden')
-	    btn.classList.add('filtering')
-	}
-    }
-    
-
-    function displaySearchparams(container) {
-
-	var filterBtn = window.document.getElementById('filterBtn')
-	var FEN = window.document.getElementById('searchparam_FEN')
-	var white = window.document.getElementById('searchparam_white')
-	var black = window.document.getElementById('searchparam_black')
-	var event = window.document.getElementById('searchparam_event')
-	var tags = window.document.getElementById('searchparam_tags')
-
-	if (searchParams.container == 'hidden') {
-	    container.classList.add('hidden')
-	    filterBtn.classList.remove('filtering')
-	} else {
-	    container.classList.remove('hidden')
-	    filterBtn.classList.add('filtering')
-	}
-
-
-	if (searchParams) {
-	    FEN.value = searchParams.FEN ? searchParams.FEN : ''
-	    white.value = searchParams.white ? searchParams.white : ''
-	    black.value = searchParams.black ? searchParams.black : ''
-	    event.value = searchParams.event ? searchParams.event : ''
-	    tags.value = searchParams.tags ? searchParams.tags : ''
-	}
-	
-	// modify search parameters
-	FEN.addEventListener('change', function (evt) {
-	    updateSearchParams('FEN', FEN.value)
-	})
-
-	white.addEventListener('change', function (evt) {
-	    updateSearchParams('white', white.value)
-	})
-	
-	black.addEventListener('change', function (evt) {
-	    updateSearchParams('black', black.value)
-	})
-
-	event.addEventListener('change', function (evt) {
-	    updateSearchParams('event', event.value)
-	})
-
-	tags.addEventListener('change', function (evt) {
-	    updateSearchParams('tags', tags.value)
-	})
-
-
-	// modify search order
-	var starOrder = window.document.getElementById('searchorder_star')
-	var whiteOrder = window.document.getElementById('searchorder_white')
-	var blackOrder = window.document.getElementById('searchorder_black')
-	var elowOrder = window.document.getElementById('searchorder_elow')
-	var elobOrder = window.document.getElementById('searchorder_elob')
-	var resOrder = window.document.getElementById('searchorder_res')
-	var eventOrder = window.document.getElementById('searchorder_event')
-	var dateOrder = window.document.getElementById('searchorder_date')
-
-	starOrder.addEventListener('click', function (evt) {
-	    updateSearchParams('orderBy', 'star')
-	})
-	whiteOrder.addEventListener('click', function (evt) {
-	    updateSearchParams('orderBy', 'white')
-	})
-	blackOrder.addEventListener('click', function (evt) {
-	    updateSearchParams('orderBy', 'black')
-	})
-	elowOrder.addEventListener('click', function (evt) {
-	    updateSearchParams('orderBy', 'elow')
-	})
-	elobOrder.addEventListener('click', function (evt) {
-	    updateSearchParams('orderBy', 'elob')
-	})
-	resOrder.addEventListener('click', function (evt) {
-	    updateSearchParams('orderBy', 'res')
-	})
-	eventOrder.addEventListener('click', function (evt) {
-	    updateSearchParams('orderBy', 'event')
-	})
-	dateOrder.addEventListener('click', function (evt) {
-	    updateSearchParams('orderBy', 'date')
-	})
-
-    }
-
-    
-    function displayDBEntries(container) {
-
-	// cleanup
-	while (container.lastChild) {
-	    container.removeChild(container.lastChild)
-	}
-
-	var limit = parseInt(localStorage.getItem('pageSize'))
-	var offset = parseInt(searchParams.pageNum * limit)
-
-	if (searchParams.orderBy != 'id') {
-	    indicateSearchOrder(searchParams.orderBy)
-	}
-	
-	console.log(searchParams)
-	console.log("offset: " + offset)
-	console.log("limit: " + limit)
-
-    
-	if (searchParams.searching && searchParams.orderBy != 'id') {
-
-	    console.log("searching 1")
-	    var queryKeys
-	    var pageKeys = []
-	    var hits = 0
-	    
-	    var reversed
-	    switch (searchParams.orderBy) {
-	    case 'star':
-	    case 'elow':
-	    case 'elob':
-	    case 'date':
-		reversed = true
-		break
-	    default:
-		reversed = false
+	    if (searchParams.black) {
+	        query.black = searchParams.black
 	    }
-		
-	    return getQueryCount().then(count => {
-
-		var maxNum = localStorage.getItem('maxNumOfItemsSortedInMemory')
-		if (count < parseInt(maxNum)) {
-		    
-		    // FAST: Sort in memory
-		    return db.games
-			.where(queryFromSearchParams())
-			.sortBy(searchParams.orderBy)
-			.then(entries => {
-
-			    if (reversed) {
-				entries = entries.reverse()
-			    }
-			    
-			    for (var i = 0, len = entries.length; i < len; i++) {
-
-				if (i >= limit || i + offset >= len) {
-				    break
-				}
-
-				displayDBEntry(entries[i+offset], container)
-			    }
-			}).catch( e => {
-			    alert(e)
-			})
-
-		} else {
-
-		    // SLOW: Arbitrary query and ordering on (non-unique) indices
-		    return db.games
-			.where(queryFromSearchParams())
-			.primaryKeys(keys => {
-			    queryKeys = new Set(keys)
-			}).then(() => {
-			    return reversed ?
-				db.games.orderBy(searchParams.orderBy).reverse() :
-				db.games.orderBy(searchParams.orderBy)
-			}).then(collection => {
-			    return collection
-				.until(() => {
-				    return (pageKeys.length === limit)
-				})
-				.eachPrimaryKey(id => {
-				    if (queryKeys.has(id)) {
-					hits += 1
-					if (hits > offset) {
-					    pageKeys.push(id)
-					}
-				    }
-				})
-			}).then(() => {
-			    return Promise.all(pageKeys.map(id => db.games.get(id)))		    
-			}).then(entries => {
-			    for (var i = 0, len = entries.length; i < len; i++) {
-				displayDBEntry(entries[i], container)
-			    }
-			}).catch( e => {
-			    alert(e)
-			})
-
-		}
-	    })
-	    
-	} else if (searchParams.searching) {
-
-	    console.log("searching 2")
-	    // FAST: No ordering
-	    
-	    return db.games
-		.where(queryFromSearchParams())
-		.reverse()
-		.offset(offset)
-		.limit(limit)
-		.toArray( entries => {
-		    for (var i = 0, len = entries.length; i < len; i++) {
-	    		displayDBEntry(entries[i], container)
-	    	    }		    
-		}).catch( e => {
-		    alert (e)
-		})
-	    
-	    
-	} else {
-
-	    console.log("searching 3")
-	    // FAST: No query
-	    let myOrderedTable = (() => {
-		if (searchParams.orderBy == 'id') {
-		    return db.games.reverse()
-		} else if (searchParams.orderBy == 'star') {
-		    return db.games.orderBy('star').reverse()
-		} else if (searchParams.orderBy == 'elow') {
-		    return db.games.orderBy('elow').reverse()
-		} else if (searchParams.orderBy == 'elob') {
-		    return db.games.orderBy('elob').reverse()
-		} else if (searchParams.orderBy == 'date') {
-		    return db.games.orderBy('date').reverse()
-		} else {
-		    return db.games.orderBy(searchParams.orderBy)
-		}
-	    })()
-
-    
-	    return myOrderedTable
-	    	.offset(offset)
-	    	.limit(limit)
-	    	.toArray( entries => {
-	    	    for (var i = 0, len = entries.length; i < len; i++) {
-	    		displayDBEntry(entries[i], container)
-	    	    }		    
-	    	}).catch(function (e) {
-	    	    alert (e)
-	    	})
-	}
-    }
-
-
-    function queryFromSearchParams() {
-	var query = {}
-	if (searchParams.FEN) {
-	    query.positions = searchParams.FEN
-	}
-	if (searchParams.white) {
-	    query.white = searchParams.white
-	}
-	if (searchParams.black) {
-	    query.black = searchParams.black
-	}
-	if (searchParams.event) {
+	    if (searchParams.event) {
 		query.event = searchParams.event
-	}
-	if (searchParams.tags) {
-	    query.tags = searchParams.tags
-	}
-
-	return query
-    }
-
-    function displayDBEntry(entry, container) {
-
-	var tr = document.createElement('tr')
-
-	var td1 = document.createElement('td')
-	td1.classList.add('db-entry-star')
-	if (entry.star == 1) {
-	    td1.innerHTML = '<i class="fa starred">&#xf005;</i>'
-	} else {
-	    td1.innerHTML = '<i class="fa">&#xf006;</i>'
-	}
-
-	td1.addEventListener('click', function(evt) {
-	    if (this.firstChild.classList.contains('starred')) {
-		this.innerHTML = '<i class="fa">&#xf006;</i>'
-	    } else {
-		this.innerHTML = '<i class="fa starred">&#xf005;</i>'
 	    }
-	    starEntry(entry.id)
-	})
+            
+            var queries = []
+            if (Object.keys(query).length > 0) {
+                queries = [db.games.where(query).primaryKeys()]
+            }
 
-	var td2 = document.createElement('td')
-	td2.classList.add('db-entry-player')
-	td2.innerHTML = entry.white
+            if (searchParams.tags[0] != "") {
+                for (var i = 0, len = searchParams.tags.length; i < len; i++) {
+                    queries.push(db.games.where('tags').equals(searchParams.tags[i]).primaryKeys())
+                }
+	    }
+            
+            return Promise.all(queries).then(keys => {
 
-	var td3 = document.createElement('td')
-	td3.classList.add('db-entry-dwz')
-	td3.innerHTML = entry.elow
+                // Find all common primary keys
+                var intersection = tools.intersect([...keys])
+                searchParams.queryCount = intersection.length
+                
+                // Look up the actual objects from these primary keys
+                return db.games.bulkGet(intersection).then(entries => {
+                
+                    var sp = module.searchParams
+                    var low = sp.pageNum * sp.limit                        
+                    var high = (sp.pageNum + 1) * sp.limit -1
 
-	var td4 = document.createElement('td')
-	td4.classList.add('db-entry-player')
-	td4.innerHTML = entry.black
+                    var sorted = entries.sort(function(a, b) {
 
-	var td5 = document.createElement('td')
-	td5.classList.add('db-entry-dwz')
-	td5.innerHTML = entry.elob
+                        var valA = a[searchParams.orderBy]
+                        var valB = b[searchParams.orderBy]
+                        var comparison = 0
+                        
+                        if (valA && valB) {
+                            comparison = (valA < valB) ? -1 : 1
+                        } else if (valA) {
+                            comparison = -1
+                        } else if (valB) {
+                            comparison = 1
+                        }
 
-	var td6 = document.createElement('td')
-	td6.classList.add('db-entry-res')
-	switch (parseInt(entry.res)) {
-	case 1: 
-	    td6.innerHTML = "1-0"
-	    break
-	case 2: 
-	    td6.innerHTML = "1/2"
-	    break
-	case 3: 
-	    td6.innerHTML = "0-1"
-	    break
-	case 4: 
-	    td6.innerHTML = "*"
-	    break
-	}
-	    
-	var td7 = document.createElement('td')
-	td7.classList.add('db-entry-event')
-	td7.innerHTML = entry.event
+                        if (searchParams.orderBy == "white" ||
+                            searchParams.orderBy == "black") {
+                            
+                            return comparison
+                        } else {
+                            return comparison * (-1)
+                        }
+                    })
+                    
+                    return sorted.slice(low, high)
+                })
+            })
+            
+            
+        } else {
+            // default
+        
+            let myOrderedTable = (() => {
 
-	var td8 = document.createElement('td')
-	td8.classList.add('db-entry-date')
-	td8.innerHTML = entry.date ? entry.date.slice(0,4) : ""
+                if (searchParams.orderBy == 'id') {
+                    return db.games.reverse()
+                } else if (searchParams.orderBy == 'star') {
+                    return db.games.orderBy('star').reverse()
+                } else if (searchParams.orderBy == 'elow') {
+                    return db.games.orderBy('elow').reverse()
+                } else if (searchParams.orderBy == 'elob') {
+                    return db.games.orderBy('elob').reverse()
+                } else if (searchParams.orderBy == 'date') {
+                    return db.games.orderBy('date').reverse()
+                } else {
+                    return db.games.orderBy(searchParams.orderBy)
+                }
+            })()
 
+            
+            return myOrderedTable
+                .offset(offset)
+                .limit(limit)
+                .toArray()
+                .catch(function (e) {
+                    alert (e)
+                })
 
-	td2.addEventListener('click', function (evt) {
-	    loadEntry(entry)
-	    
-	    // var gameDeletedEvent = new CustomEvent("gameDeletedEvt", {
-	    // 	detail: { game_id : entry.id }
-	    // })
-	    // window.document.dispatchEvent(gameDeletedEvent)
-	    
-	})
-	td3.addEventListener('click', function (evt) {
-	    loadEntry(entry)
-	})
-	td4.addEventListener('click', function (evt) {
-	    loadEntry(entry)
-	})
-	td5.addEventListener('click', function (evt) {
-	    loadEntry(entry)
-	})
-	td6.addEventListener('click', function (evt) {
-	    loadEntry(entry)
-	})
-	td7.addEventListener('click', function (evt) {
-	    loadEntry(entry)
-	})
-	td8.addEventListener('click', function (evt) {
-	    loadEntry(entry)
-	})	
-
-	tr.appendChild(td1)
-	tr.appendChild(td2)
-	tr.appendChild(td3)
-	tr.appendChild(td4)
-	tr.appendChild(td5)
-	tr.appendChild(td6)
-	tr.appendChild(td7)
-	tr.appendChild(td8)
-
-	container.appendChild(tr)
+        }
 
     }
 
-    function starEntry(id) {
 
-	db.games.get(id, function (entry) {
-	    if (entry.star == 0) {
-		return db.games.update(id, {star: 1})
-	    } else {
-		return db.games.update(id, {star: 0})
-	    }
-	}).catch(function (e) {
-	    alert ("Error: " + (e.stack || e))
-	})
 
+    module.addGame = function(gameInfo, nodes) {
+
+        return db.transaction("rw", db.games, db.players, db.events, function() {
+            
+            var game_id = db.games.add({
+                star: 0,
+                white: gameInfo.white,
+                elow: gameInfo.elow,
+                black: gameInfo.black,
+                elob: gameInfo.elob,
+                res: gameInfo.res,
+                event: gameInfo.event,
+                site: gameInfo.site,
+                round: gameInfo.round,
+                date: gameInfo.date,
+                tags: [],
+                positions: ph.getPositions(nodes)
+                
+            })
+
+            db.players.put({
+                name: gameInfo.white.toLowerCase(),
+                fullName: gameInfo.white
+            })
+            
+            db.players.put({
+                name: gameInfo.black.toLowerCase(),
+                fullName: gameInfo.black
+            })
+            
+            db.events.put({
+                name: gameInfo.event.toLowerCase(),
+                fullName: gameInfo.event
+            })
+
+            return game_id
+            
+        }).then(function(game_id) {
+            return ph.createPathFromNumber(game_id)
+            
+        }).then(function(game_id) {
+
+            var pgnData = {}
+            pgnData.filename = ph.pathFromNumber(game_id)
+            pgnData.nodes = nodes
+            pgnData.gameInfo = gameInfo            
+            ph.exportGameAsPGN(pgnData) 
+            return game_id
+            
+        }).then(function(game_id) {
+            // entry has been saved,
+            // update totalCount and return
+            if (searchParams.totalCount) {
+                searchParams.totalCount += 1
+            } else {
+                searchParams.totalCount = 1
+            }
+            return game_id
+            
+        }).catch(function (e) {
+            alert ("Error: " + (e.stack || e))
+        })              
+    }
+
+
+    module.updateGame = function(gameInfo, nodes) {
+
+        var game_id = gameInfo.id
+
+        var taglist = []
+        for (var i = 0, len = gameInfo['tags'].length; i < len; i++) {
+            var tagname = gameInfo['tags'][i]
+            taglist.push( {name: tagname.toLowerCase(), fullName: tagname })
+        }
+
+        
+        db.transaction("rw", db.games, db.players, db.events, db.tags, function() {
+            
+            db.games.update(parseInt(game_id), {
+                star: gameInfo['star'],
+                white: gameInfo['white'],
+                elow: gameInfo['elow'],
+                black: gameInfo['black'],
+                elob: gameInfo['elob'],
+                res: gameInfo['res'],
+                event: gameInfo['event'],
+                site: gameInfo['site'],
+                round: gameInfo['round'],
+                date: gameInfo['date'],
+                tags: gameInfo['tags'],     
+                positions: ph.getPositions(nodes)           
+            })
+
+            
+            db.players.put({
+                name: gameInfo.white.toLowerCase(),
+                fullName: gameInfo.white
+            })
+            
+            db.players.put({
+                name: gameInfo.black.toLowerCase(),
+                fullName: gameInfo.black
+            })
+            
+            db.events.put({
+                name: gameInfo.event.toLowerCase(),
+                fullName: gameInfo.event
+            })
+
+            db.tags.bulkPut(taglist)
+            
+            return 0
+
+        }).then(function() {
+            
+            var pgnData = {}
+            pgnData.filename = ph.pathFromNumber(game_id)
+            pgnData.nodes = nodes
+            pgnData.gameInfo = gameInfo            
+            ph.exportGameAsPGN(pgnData)
+
+            console.log("Record " + game_id + " has been updated")
+            return 0
+                
+        }).catch(function (e) {
+            alert ("Error: " + (e.stack || e))
+        })
+            
+        
+    }
+
+    module.getEntry = function(id) {
+
+        return db.games.get(id, function (entry) {
+
+            return entry
+                               
+        }).catch(function (e) {
+            alert ("Error: " + (e.stack || e))
+        })
+        
+    }
+
+
+    module.starEntry = function(id) {
+        
+        db.games.get(id, function (entry) {
+            if (entry.star == 0) {
+                return db.games.update(id, {star: 1})
+            } else {
+                return db.games.update(id, {star: 0})
+            }
+        }).catch(function (e) {
+            alert ("Error: " + (e.stack || e))
+        })
+        
+    }
+
+
+    module.getAWPlayerList = function(aw, inp) {
+	return db.players.where('name')
+	    .startsWith(inp)
+	    .limit(searchParams.awesompleteLimit)
+		.toArray().then(function(arr) {
+		    
+		    aw.list = arr.map( a => a.fullName)
+		    aw.evaluate()
+		})
     }
 
     
-    function loadEntry(entry) {
-
-	var game_id = entry.id.toString()
-	var title = entry.white + ' - ' + entry.black
-	
-	var loadEntryEvt = new CustomEvent("loadEntryEvt", {
-	    detail : { game_id : game_id,
-		       title: title }
-	})
-	window.document.dispatchEvent(loadEntryEvt)
-	
-    }
-
-
-    async function getSearchCount(query) {
-
-	var count = await db.games.where(query).count()
-	return count
-    }
-
-
-    function getQueryCount() {
-
-	if (searchParams.searching) {
-	    return getSearchCount(queryFromSearchParams())
-	} else {
-	    
-	    return new Promise (function (resolve, reject) {
-		var count = localStorage.getItem('dbCount')
-		if (count) {
-		    resolve(parseInt(count))
-		} else {
-		    reject('count not set')
-		}
+    module.getAWEventList = function(aw, inp) {
+	return db.events.where('name')
+	    .startsWith(inp)
+	    .limit(searchParams.awesompleteLimit)
+	    .toArray().then(function(arr) {
+		
+		aw.list = arr.map( a => a.fullName)
+		aw.evaluate()
 	    })
-	}
     }
-
-
-    function pageNext() {
-	searchParams.pageNum += 1
-	localStorage.setItem('searchParams', JSON.stringify(searchParams))
-    }
-
-
-    function pagePrev() {
-	searchParams.pageNum -= 1
-	localStorage.setItem('searchParams', JSON.stringify(searchParams))
-    }
-
-
-    function importDB(file) {
-	console.log("import started")
-
-
-	// return db.games.clear().then(() => {
-	//     return db.nodes.clear()
-	// }).then(() => {
-	    
-	return db.import(file, {progressCallback}).then(() => {
-	    return db.games.count()
-	}).then( count => {
-
-	    var importStatusBar = window.document.getElementById('importStatusBar')
-	    importStatusBar.innerHTML = 'Imported ' + count + ' games'
-	    
-	    console.log("New DB count: " + count)
-	    return localStorage.setItem('dbCount', count)
-	}).catch(function (e) {
-	    alert ("Error: " + (e.stack || e))
-	})
-    }
-
     
-    function progressCallback ({totalRows, completedRows}) {
-	console.log(`Progress: ${completedRows} of ${totalRows} rows completed`)
+
+    module.getAWTagList = function(aw, inp) {
+	return db.tags.where('name')
+	    .startsWith(inp)
+	    .limit(searchParams.awesompleteLimit)
+	    .toArray().then(function(arr) {
+		
+		aw.list = arr.map( a => a.fullName)
+		aw.evaluate()
+	    })
     }
 
 
-    module.addGame = addGame
-    module.importPGNsFromFile = importPGNsFromFile 
-    module.displayDBEntries = displayDBEntries
-    module.getPositions = getPositions
-    module.getSearchCount = getSearchCount
-    module.displaySearchparams = displaySearchparams
-    module.resetSearchparams = resetSearchparams
-    module.getQueryCount = getQueryCount
-    module.pageNext = pageNext
-    module.pagePrev = pagePrev
-    module.db = db
-    module.indicateSearchOrder = indicateSearchOrder
-    module.importDB = importDB
-    module.progressCallback = progressCallback
+    module.deleteGame = function(id) {
+        
+	return db.games.delete(id).then(() => {
+            
+            if (searchParams.totalCount) {
+                searchParams.totalCount -= 1
+            }
+            
+            return id
+        })	
+    }
+
     
     return module
-
+    
 }

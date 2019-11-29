@@ -48,16 +48,16 @@ var pgn
 var num_games
 
 function parseNodesFromGameInfo() {
-
+    
     var pgnData = ph.parsePGNData(pgn)
     var nodes = ph.pgnMovesToNodes(pgnData['Moves'], pgnData['FEN'])
     
     process.send({
-	
-     	importWorker : {readGame : true,
-     			num_games : num_games,
-     			pgnData: pgnData,
-     			nodes: nodes}
+        
+        importWorker : {readGame : true,
+                        num_games : num_games,
+                        pgnData: pgnData,
+                        nodes: nodes}
     })
 }
 
@@ -68,11 +68,11 @@ function extractNodesFromPGN() {
     var nodes = ph.extractedPGNMovesToNodes(pgnData['Moves'], pgnData['FEN'])
     
     process.send({
-	
-     	importWorker : {readGame : true,
-     			num_games : num_games,
-     			pgnData: pgnData,
-     			nodes: nodes}
+        
+        importWorker : {readGame : true,
+                        num_games : num_games,
+                        pgnData: pgnData,
+                        nodes: nodes}
     })
 }
 
@@ -80,61 +80,64 @@ process.on('message', (msg) => {
 
     function readGamesFromStream(callback) {
 
-	num_games = 0
-	pgn = ''
+        num_games = 0
+        pgn = ''
 
-	readstream = fs.createReadStream(msg.importWorker.pgn_file)
-	    .pipe(es.split())
-	    .pipe(es.mapSync(function(line){
+        readstream = fs.createReadStream(msg.importWorker.pgn_file)
+            .pipe(es.split())
+            .pipe(es.mapSync(function(line){
 
-		// pause the readstream
-		readstream.pause();
-		
-		// process line here and call s.resume() when rdy		
-		if (/(\[Event\s.*\])/.test(line)) {
+                // pause the readstream
+                readstream.pause();
+                
+                // process line here and call s.resume() when rdy               
+                if (/(\[Event\s.*\])/.test(line)) {
 
-		    if (num_games !== 0) {
-			callback()
-			num_games += 1
-			pgn = ' ' + line
-		    } else {
-			num_games += 1
-			pgn += line
-			readstream.resume()
-		    }
-		} else {
-		    // continue reading
-		    pgn += ' ' + line 
-		    readstream.resume()
-		}
-		
-	    }).on('error', function(err){
-		console.log('Error while reading file.', err);
-	    }).on('end', function(){
+                    if (num_games !== 0) {
+                        callback()
+                        num_games += 1
+                        pgn = ' ' + line
+                    } else {
+                        num_games += 1
+                        pgn += line
+                        readstream.resume()
+                    }
+                } else {
+                    // continue reading
+                    pgn += ' ' + line 
+                    readstream.resume()
+                }
+                
+            }).on('error', function(err){
+                console.log('Error while reading file.', err);
+            }).on('end', function(){
 
-		callback()
+                callback()
 
-		// finish
-		process.send({
-		    importWorker : {completedImport : true,
-				    num_games : num_games }
-		})
+                // finish
+                process.send({
+                    importWorker : {completedImport : true,
+                                    num_games : num_games }
+                })
 
-	    }))
+            }))
     }
 
 
     
     if (msg.importWorker.startPGNImport) {
-	readGamesFromStream(parseNodesFromGameInfo)
+        console.log("Received msg: importWorker.startPGNImport")
+        readGamesFromStream(parseNodesFromGameInfo)
     }
 
     if (msg.importWorker.startDBImport) {
-	readGamesFromStream(extractNodesFromPGN)
+        console.log("Received msg: importWorker.startDBImport")
+        readGamesFromStream(extractNodesFromPGN)
     }
 
     if (msg.importWorker.resumeImport) {
-	readstream.resume()
+        console.log("Received msg: importWorker.resumeImport")
+        readstream.resume()
     }
 })
 

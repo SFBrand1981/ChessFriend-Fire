@@ -1,26 +1,51 @@
 
-// Binding and chaining functions
-function bind(f, g) {
-    return function(a, callback) {
-        f(a, function(result) {
-	    return g(result, callback)
-	})
-    }
+exports.newObjFrom = function(obj) {
+
+    var newObj = {}
+
+    Object.entries(obj).forEach(([key, value]) => {
+	newObj[key] = value
+    })
+
+    console.log("Created new object: ", newObj)
+    return newObj
 }
 
-function chain() {
-    var args = Array.prototype.slice.call(arguments),
-        f = args.shift()
-    while (args.length > 0) {
-        f = bind(f, args.shift())
-    }
-    return f
+
+exports.intersect = function (a) {
+    if (a.length > 2)
+        return intersect([intersect(a.slice(0, a.length / 2)),
+                          intersect(a.slice(a.length / 2))])
+        
+    if (a.length == 1)
+        return a[0]
+    
+    return a[0].filter(function(item) {
+        return a[1].indexOf(item) !== -1
+    })
 }
 
-exports.chain = chain
+
+exports.isScrolledIntoView = function isScrolledIntoView(window, el) {
+    var rect = el.getBoundingClientRect();
+    var elemTop = rect.top;
+    var elemBottom = rect.bottom;
+    
+    // Only completely visible elements return true:
+    var isVisible = (elemTop >= 0) && (elemBottom <= window.innerHeight);
+
+    // Partially visible elements return true:
+    //isVisible = elemTop < window.innerHeight && elemBottom >= 0;
+
+    return isVisible;
+}
 
 
-// Date format
+exports.getInitialFEN = function() {
+    return "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+}
+
+
 exports.formatDate = function(date) {
     var d = new Date(date),
         month = '' + (d.getMonth() + 1),
@@ -31,33 +56,4 @@ exports.formatDate = function(date) {
     if (day.length < 2) day = '0' + day
     
     return [year, month, day].join('.')
-}
-
-
-// Query parameters
-exports.getParams = function (url) {
-    var params = {};
-    var parser = document.createElement('a');
-    parser.href = url;
-    var query = parser.search.substring(1);
-    var vars = query.split('&');
-    for (var i = 0; i < vars.length; i++) {
-	var pair = vars[i].split('=');
-	params[pair[0]] = decodeURIComponent(pair[1]);
-    }
-    return params;
-};
-
-
-// Check if element is visible after scrolling
-exports.isScrolledIntoView = function isScrolledIntoView(el) {
-    var rect = el.getBoundingClientRect();
-    var elemTop = rect.top;
-    var elemBottom = rect.bottom;
-    
-    // Only completely visible elements return true:
-    var isVisible = (elemTop >= 0) && (elemBottom <= window.innerHeight);
-    // Partially visible elements return true:
-    //isVisible = elemTop < window.innerHeight && elemBottom >= 0;
-    return isVisible;
 }

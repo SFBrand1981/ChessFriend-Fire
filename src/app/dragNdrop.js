@@ -46,13 +46,19 @@ module.exports = function () {
 	    //dragSrcEl.innerHTML = this.innerHTML;
 	    //this.innerHTML = e.dataTransfer.getData('text/html');
 	    this.parentNode.removeChild(dragSrcEl);
+            
 	    var dropHTML = e.dataTransfer.getData('text/html');
 	    this.insertAdjacentHTML('beforebegin',dropHTML);
+            
 	    var dropElem = this.previousSibling;
 	    addDnDHandlers(dropElem);
-
-	    var sidebarReorderedEvt = new CustomEvent("sidebarReorderedEvt", {
-		detail: {}
+            
+            
+            var sidebarItem = dragSrcEl.querySelector(".sidebarItem__container")
+            var text = sidebarItem.querySelector(".sidebarItem__text")
+            
+	    var sidebarReorderedEvt = new CustomEvent("sidebarReordered", {
+		detail: {id: text.id}
 	    })
 	    this.parentNode.dispatchEvent(sidebarReorderedEvt)
 	    

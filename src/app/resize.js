@@ -1,5 +1,5 @@
 // resize
-module.exports = function () {
+module.exports = function (window) {
 
     var isResizing = false,
 	lastDownX = 0;
@@ -13,7 +13,7 @@ module.exports = function () {
     })
     
 
-    function makeResizable(window, container, left, right, handle) {
+    module.makeResizable = function(container, left, right, handle) {
 
 	handle.onmousedown = function(e) {
             isResizing = true
@@ -28,16 +28,15 @@ module.exports = function () {
             }
 	    
             var offsetRight = container.clientWidth - (e.clientX - container.offsetLeft);
-	    
-            left.style.right = offsetRight + "px"
-            right.style.width = offsetRight + "px"
-
-	    e.currentTarget.dispatchEvent(sidebarResizedEvent)
-	    
-	    // save sidebar width
 	    var ratio = offsetRight/window.outerWidth
-	    if (ratio <= 0.9) {
-		// prevent unusable GUI
+            
+	    if (ratio <= 0.9 && ratio >= 0.5) {
+	
+                left.style.right = offsetRight + "px"
+                right.style.width = offsetRight + "px"        
+	        e.currentTarget.dispatchEvent(sidebarResizedEvent)
+
+                // save sidebar width
 		localStorage.setItem('sidebarRatio', offsetRight/window.outerWidth)
 	    }
 	    
@@ -51,25 +50,25 @@ module.exports = function () {
 
 
 	window.addEventListener('resize', function(e) {
-	    // keep sidebar proportions on resize
+                
+            // keep sidebar proportions on resize
 	    var ratio = parseFloat(localStorage.getItem('sidebarRatio'))
-	    restoreSidebar(window, left, right, ratio)
-	    
+	    module.restoreSidebar(left, right, ratio)
+            window.document.dispatchEvent(sidebarResizedEvent)
+            
 	}, false);
+
     
     };
 
 
-    function restoreSidebar(window, left, right, ratio) {
+    module.restoreSidebar = function(left, right, ratio) {
 	var offsetRight = ratio*window.outerWidth
 	left.style.right =  offsetRight + "px"
 	right.style.width =  offsetRight + "px"	
     }
 
-    
-    // Module exports
-    module.makeResizable = makeResizable
-    module.restoreSidebar = restoreSidebar
+   
     
     return module
 }
