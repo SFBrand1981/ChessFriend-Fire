@@ -137,6 +137,31 @@ module.exports = function (window) {
     })
 
 
+    window.document.addEventListener("prevDBGame", evt => {
+        console.log("Evt prevDBGame")
+
+        var curIndx = db.searchParams.gameList.indexOf(board.getBoard().game_id)
+        if (curIndx > 0) {
+            
+            var nextId = db.searchParams.gameList[curIndx - 1]
+            loadEntryById(nextId)
+        }
+    })
+
+
+    window.document.addEventListener("nextDBGame", evt => {
+        console.log("Evt nextDBGame")
+
+        var curIndx = db.searchParams.gameList.indexOf(board.getBoard().game_id)
+        if (curIndx != -1 && (curIndx + 1 < db.searchParams.queryCount)) {
+
+            var nextId = db.searchParams.gameList[curIndx + 1]
+            loadEntryById(nextId)
+        }
+        
+    })
+
+
     window.document.addEventListener("setupBoardEdited", evt => {
         console.log("Evt setupBoardEdited", evt.detail)
         board.setCurrentFEN(evt.detail)
@@ -626,10 +651,7 @@ module.exports = function (window) {
             sidebarItemClicked()
 
             game_id = parseInt(id.replace(/^sidebarItem/, ''))
-            db.getEntry(game_id).then( entry => {
-                console.log("loading", entry)
-                loadEntry(entry, entry.star)
-            })
+            loadEntryById(game_id)
         })
         
         icon.addEventListener("click", evt => {
@@ -770,6 +792,13 @@ module.exports = function (window) {
         boardGUI.resetCursor(leftPane)
     }
 
+
+    function loadEntryById(id) {
+        return db.getEntry(id).then( entry => {
+            console.log("loading", entry)
+            loadEntry(entry, entry.star)
+        })
+    }
 
     function loadEntry(entry, starred) {
 

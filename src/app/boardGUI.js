@@ -60,6 +60,21 @@ module.exports = function (window, board) {
         window.document.dispatchEvent(loadPrevDBPageEvent)
     }
 
+
+    function prevDBGame() {
+        var prevDBGameEvent = new CustomEvent("prevDBGame", {
+        })
+        window.document.dispatchEvent(prevDBGameEvent)
+    }
+
+
+    function nextDBGame() {
+        var nextDBGameEvent = new CustomEvent("nextDBGame", {
+        })
+        window.document.dispatchEvent(nextDBGameEvent)
+    }
+
+    
     function editSearchParams(searchParam) {
         
         var editSearchParamsEvent = new CustomEvent("editSearchParams", {
@@ -1009,13 +1024,13 @@ module.exports = function (window, board) {
         var left = document.createElement('div')
         left.innerHTML = '<i class="fa">&#xf060;</i>'
         left.addEventListener('click', function(evt) {
-            //prevEntry()
+            prevDBGame()
         })
 
         var right = document.createElement('div')
         right.innerHTML = '<i class="fa">&#xf061;</i>'
         right.addEventListener('click', function(evt) {
-            //nextEntry()
+            nextDBGame()
         })
 
         addTooltip(star, 'star')

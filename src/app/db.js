@@ -28,6 +28,7 @@ module.exports = function () {
                     pageNum: 0,
                     totalCount: undefined,
                     queryCount: undefined,
+                    gameList: [],
                     searching: false,
                     displaySearchBar: false,
                     fen: "",
@@ -47,6 +48,7 @@ module.exports = function () {
         searchParams.black = ""
         searchParams.event = ""
         searchParams.tags = [""]
+        searchParams.gameList = []
     }
     
     
@@ -168,6 +170,12 @@ module.exports = function () {
                         } else {
                             return comparison * (-1)
                         }
+                    })
+
+                    // reset gameList
+                    searchParams.gameList = []
+                    sorted.slice(low, high).forEach( x => {
+                        searchParams.gameList.push(x.id)
                     })
                     
                     return sorted.slice(low, high)
