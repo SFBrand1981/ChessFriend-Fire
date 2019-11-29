@@ -1,5 +1,6 @@
 {
     "name": "ChessFriend-Fire",
+    "version": "3.0.0",
     "main": "views/sidebar.html",
     "window": {
 	"width": 1024,
