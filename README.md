@@ -53,35 +53,18 @@ ChessFriend-Fire is open source and runs on any platform.
 
 # Features
 
-
-## Ships with Stockfish 10
-
-
-<img align="left" src="https://github.com/SFBrand1981/ChessFriend-Fire/blob/master/docs/ChessFriend-Fire_engine.png?v=20190621" width="40%"/>
-
-By default, ChessFriend-Fire includes the binaries of Stockfish 10, one of the strongest chess engines available. Start the engine by clicking
-on the 'play' button underneath the chess board. With a right-click on the displayed engine lines, you can open the engine settings menu,
-where you can specify the path to the engine (can be any UCI-compatible chess engine installed on your system) and basic settings
-like multiPV (number of variations which the engine calculates simultaneously) and the number of CPU threads that the engine
-is allowed to use (default: 1).
-
+- Load and save PGN files
+- Browse chess games, including variations
+- Label games with custom tags
+- Enter moves, variations, and comments
+- Pin multiple games as tabs  
+- Setup board, copy/paste FEN
+- Search in database for positions, players or tags
+- Autosave and redo/undo history
+- Analyze using UCI chess engines
+- Integrated Stockfish engine
 
 
-<br clear="both"/>
-
-
-## Presentation mode
-
-
-<img align="left" src="https://github.com/SFBrand1981/ChessFriend-Fire/blob/master/docs/ChessFriend-Fire_kiosk.png?v=20190724" width="40%"/>
-
-
-In presentation mode, ChessFriend-Fire will maximize the available board space for you. You can then still navigate through
-the game by using the arrow keys on your keyboard and even highlight important squares by a right-click from your mouse.
-
-
-
-<br clear="both"/>
 
 
 ## One-click annotations
@@ -96,59 +79,6 @@ selection will be automatically inserted after the currently highlighted move.
 
 
 
-## Open your games in tabs
-
-
-<img align="left" src="https://github.com/SFBrand1981/ChessFriend-Fire/blob/master/docs/ChessFriend-Fire_tabs.png?v=20190621" width="40%"/>
-
-
-ChessFriend-Fire opens all your games in tabs. It has never been easier to switch between all your favorite games! With drag-and-drop, you can even rearrange the tabs into your preferred order.
-
-
-<br clear="both"/>
-
-
-## Fast database search
-
-
-<img align="left" src="https://github.com/SFBrand1981/ChessFriend-Fire/blob/master/docs/ChessFriend-Fire_search.png?v=20190621" width="40%"/>
-
-
-With ChessFriend-Fires's powerful search functionality, you can browse through any database with lightning speed.
-ChessFriend-Fire also allows you to tag your games with custom labels, which makes it super easy to find them later again.
-
-
-<br clear="both"/>
-
-
-## Analyse any position
-
-
-<img align="left" src="https://github.com/SFBrand1981/ChessFriend-Fire/blob/master/docs/ChessFriend-Fire_setup.png?v=20190621" width="40%"/>
-
-
-A click on 'Setup position' enables you to setup an arbitrary position on a chessboard and search for it in the database
-or add it as the starting point of a new game. Move the pieces around with a click from your mouse.
-
-
-<br clear="both"/>
-
-
-
-## LaTeX export
-
-
-<img align="left" src="https://github.com/SFBrand1981/ChessFriend-Fire/blob/master/docs/ChessFriend-Fire_latex.png?v=20190621" width="40%"/>
-
-
-ChessFriend-Fire allows you to export your game as a LaTeX-file and helps you to produce publication-ready documents
-in the twinkling of an eye. For example, any comment of the form `\diagram` will automatically be converted into
-a chess diagram, without any further user action necessary. In order to convert the LaTeX file into a pdf-document,
-you need to have a LaTeX processor like [xelatex][xelatex] installed.
-
-<br clear="both"/>
-
-
 ## Keyboard shortcuts
 
 
@@ -159,12 +89,7 @@ you need to have a LaTeX processor like [xelatex][xelatex] installed.
 |------------------------------------------------------|--------------------------------|
 | <kbd>&leftarrow;</kbd>                               | Previous move                  |
 | <kbd>&rightarrow;</kbd>                              | Next move                      |
-| <kbd>Space</kbd>	                               | Insert engine move             |
-| <kbd>\diagram</kbd> (as text in comments)            | Insert diagram in LaTeX-export |
-| Right-click                                          | Mark selected square green     |
-| <kbd>Shift</kbd> + right-click                       | Mark selected square red       |
-| <kbd>Ctrl</kbd><kbd>x</kbd> + <kbd>c</kbd>           | Insert comment                 |
-| <kbd>Ctrl</kbd><kbd>x</kbd> + <kbd>s</kbd>           | Save game                      |
+
 
 
 </div>
