@@ -21,6 +21,9 @@ module.exports = function (window) {
     var LabelHandler = require(path.join(process.cwd(), '/app/labels.js'))
     var lh = new LabelHandler()
 
+    var PGNHandler = require(path.join(process.cwd(), '/app/pgn.js'))
+    var ph = new PGNHandler()
+
     var menuHandler = require(path.join(process.cwd(), '/app/menu.js'))
     var menu = new menuHandler(window)
     
@@ -38,7 +41,7 @@ module.exports = function (window) {
 
     var engineHandler = require(path.join(process.cwd(), '/app/engine.js'))
     var engine = new engineHandler(window)
-    
+
 
     // GUI elements from HTML
     var navbarContainer = window.document.getElementById("sidebar__stickyItems")
@@ -243,6 +246,17 @@ module.exports = function (window) {
     window.document.addEventListener("staticSidebarItemClicked", evt => {
         console.log("Evt sidebarItemClicked", evt.detail)
         sidebarItemClicked()
+    })
+
+
+    window.document.addEventListener("exportToPGN", evt => {
+        console.log("Evt exportToPGN", evt.detail)
+
+	var pgnData = {}
+	pgnData.filename = evt.detail
+	pgnData.nodes = board.getBoard().nodes
+	pgnData.gameInfo = board.getBoard().gameInfo
+	ph.exportGameAsPGN(pgnData)	
     })
 
     

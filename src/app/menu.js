@@ -94,6 +94,15 @@ module.exports = function (window) {
         })
         window.document.dispatchEvent(searchPositionEvent)
     }
+
+
+    function exportToPGN(filename) {
+        
+        var exportToPGNEvent = new CustomEvent("exportToPGN", {
+            detail: filename
+        })
+        window.document.dispatchEvent(exportToPGNEvent)
+    }
     
     
     // menu
@@ -231,7 +240,7 @@ module.exports = function (window) {
         }))
         
 
-    //     menu.append(new nw.MenuItem({ type: 'separator' }))
+        menu.append(new nw.MenuItem({ type: 'separator' }))
         
     //     menu.append(new nw.MenuItem({
     //         label: 'Export to LaTeX',
@@ -252,24 +261,24 @@ module.exports = function (window) {
     //         }
     //     }))
 
-    //     menu.append(new nw.MenuItem({
-    //         label: 'Export to PGN',
-    //         click: function(){
-
-    //          var exportDialog = document.createElement('input')
-    //          exportDialog.style.display = 'none'
-    //          exportDialog.type = 'file'
-    //          exportDialog.id = 'exportDialog'
-    //          exportDialog.accept = '.pgn'
-    //          exportDialog.nwsaveas = "ChessFriend-Fire_Export.pgn"
-    //          window.document.body.appendChild(exportDialog)
-    //          exportDialog.click()
-    //          exportDialog.addEventListener("change", function (evt) {
-    //              boardState.exportGameAsPGN(this.value)
-    //          })
+        menu.append(new nw.MenuItem({
+            label: 'Export to PGN',
+            click: function(){
                 
-    //         }
-    //     }))
+                var exportDialog = document.createElement('input')
+                exportDialog.style.display = 'none'
+                exportDialog.type = 'file'
+                exportDialog.id = 'exportDialog'
+                exportDialog.accept = '.pgn'
+                exportDialog.nwsaveas = "ChessFriend-Fire_Export.pgn"
+                window.document.body.appendChild(exportDialog)
+                exportDialog.click()
+                exportDialog.addEventListener("change", function (evt) {
+                    exportToPGN(this.value)
+                })
+                
+            }
+        }))
         
         
         
