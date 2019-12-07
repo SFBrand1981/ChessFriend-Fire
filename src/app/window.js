@@ -221,9 +221,17 @@ module.exports = function (window) {
 
         var key = evt.detail.key.replace(/^searchParam_/, '')
         var value = evt.detail.value
-        db.searchParams[key] = value
+        var needsRedraw = true
+        
         db.searchParams['pageNum'] = 0
 
+        if (key == "ignoreColor") {
+            db.searchParams['ignoreColor'] = (db.searchParams['ignoreColor'] == true) ? false : true
+        } else {
+            db.searchParams[key] = value
+        }
+        
+        
         if (db.searchParams['fen'] == "" &&
             db.searchParams['white'] == "" &&
             db.searchParams['black'] == "" &&
@@ -232,13 +240,20 @@ module.exports = function (window) {
             db.searchParams['tags'][0] == "") {
 
             db.searchParams['searching'] = false
+
+            if (key == "ignoreColor") {
+                needsRedraw = false
+            }
             
         } else {
             db.searchParams['searching'] = true
         }
 
         console.log("set gui.searchParams", db.searchParams)
-        drawDBEntries()
+
+        if (needsRedraw) {
+            drawDBEntries()
+        }
         
     })
 
@@ -861,15 +876,15 @@ module.exports = function (window) {
 
     function toggleSearchBar() {
         
-        var searchInfoTable = window.document.getElementById("searchInfoTable")
+        var searchControl = window.document.getElementById("searchControl")
         if (db.searchParams.displaySearchBar) {
             db.searchParams.displaySearchBar = false
-            searchInfoTable.classList.add("display__none")
+            searchControl.classList.add("display__none")
             db.searchParams.searching = false
             
         } else {
             db.searchParams.displaySearchBar = true
-            searchInfoTable.classList.remove("display__none")
+            searchControl.classList.remove("display__none")
         }
 
         db.resetSearchParams()

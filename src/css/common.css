@@ -876,6 +876,24 @@ div.awesomplete {
 
 /* search info */
 
+.searchControl {
+    margin-bottom: 24px;
+}
+
+.searchControlDiv input {
+    cursor: pointer;
+}
+
+.searchControlDiv {
+    display: flex;
+    flex-direction: row;
+    color: var(--base6-color);
+}
+
+.searchControlDiv > div {
+    padding-left: 8px; 
+}
+
 .searchInfoContainer {
     font-size: 90%;
     padding: 8px 12px;
@@ -893,7 +911,7 @@ div.awesomplete {
 }
 
 .searchInfoTable {
-    margin-bottom: 16px;
+    margin-bottom: 8px;
     border-collapse: collapse;
     width: 100%;
     color: var(--base6-color);

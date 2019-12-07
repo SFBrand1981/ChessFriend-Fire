@@ -35,7 +35,8 @@ module.exports = function () {
                     white: "",
                     black: "",
                     event: "",
-                    tags: [""]
+                    tags: [""],
+                    ignoreColor: true,
                    }
 
     module.searchParams = searchParams
@@ -111,27 +112,44 @@ module.exports = function () {
         if (searchParams.searching) {
 
             var query = {}
+            var altQuery = {}
             
             if (searchParams.fen) {
 	        query.positions = searchParams.fen
+	        altQuery.positions = searchParams.fen
 	    }
 	    if (searchParams.white) {
 	        query.white = searchParams.white
+                altQuery.black = searchParams.white
 	    }
 	    if (searchParams.black) {
 	        query.black = searchParams.black
+	        altQuery.white = searchParams.black
 	    }
 	    if (searchParams.event) {
 		query.event = searchParams.event
+		altQuery.event = searchParams.event
 	    }
             
             var queries = []
+            var altQueryNeeded = false
+            
             if (Object.keys(query).length > 0) {
+
                 queries = [db.games.where(query).primaryKeys()]
+                
+                if (searchParams.ignoreColor == true &&
+                    (searchParams.white || searchParams.black)) {
+                    
+                    console.log("add query with reversed color")
+                    altQueryNeeded = true
+                    queries.push(db.games.where(altQuery).primaryKeys())
+                }
             }
+            
 
             if (searchParams.tags[0] != "") {
-                for (var i = 0, len = searchParams.tags.length; i < len; i++) {
+                for (let i = 0, len = searchParams.tags.length; i < len; i++) {
                     queries.push(db.games.where('tags').equals(searchParams.tags[i]).primaryKeys())
                 }
 	    }
@@ -139,7 +157,30 @@ module.exports = function () {
             return Promise.all(queries).then(keys => {
 
                 // Find all common primary keys
-                var intersection = tools.intersect([...keys])
+                var queryKeyArray = []
+                var altQueryKeyArray = []
+                
+                for (let i = 0, len = keys.length; i < len; i++) {
+
+                    if (altQueryNeeded && i == 1) {
+                        continue
+                    }
+                    
+                    queryKeyArray.push(keys[i])
+                }
+
+                var intersection = tools.intersect(queryKeyArray)
+                
+                if (altQueryNeeded) {
+                    for (let i = 1, len = keys.length; i < len; i++) {
+                        altQueryKeyArray.push(keys[i])
+                    }
+
+                    intersection = intersection.concat(tools.intersect(altQueryKeyArray))
+                }    
+
+                
+                
                 searchParams.queryCount = intersection.length
                 
                 // Look up the actual objects from these primary keys

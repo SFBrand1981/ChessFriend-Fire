@@ -665,15 +665,44 @@ module.exports = function (window, board) {
             addEventListenerOnChangeToSearchInfo(input)
         }
 
+
+        // search controls
+        var searchControl = document.createElement('div')
+        searchControl.id = "searchControl"
+        searchControl.classList.add("searchControl")
+
+        var ignoreColorDiv = document.createElement('div')
+        ignoreColorDiv.classList.add("searchControlDiv")
+        
+        var ignoreColorDesc = document.createElement('div')
+        ignoreColorDesc.innerHTML = "Ignore colors"
+       
+        var ignoreColorOpt = document.createElement('input')
+        ignoreColorOpt.type = "checkbox"
+        ignoreColorOpt.name = "ignoreColor"
+
+        
+        ignoreColorOpt.checked = (searchParams.ignoreColor == false) ? false : true
+        ignoreColorOpt.id = "searchParam_ignoreColor"
+        addEventListenerOnChangeToSearchInfo(ignoreColorOpt)
+
+
+        ignoreColorDiv.appendChild(ignoreColorOpt)
+        ignoreColorDiv.appendChild(ignoreColorDesc)
+
+        searchControl.appendChild(searchInfoTable)
+        searchControl.appendChild(ignoreColorDiv)
+        
         searchInfoContainer.appendChild(searchStatusBar)
-        searchInfoContainer.appendChild(searchInfoTable)
+        searchInfoContainer.appendChild(searchControl)
         container.appendChild(searchInfoContainer)
 
         
         // hide searchbar if not searching
         if (!searchParams.displaySearchBar) {
-            searchInfoTable.classList.add("display__none")
+            searchControl.classList.add("display__none")
         }
+
     }
 
 
