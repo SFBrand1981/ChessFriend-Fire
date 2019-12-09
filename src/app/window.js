@@ -852,6 +852,7 @@ module.exports = function (window) {
             boardGUI.drawNotation({container: rightPane, nodes: rv})
             boardGUI.makeMovesSelectable()
             boardGUI.hidePieceSelector()
+            boardGUI.drawCoords(board.getBoard())
             boardGUI.drawFEN(board)
             boardGUI.scrollIntoView(board.getBoard().hlNodeIndx)
             boardGUI.highlightSAN(board.getBoard().hlNodeIndx)
