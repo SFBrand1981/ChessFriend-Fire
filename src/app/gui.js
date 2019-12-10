@@ -305,13 +305,14 @@ module.exports = function (window) {
         
         if (callback) {
             modalConfirm.addEventListener('click', evt => {
+                modal.parentNode.removeChild(modal)
                 callback()
             })
         }
 
 
         modalAbort.addEventListener('click', evt => {
-            modal.parentNode. removeChild(modal)
+            modal.parentNode.removeChild(modal)
         })
         
         modalButtons.appendChild(modalAbort)

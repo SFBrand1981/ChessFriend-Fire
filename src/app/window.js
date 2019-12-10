@@ -810,6 +810,7 @@ module.exports = function (window) {
         var fen = board.getFENfromNodeIndx(nodeIndx)
         board.setCurrentFEN(fen)
         boardGUI.drawFEN(board)
+        boardGUI.scrollIntoView(nodeIndx)
         
         engine.updateEnginePosition(fen)
     }
@@ -1016,7 +1017,6 @@ module.exports = function (window) {
                 
                 var prevNodeIndx = board.getBoard().nodes[hlNodeIndx]['parentIndx']
                 console.log("keyboard select prevMove", prevNodeIndx)
-                boardGUI.scrollIntoView(prevNodeIndx)
                 selectMove(prevNodeIndx)
                 
 	    } else if (evt.which === 39) {
@@ -1034,8 +1034,25 @@ module.exports = function (window) {
                 }
                 
                 console.log("keyboard select nextMove", nextNodeIndx)
-                boardGUI.scrollIntoView(nextNodeIndx)
-                selectMove(nextNodeIndx)
+                var curBoard = board.getBoard()
+                
+                if (curBoard.nodes[curBoard.hlNodeIndx]['children'].length == 1) {
+
+                    // only one choice
+                    selectMove(nextNodeIndx)
+                    
+                } else if (window.document.getElementById('variationModal')) {
+
+                    var existing = window.document.getElementById('variationModal')
+                    existing.parentNode.removeChild(existing)
+                    selectMove(nextNodeIndx)
+                    
+                } else {
+                    
+                    boardGUI.drawVariationModal({container: rightPane,
+                                                 board: board.getBoard()})
+                }
+                
                 
 	    }	    
             

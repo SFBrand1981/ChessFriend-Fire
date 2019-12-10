@@ -1865,6 +1865,74 @@ module.exports = function (window, board) {
         
     }
 
+
+    module.drawVariationModal = function({container: container,
+                                          board: board}) {
+
+
+        // remove existing
+        var existing = window.document.getElementById('variationModal')
+        if (existing) {
+            existing.parentNode.removeChild(existing)
+        }
+        
+        var modal = document.createElement('div')
+        modal.classList.add('modal')
+        modal.id = 'variationModal'
+        
+        var modalContent = document.createElement('div')
+        modalContent.classList.add('modal-content')
+
+        var modalText = document.createElement('div')
+        modalText.classList.add('modal-text')
+        modalText.innerHTML = 'Select variation'
+
+        var modalButtons = document.createElement('div')
+        modalButtons.classList.add('modal-buttons')
+
+        var modalAbort = document.createElement('div')
+        modalAbort.innerHTML = 'Cancel'
+
+        var children = board.nodes[board.hlNodeIndx]['children']
+        var varContainer = document.createElement('div')
+        varContainer.classList.add('modal-varContainer')
+        
+        for (var i = 0, len = children.length; i < len; i++) {
+            var div = document.createElement('div')
+            div.id = children[i]
+            var san = board.nodes[children[i]]['SAN']
+            var fen = board.nodes[children[i]]['FEN']
+            var mvNr = fen.split(' ')[5]
+            var sideToMove = fen.split(' ')[1]
+
+            if (sideToMove == 'b') {
+                div.innerHTML = mvNr + '. ' + san
+            } else {
+                div.innerHTML = parseInt(mvNr)-1 + '... ' + san
+            }
+            varContainer.appendChild(div)
+            makeMoveSelectable(div)
+
+            div.addEventListener('click', evt => {
+                modal.parentNode.removeChild(modal)
+            })
+        }
+        
+        modalAbort.addEventListener('click', evt => {
+            modal.parentNode.removeChild(modal)
+        })
+        
+        modalButtons.appendChild(modalAbort)
+        modalContent.appendChild(modalText)
+        modalContent.appendChild(varContainer)
+        modalContent.appendChild(modalButtons)
+        modal.appendChild(modalContent)
+        
+        container.appendChild(modal)
+
+
+    }
+
     
     
     return module

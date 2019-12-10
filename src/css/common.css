@@ -463,9 +463,27 @@ body {
     display: flex;
     position: fixed;
     top: 0;
-    width: 100%;
+    width: 50%;
     height: 100%;
     background-color: rgba(0,0,0,0.4);
+}
+
+
+.modal-varContainer {
+    text-align: left;
+    padding: 0 12px;
+}
+
+
+.modal-varContainer div {
+    color: var(--base7-color);
+    margin: 8px 0;
+}
+
+
+.modal-varContainer div:hover {
+    color: var(--base8-color);
+    cursor: pointer;
 }
 
 
@@ -473,7 +491,7 @@ body {
     background-color: var(--base4-color);
     margin: auto;
     text-align: center;
-    width: 38%;
+    width: 68%;
     color: var(--base8-color);
     border-radius: 8px;
     border: 1pt solid var(--base7-color);
