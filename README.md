@@ -77,10 +77,12 @@ ChessFriend-Fire is open source and runs on any platform.
 <div style="text-align: center;">
 
 
-| Command                                              | Function                       |
-|------------------------------------------------------|--------------------------------|
-| <kbd>&leftarrow;</kbd>                               | Previous move                  |
-| <kbd>&rightarrow;</kbd>                              | Next move                      |
+| Command                                              | Function                                       |
+|------------------------------------------------------|------------------------------------------------|
+| <kbd>&leftarrow;</kbd>                               | Previous move                                  |
+| <kbd>&rightarrow;</kbd>                              | Next move                                      |
+| <kbd>&uparrow;</kbd>, <kbd>&downarrow;</kbd>         | Select move in the "Select variation" window.  |
+|                                                      | Confirm your choice with <kbd>&leftarrow;</kbd>|
 
 
 

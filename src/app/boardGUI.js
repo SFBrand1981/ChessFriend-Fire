@@ -1899,11 +1899,13 @@ module.exports = function (window, board) {
         
         for (var i = 0, len = children.length; i < len; i++) {
             var div = document.createElement('div')
-            div.id = children[i]
             var san = board.nodes[children[i]]['SAN']
             var fen = board.nodes[children[i]]['FEN']
             var mvNr = fen.split(' ')[5]
             var sideToMove = fen.split(' ')[1]
+
+            div.id = children[i]
+            div.classList.add("modal-variation")
 
             if (sideToMove == 'b') {
                 div.innerHTML = mvNr + '. ' + san
@@ -1916,6 +1918,10 @@ module.exports = function (window, board) {
             div.addEventListener('click', evt => {
                 modal.parentNode.removeChild(modal)
             })
+
+            if (i == 0) {
+                div.classList.add('highlightedSAN')
+            }
         }
         
         modalAbort.addEventListener('click', evt => {
@@ -1930,10 +1936,66 @@ module.exports = function (window, board) {
         
         container.appendChild(modal)
 
-
     }
 
-    
+
+    module.selectNextMoveFromVariationModal = function() {
+        console.log("selecting next")
+
+        var modal = window.document.getElementById('variationModal')
+        var query = modal.querySelectorAll(".modal-variation")
+        var currentSelected = 0
+
+        for (let i = 0, len = query.length; i < len; i++) {
+            if (query[i].classList.contains("highlightedSAN")) {
+                currentSelected = i
+            }
+            
+            query[i].classList.remove("highlightedSAN")
+        }
+
+        if (currentSelected == query.length -1) {
+            query[0].classList.add("highlightedSAN")
+        } else {
+            query[currentSelected+1].classList.add("highlightedSAN")
+        }
+    }
+
+
+    module.selectPrevMoveFromVariationModal = function() {
+        console.log("selecting prev")
+        
+        var modal = window.document.getElementById('variationModal')
+        var query = modal.querySelectorAll(".modal-variation")
+        var currentSelected = 0
+
+        for (let i = 0, len = query.length; i < len; i++) {
+            if (query[i].classList.contains("highlightedSAN")) {
+                currentSelected = i
+            }
+            
+            query[i].classList.remove("highlightedSAN")   
+        }
+        
+        if (currentSelected == 0) {
+            query[query.length-1].classList.add("highlightedSAN")
+        } else {
+            query[currentSelected-1].classList.add("highlightedSAN")
+        }
+    }
+
+
+    module.getSelectedMoveFromVariationModal = function() {
+        var modal = window.document.getElementById('variationModal')
+        var query = modal.querySelectorAll(".modal-variation")
+        
+        for (let i = 0, len = query.length; i < len; i++) {
+            if (query[i].classList.contains("highlightedSAN")) {
+                console.log("return selected move", query[i].id)
+                return query[i].id
+            }
+        }
+    }
     
     return module
 }

@@ -1001,12 +1001,23 @@ module.exports = function (window) {
         window.document.addEventListener('keydown', window.document.listenForArrowKeys = function (evt) {
             
             if (evt.which === 37) {
+                // left arrow
 
                 var startEngineBtn = window.document.getElementById("startEngineBtn")
                 if (!startEngineBtn) {
                     console.log("no move to select")
                     return
                 }
+
+
+                if (window.document.getElementById('variationModal')) {
+                    var existing = window.document.getElementById('variationModal')
+                    existing.parentNode.removeChild(existing)
+
+                    // do not select next move
+                    return
+                }
+
                 
                 var hlNodeIndx = board.getBoard().hlNodeIndx
 
@@ -1020,6 +1031,7 @@ module.exports = function (window) {
                 selectMove(prevNodeIndx)
                 
 	    } else if (evt.which === 39) {
+                // right arrow
 
                 var startEngineBtn = window.document.getElementById("startEngineBtn")
                 if (!startEngineBtn) {
@@ -1043,9 +1055,15 @@ module.exports = function (window) {
                     
                 } else if (window.document.getElementById('variationModal')) {
 
+                    // select move from variationModal
+                    var selected = boardGUI.getSelectedMoveFromVariationModal()
+
+                    // hide modal
                     var existing = window.document.getElementById('variationModal')
                     existing.parentNode.removeChild(existing)
-                    selectMove(nextNodeIndx)
+
+                    
+                    selectMove(selected)
                     
                 } else {
                     
@@ -1053,8 +1071,23 @@ module.exports = function (window) {
                                                  board: board.getBoard()})
                 }
                 
+
+            } else if (evt.which === 40) {
+                // down arrow
+
+                if (window.document.getElementById('variationModal')) {
+                    evt.preventDefault()
+                    boardGUI.selectNextMoveFromVariationModal(board.getBoard())
+                }
+
+            } else if (evt.which === 38) {
+                // up arrow
                 
-	    }	    
+                if (window.document.getElementById('variationModal')) {
+                    evt.preventDefault()
+                    boardGUI.selectPrevMoveFromVariationModal(board.getBoard())
+                }
+            }
             
         }, false)
     }
