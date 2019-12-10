@@ -793,7 +793,7 @@ module.exports = function (window) {
             var [low, high, num] = db.getSearchLimits()
             boardGUI.updateNumDBSearchResults(low, high, num)
 
-            enableAwesomplete()
+            enableAwesomplete('searchParam')
 
         }).then( () => {
             boardGUI.displaySortIndicator(db.searchParams.orderBy)
@@ -861,6 +861,8 @@ module.exports = function (window) {
                                          board: board.getBoard(),
                                          starred: starred})
 
+            enableAwesomplete('gameInfo')
+
             return 0
             
         }).then(() => {
@@ -899,11 +901,11 @@ module.exports = function (window) {
     }
 
 
-    function enableAwesomplete() {
-        var white = window.document.getElementById('searchParam_white')
-        var black = window.document.getElementById('searchParam_black')
-        var event = window.document.getElementById('searchParam_event')
-        var tags = window.document.getElementById('searchParam_tags')
+    function enableAwesomplete(fields) {
+        var white = window.document.getElementById(fields + '_white')
+        var black = window.document.getElementById(fields + '_black')
+        var event = window.document.getElementById(fields + '_event')
+        var tags = window.document.getElementById(fields + '_tags')
         
         var ahWhite = new Awesomplete(white)
         var ahBlack = new Awesomplete(black)

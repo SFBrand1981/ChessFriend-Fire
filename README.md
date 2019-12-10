@@ -81,8 +81,7 @@ ChessFriend-Fire is open source and runs on any platform.
 |------------------------------------------------------|------------------------------------------------|
 | <kbd>&leftarrow;</kbd>                               | Previous move                                  |
 | <kbd>&rightarrow;</kbd>                              | Next move                                      |
-| <kbd>&uparrow;</kbd>, <kbd>&downarrow;</kbd>         | Select move in the "Select variation" window.  |
-|                                                      | Confirm your choice with <kbd>&leftarrow;</kbd>|
+| <kbd>&uparrow;</kbd>, <kbd>&downarrow;</kbd>         | Select move in the "Select variation" window. Confirm your choice with <kbd>&leftarrow;</kbd>|
 
 
 
