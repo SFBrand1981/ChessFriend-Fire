@@ -707,6 +707,7 @@ div.awesomplete {
     border-bottom: 2px solid var(--base0-color);
     text-align: center;
     padding: 12px 0px;
+    z-index: 1000;
 }
 
 
