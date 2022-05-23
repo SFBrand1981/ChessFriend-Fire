@@ -14,7 +14,7 @@
     "dependencies": {
         "awesomplete": "^1.1.4",
         "chess.js": "^0.10.2",
-        "dexie": "^3.0.0-rc.1",
+        "dexie": "^3.2.2",
         "event-stream": "^4.0.1",
         "font-awesome": "^4.7.0",
         "make-dir": "^3.0.0",
